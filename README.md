@@ -1,32 +1,52 @@
-\# Umbler Talk Mobile
+umbler-talk-mobile/
 
+├── app/                        # Telas (Expo Router file-based routing)
 
+│   ├── \_layout.tsx             # Root layout + providers
 
-\## 📱 Sobre
+│   ├── index.tsx               # Redirect inteligente
 
-App mobile para agentes responderem clientes via WhatsApp usando Umbler Talk.
+│   ├── (auth)/
 
+│   │   └── connect.tsx         # Login / Conexão com API
 
+│   ├── (app)/
 
-\## 🚀 Funcionalidades
+│   │   ├── \_layout.tsx         # Tab navigator
 
-\- Inbox de conversas
+│   │   ├── inbox.tsx           # Lista de conversas
 
-\- Resposta em tempo real
+│   │   └── settings.tsx        # Configurações
 
-\- Notificações push
+│   ├── conversation/\[id].tsx   # Tela de conversa
 
-\- Transferência de atendimento
+│   ├── contact/\[id].tsx        # Perfil do contato
 
+│   └── transfer/\[id].tsx       # Transferência (modal)
 
+├── components/
 
-\## 🧠 Uso de IA
+│   ├── common/                 # Avatar, Badge, Button, EmptyState, Skeleton
 
-Este projeto foi desenvolvido com apoio do Claude (Anthropic)
+│   ├── inbox/                  # ConversationItem, InboxFilters
 
+│   └── conversation/           # MessageBubble, MessageComposer
 
+├── services/
 
-\## 🔗 Demo
+│   ├── api/                    # apiClient + todos os serviços por domínio
 
-(em breve)
+│   └── storage/                # SecureStore + AsyncStorage
+
+├── hooks/                      # TanStack Query hooks por feature
+
+├── store/                      # Zustand stores (auth, inbox)
+
+├── types/                      # TypeScript: api.ts + ui.ts
+
+├── utils/                      # dateUtils, mappers, phoneUtils
+
+├── theme/                      # colors, spacing, typography
+
+└── mocks/                      # Dados demo realistas
 
