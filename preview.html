@@ -544,6 +544,66 @@ body {
 
 .home-bar { height:22px; display:flex; align-items:center; justify-content:center; background:var(--surface); flex-shrink:0; }
 .home-bar div { width:120px; height:4px; background:#111; border-radius:2px; }
+
+/* ── SIDE DRAWER ─────────────────────────────────────────────── */
+.drawer-overlay {
+  position:absolute; inset:0; background:rgba(0,0,0,.45);
+  z-index:300; opacity:0; pointer-events:none; transition:opacity .28s;
+}
+.drawer-overlay.open { opacity:1; pointer-events:auto; }
+.side-drawer {
+  position:absolute; top:0; left:0; bottom:0; width:85%;
+  background:#fff; z-index:310;
+  transform:translateX(-100%);
+  transition:transform .28s cubic-bezier(.4,0,.2,1);
+  display:flex; flex-direction:column; overflow:hidden;
+}
+.side-drawer.open { transform:translateX(0); }
+.drawer-head {
+  display:flex; align-items:center; padding:14px 12px 12px; gap:10px;
+  border-bottom:1px solid var(--border); flex-shrink:0;
+}
+.drawer-close {
+  width:30px; height:30px; border:none; background:none; cursor:pointer;
+  display:flex; align-items:center; justify-content:center;
+  color:var(--text-2); font-size:15px; flex-shrink:0; border-radius:8px;
+}
+.drawer-close:hover { background:var(--bg); }
+.drawer-org { flex:1; display:flex; align-items:center; gap:10px; min-width:0; }
+.drawer-org-av {
+  width:36px; height:36px; border-radius:18px; background:#dce8ff;
+  display:flex; align-items:center; justify-content:center;
+  font-size:14px; font-weight:700; color:var(--blue); flex-shrink:0;
+  overflow:hidden;
+}
+.drawer-org-info { flex:1; min-width:0; }
+.drawer-org-label { font-size:10px; color:var(--text-3); font-weight:500; }
+.drawer-org-name  { font-size:13px; font-weight:700; color:var(--blue); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.drawer-apps-btn {
+  width:30px; height:30px; border:none; background:none; cursor:pointer;
+  display:flex; align-items:center; justify-content:center; flex-shrink:0;
+  color:var(--text-2); border-radius:8px;
+}
+.drawer-apps-btn:hover { background:var(--bg); }
+.drawer-body { flex:1; overflow-y:auto; padding:4px 0; }
+.drawer-item {
+  display:flex; align-items:center; gap:14px; padding:12px 18px;
+  cursor:pointer; transition:background .1s;
+  font-size:13.5px; color:var(--text-1); font-weight:500;
+}
+.drawer-item:hover { background:var(--bg); }
+.dicon { width:20px; display:flex; align-items:center; justify-content:center; color:var(--text-2); flex-shrink:0; }
+.drawer-section {
+  font-size:10.5px; font-weight:700; color:var(--text-3);
+  text-transform:uppercase; letter-spacing:.7px; padding:12px 18px 4px;
+}
+.drawer-divider { height:1px; background:var(--border); margin:4px 18px; }
+.drawer-footer { padding:10px 18px 16px; border-top:1px solid var(--border); flex-shrink:0; }
+.drawer-logout {
+  display:flex; align-items:center; gap:12px; font-size:14px; font-weight:600;
+  color:var(--error); background:none; border:none; cursor:pointer; padding:10px 0;
+  font-family:'Poppins',sans-serif; width:100%;
+}
 </style>
 </head>
 <body>
@@ -565,10 +625,10 @@ body {
       <div class="splash-center">
         <!-- Official Umbler Talk logo -->
         <svg width="200" height="80" viewBox="0 0 200 80" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <!-- Icon: outer blue U-arc -->
-          <path d="M 8 38 A 32 32 0 1 0 72 38" stroke="#3B6AE4" stroke-width="11" fill="none" stroke-linecap="round"/>
+          <!-- Icon: outer blue arc, gap at top -->
+          <path d="M 25 14 A 30 30 0 1 0 55 14" stroke="#3B6AE4" stroke-width="11" fill="none" stroke-linecap="round"/>
           <!-- Icon: inner coral smile -->
-          <path d="M 20 42 Q 40 62 60 42" stroke="#F06060" stroke-width="9" fill="none" stroke-linecap="round"/>
+          <path d="M 24 50 Q 40 66 56 50" stroke="#F06060" stroke-width="9" fill="none" stroke-linecap="round"/>
           <!-- Text: umbler -->
           <text x="84" y="52" font-family="Poppins,sans-serif" font-size="26" font-weight="300" fill="#1A1A2E" letter-spacing="-0.5">umbler</text>
           <!-- Text: tal -->
@@ -708,8 +768,8 @@ body {
       <div class="login-logo-block">
         <!-- Umbler Talk logo -->
         <svg width="64" height="64" viewBox="0 0 80 80" fill="none">
-          <path d="M 10 48 A 36 36 0 1 0 70 48" stroke="#3B6AE4" stroke-width="13" fill="none" stroke-linecap="round"/>
-          <path d="M 22 54 Q 40 72 58 54" stroke="#F06060" stroke-width="10" fill="none" stroke-linecap="round"/>
+          <path d="M 25 14 A 30 30 0 1 0 55 14" stroke="#3B6AE4" stroke-width="12" fill="none" stroke-linecap="round"/>
+          <path d="M 24 50 Q 40 66 56 50" stroke="#F06060" stroke-width="9" fill="none" stroke-linecap="round"/>
         </svg>
         <svg width="160" height="28" viewBox="0 0 200 32" fill="none">
           <text x="0" y="26" font-family="Poppins,sans-serif" font-size="28" font-weight="300" fill="#1A1A2E" letter-spacing="-0.5">umbler talk</text>
@@ -735,14 +795,14 @@ body {
     <div class="view" id="view-inbox">
       <!-- Top header -->
       <div class="inbox-topbar">
-        <button class="hamburger-btn">
+        <button class="hamburger-btn" onclick="openDrawer()">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
         </button>
         <div class="topbar-logo">
           <!-- Umbler U icon -->
           <svg width="32" height="32" viewBox="0 0 80 80" fill="none">
-            <path d="M10 48 A36 36 0 1 0 70 48" stroke="#3B6AE4" stroke-width="13" fill="none" stroke-linecap="round"/>
-            <path d="M22 54 Q40 72 58 54" stroke="#F06060" stroke-width="10" fill="none" stroke-linecap="round"/>
+            <path d="M25 14 A30 30 0 1 0 55 14" stroke="#3B6AE4" stroke-width="12" fill="none" stroke-linecap="round"/>
+            <path d="M24 50 Q40 66 56 50" stroke="#F06060" stroke-width="9" fill="none" stroke-linecap="round"/>
           </svg>
         </div>
         <div class="topbar-actions">
@@ -1012,6 +1072,107 @@ body {
   </div>
 
   <div class="home-bar"><div></div></div>
+
+  <!-- ══ SIDE DRAWER ══ -->
+  <div class="drawer-overlay" id="drawer-overlay" onclick="closeDrawer()"></div>
+  <div class="side-drawer" id="side-drawer">
+    <div class="drawer-head">
+      <button class="drawer-close" onclick="closeDrawer()">✕</button>
+      <svg width="26" height="26" viewBox="0 0 80 80" fill="none">
+        <path d="M25 14 A30 30 0 1 0 55 14" stroke="#3B6AE4" stroke-width="12" fill="none" stroke-linecap="round"/>
+        <path d="M24 50 Q40 66 56 50" stroke="#F06060" stroke-width="9" fill="none" stroke-linecap="round"/>
+      </svg>
+      <div class="drawer-org">
+        <div class="drawer-org-av">🐕</div>
+        <div class="drawer-org-info">
+          <div class="drawer-org-label">Organização</div>
+          <div class="drawer-org-name">Umblerito</div>
+        </div>
+      </div>
+      <button class="drawer-apps-btn">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+      </button>
+    </div>
+    <div class="drawer-body">
+      <div class="drawer-item" onclick="closeDrawer()">
+        <span class="dicon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></span>Conversas
+      </div>
+      <div class="drawer-item">
+        <span class="dicon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span>Contatos
+      </div>
+      <div class="drawer-item">
+        <span class="dicon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></span>Board de contatos
+      </div>
+      <div class="drawer-item">
+        <span class="dicon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></span>Relatórios
+      </div>
+      <div class="drawer-item">
+        <span class="dicon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></span>Envios de campanhas de marketing
+      </div>
+      <div class="drawer-item">
+        <span class="dicon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 12 20 22 4 22 4 12"/><rect x="2" y="7" width="20" height="5"/><path d="M12 22V7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/></svg></span>Indique um amigo
+      </div>
+      <div class="drawer-item">
+        <span class="dicon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></span>Suporte
+      </div>
+
+      <div class="drawer-divider"></div>
+      <div class="drawer-section">Dados da conta</div>
+
+      <div class="drawer-item">
+        <span class="dicon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></span>Preferências pessoais
+      </div>
+      <div class="drawer-item">
+        <span class="dicon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></span>Configurações da organização
+      </div>
+      <div class="drawer-item">
+        <span class="dicon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></span>Financeiro
+      </div>
+
+      <div class="drawer-divider"></div>
+      <div class="drawer-section">Outras configurações</div>
+
+      <div class="drawer-item">
+        <span class="dicon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></span>Canais de atendimento
+      </div>
+      <div class="drawer-item">
+        <span class="dicon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>Atendentes
+      </div>
+      <div class="drawer-item">
+        <span class="dicon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/></svg></span>Setores
+      </div>
+      <div class="drawer-item">
+        <span class="dicon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></span>Agentes de IA
+      </div>
+      <div class="drawer-item">
+        <span class="dicon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/><circle cx="12" cy="16" r="1" fill="currentColor"/></svg></span>Chatbots
+      </div>
+      <div class="drawer-item">
+        <span class="dicon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg></span>Etiquetas
+      </div>
+      <div class="drawer-item">
+        <span class="dicon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg></span>Templates WhatsApp Business API
+      </div>
+      <div class="drawer-item">
+        <span class="dicon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></span>Mensagens agendadas
+      </div>
+      <div class="drawer-item">
+        <span class="dicon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/><line x1="9" y1="10" x2="15" y2="10"/><line x1="12" y1="7" x2="12" y2="13"/></svg></span>Respostas rápidas
+      </div>
+      <div class="drawer-item">
+        <span class="dicon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 3a3 3 0 0 0-3 3v12a3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3H6a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3V6a3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3h12a3 3 0 0 0 3-3 3 3 0 0 0-3-3z"/></svg></span>Webhooks
+      </div>
+      <div class="drawer-item">
+        <span class="dicon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></span>Logs de atividade
+      </div>
+    </div>
+    <div class="drawer-footer">
+      <button class="drawer-logout" onclick="closeDrawer();doLogout()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        Sair
+      </button>
+    </div>
+  </div>
 </div>
 
 <script>
@@ -1546,6 +1707,16 @@ function saveLabels(){
   closeOverlay('overlay-labels');
   const count=(convLabels[currentConvId]||[]).length;
   toast(`🏷️ ${count} etiqueta${count!==1?'s':''} salva${count!==1?'s':''}!`,'success');
+}
+
+// ── SIDE DRAWER ──────────────────────────────────────────────
+function openDrawer(){
+  document.getElementById('side-drawer').classList.add('open');
+  document.getElementById('drawer-overlay').classList.add('open');
+}
+function closeDrawer(){
+  document.getElementById('side-drawer').classList.remove('open');
+  document.getElementById('drawer-overlay').classList.remove('open');
 }
 
 
