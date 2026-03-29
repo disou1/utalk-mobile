@@ -1,0 +1,1116 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Umbler Talk — Preview</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --blue:       #3B6AE4;
+  --blue-dark:  #2A52C0;
+  --blue-light: #EEF2FF;
+  --coral:      #F06060;
+  --teal:       #00B5AC;
+  --teal-dark:  #009990;
+  --green-wa:   #25D366;
+  --bg:         #F4F5FF;
+  --surface:    #FFFFFF;
+  --border:     #E8E9F3;
+  --border2:    #D1D5DB;
+  --text-1:     #1A1A2E;
+  --text-2:     #6B7280;
+  --text-3:     #9CA3AF;
+  --bubble-in:  #EDFAF7;
+  --bubble-out: #EEF2FF;
+  --notes-gold: #F59E0B;
+  --error:      #EF4444;
+  --tag-geral:  #F3F4F6;
+  --talk2-bg:   #E0FBF9;
+  --talk2-text: #00837C;
+}
+
+body {
+  font-family: 'Poppins', -apple-system, sans-serif;
+  background: #0F172A;
+  display: flex; align-items: center; justify-content: center;
+  min-height: 100vh; padding: 24px;
+}
+
+/* ── Phone shell ── */
+.phone {
+  width: 390px; height: 844px;
+  background: var(--surface);
+  border-radius: 44px;
+  box-shadow: 0 0 0 10px #1E293B, 0 0 0 12px #334155, 0 40px 80px rgba(0,0,0,.7);
+  overflow: hidden; position: relative;
+  display: flex; flex-direction: column;
+}
+
+.status-bar {
+  height: 44px; background: var(--surface);
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 20px; flex-shrink: 0;
+}
+.status-bar .time { font-size: 14px; font-weight: 600; color: var(--text-1); }
+.status-bar .icons { display: flex; gap: 5px; align-items: center; color: var(--text-1); }
+.status-bar .icons svg { width: 14px; height: 14px; }
+
+.screen { flex: 1; display: flex; flex-direction: column; overflow: hidden; position: relative; }
+.view   { display: none; flex: 1; flex-direction: column; overflow: hidden; }
+.view.active { display: flex; }
+
+/* ════════════════════════════════════
+   SPLASH
+════════════════════════════════════ */
+#view-splash {
+  background: #fff;
+  align-items: center; justify-content: center; gap: 0;
+}
+.splash-center { display:flex; flex-direction:column; align-items:center; gap:52px; width:100%; padding:0 40px; }
+.splash-progress { display:flex; flex-direction:column; align-items:center; gap:10px; width:100%; }
+.splash-init { font-size:13px; color:#9CA3AF; font-weight:400; }
+.splash-bar-bg { width:100%; height:4px; background:#E5E7EB; border-radius:2px; overflow:hidden; }
+.splash-bar-fill { height:100%; background:var(--blue); border-radius:2px; width:0%; transition:width .08s linear; }
+
+/* ════════════════════════════════════
+   ONBOARDING
+════════════════════════════════════ */
+#view-onboarding { background:#fff; position:relative; }
+.ob-skip {
+  position:absolute; top:14px; right:18px; z-index:10;
+  background:none; border:none; cursor:pointer;
+  font-size:11px; font-weight:700; color:#9CA3AF;
+  letter-spacing:1.2px; text-transform:uppercase;
+  font-family:'Poppins',sans-serif;
+}
+.ob-slider { flex:1; overflow:hidden; position:relative; }
+.ob-track  { display:flex; height:100%; transition:transform .38s cubic-bezier(.4,0,.2,1); }
+.ob-slide  {
+  min-width:100%; height:100%; display:flex; flex-direction:column;
+  align-items:center; justify-content:center; padding:56px 32px 16px; gap:0;
+}
+.ob-illo { width:240px; height:200px; flex-shrink:0; }
+.ob-title { font-size:21px; font-weight:700; color:var(--blue); text-align:center; margin-top:32px; line-height:1.25; }
+.ob-desc  { font-size:13.5px; color:var(--text-2); text-align:center; margin-top:10px; line-height:1.65; max-width:270px; font-weight:400; }
+.ob-footer { display:flex; align-items:center; padding:14px 24px 26px; flex-shrink:0; }
+.ob-dots  { display:flex; gap:7px; flex:1; justify-content:center; }
+.ob-dot   { width:8px; height:8px; border-radius:4px; background:#D1D5DB; transition:all .3s; }
+.ob-dot.active { background:var(--blue); width:22px; }
+.ob-next-btn {
+  width:50px; height:50px; border-radius:25px; background:var(--blue); border:none;
+  cursor:pointer; display:flex; align-items:center; justify-content:center;
+  box-shadow:0 6px 18px rgba(59,106,228,.4); transition:transform .12s, background .15s;
+}
+.ob-next-btn:hover { background:var(--blue-dark); transform:scale(1.06); }
+.ob-next-btn svg { width:20px; height:20px; stroke:#fff; fill:none; stroke-width:2.5; stroke-linecap:round; stroke-linejoin:round; }
+.ob-start-btn {
+  flex:1; padding:14px; background:var(--blue); color:#fff; border:none;
+  border-radius:14px; font-size:15px; font-weight:700; cursor:pointer;
+  font-family:'Poppins',sans-serif; transition:background .15s;
+}
+.ob-start-btn:hover { background:var(--blue-dark); }
+@keyframes floatUp { 0%{opacity:0;transform:translateY(18px)} 100%{opacity:1;transform:translateY(0)} }
+.ob-slide.anim-in .illo-item { animation:floatUp .45s ease both; }
+.ob-slide.anim-in .illo-item:nth-child(1){animation-delay:.04s}
+.ob-slide.anim-in .illo-item:nth-child(2){animation-delay:.13s}
+.ob-slide.anim-in .illo-item:nth-child(3){animation-delay:.22s}
+
+/* ════════════════════════════════════
+   LOGIN
+════════════════════════════════════ */
+#view-login {
+  background:#fff;
+  align-items:center; justify-content:center;
+  padding:32px 24px; gap:0;
+}
+.login-logo-block { display:flex; flex-direction:column; align-items:center; gap:14px; margin-bottom:36px; }
+.login-card {
+  background:#fff; border-radius:20px; padding:28px; width:100%;
+  box-shadow:0 2px 24px rgba(59,106,228,.12); border:1px solid var(--border);
+}
+.login-card h2 { font-size:16px; font-weight:700; color:var(--text-1); margin-bottom:4px; }
+.login-card p  { font-size:13px; color:var(--text-2); margin-bottom:20px; font-weight:400; }
+.field { margin-bottom:14px; }
+.field label { font-size:11px; font-weight:600; color:var(--text-2); text-transform:uppercase; letter-spacing:.5px; display:block; margin-bottom:5px; }
+.field input {
+  width:100%; padding:11px 13px; border:1.5px solid var(--border);
+  border-radius:10px; font-size:14px; color:var(--text-1); outline:none;
+  transition:border-color .2s; font-family:'Poppins',sans-serif;
+}
+.field input:focus { border-color:var(--blue); }
+.btn-login {
+  width:100%; padding:13px; background:var(--blue); color:#fff; border:none;
+  border-radius:12px; font-size:15px; font-weight:600; cursor:pointer; margin-top:4px;
+  display:flex; align-items:center; justify-content:center; gap:8px;
+  transition:background .15s; font-family:'Poppins',sans-serif;
+}
+.btn-login:hover { background:var(--blue-dark); }
+.btn-login.loading { opacity:.7; pointer-events:none; }
+.spinner { width:15px; height:15px; border:2px solid rgba(255,255,255,.3); border-top-color:#fff; border-radius:50%; animation:spin .6s linear infinite; }
+@keyframes spin { to{transform:rotate(360deg)} }
+.login-footer { font-size:11px; color:#9CA3AF; text-align:center; margin-top:16px; }
+
+/* ════════════════════════════════════
+   INBOX
+════════════════════════════════════ */
+#view-inbox { background:var(--bg); }
+
+/* Top header bar */
+.inbox-topbar {
+  background:var(--surface); padding:10px 16px; flex-shrink:0;
+  display:flex; align-items:center; gap:10px;
+  border-bottom:1px solid var(--border);
+}
+.hamburger-btn { width:28px; height:28px; display:flex; align-items:center; justify-content:center; cursor:pointer; background:none; border:none; color:var(--text-2); flex-shrink:0; }
+.topbar-logo   { flex:1; display:flex; align-items:center; justify-content:center; }
+.topbar-actions { display:flex; gap:4px; align-items:center; }
+.topbar-icon-btn { width:30px; height:30px; display:flex; align-items:center; justify-content:center; cursor:pointer; background:none; border:none; color:var(--text-2); border-radius:8px; }
+.topbar-icon-btn:hover { background:var(--bg); }
+.topbar-avatar { width:30px; height:30px; border-radius:15px; background:#F87171; display:flex; align-items:center; justify-content:center; cursor:pointer; flex-shrink:0; overflow:hidden; }
+
+/* Second row: view switcher */
+.inbox-toolbar {
+  background:var(--surface); padding:6px 14px 8px;
+  display:flex; align-items:center; gap:6px; border-bottom:1px solid var(--border); flex-shrink:0;
+}
+.tb-icon-btn { width:30px; height:30px; display:flex; align-items:center; justify-content:center; cursor:pointer; background:none; border:none; color:var(--text-2); border-radius:8px; flex-shrink:0; }
+.tb-count-badge { background:var(--blue); color:#fff; width:26px; height:26px; border-radius:13px; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; cursor:pointer; flex-shrink:0; }
+.tb-divider { width:1px; height:20px; background:var(--border2); margin:0 2px; }
+.tb-dropdown { width:24px; height:24px; display:flex; align-items:center; justify-content:center; cursor:pointer; background:none; border:none; color:var(--text-2); }
+
+/* Tab pills */
+.inbox-tabs { background:var(--surface); padding:8px 14px 10px; display:flex; gap:6px; flex-shrink:0; }
+.inbox-tab {
+  padding:6px 16px; border-radius:20px; font-size:13px; font-weight:600;
+  border:none; cursor:pointer; transition:all .15s; font-family:'Poppins',sans-serif;
+  color:var(--text-2); background:none;
+}
+.inbox-tab.active { background:var(--blue); color:#fff; }
+.inbox-tab:hover:not(.active) { background:var(--bg); }
+
+.conv-list { overflow-y:auto; flex:1; }
+
+/* Conversation item */
+.conv-item {
+  background:var(--surface); padding:12px 14px 10px;
+  display:flex; gap:10px; cursor:pointer;
+  border-bottom:1px solid var(--border); transition:background .1s;
+  position:relative;
+}
+.conv-item:hover  { background:#FAFBFF; }
+.conv-item.unread { background:#F7F8FF; }
+
+.ci-avatar-wrap { position:relative; flex-shrink:0; }
+.ci-avatar {
+  width:46px; height:46px; border-radius:23px;
+  display:flex; align-items:center; justify-content:center;
+  font-size:16px; font-weight:600; color:#fff;
+  background:#9CA3AF;
+}
+.ci-channel-badge {
+  position:absolute; bottom:-1px; left:-1px;
+  width:20px; height:20px; border-radius:5px;
+  border:2px solid var(--surface); overflow:hidden;
+  display:flex; align-items:center; justify-content:center;
+  font-size:10px;
+}
+.ci-body { flex:1; min-width:0; }
+.ci-row1 { display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:2px; }
+.ci-name { font-size:14px; font-weight:600; color:var(--text-1); }
+.ci-time { font-size:11px; color:var(--text-3); font-weight:400; white-space:nowrap; margin-left:6px; margin-top:1px; }
+.ci-row2 { display:flex; align-items:center; gap:5px; margin-bottom:5px; }
+.ci-status-icon { font-size:12px; flex-shrink:0; }
+.ci-preview { font-size:12.5px; color:var(--text-2); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; flex:1; font-weight:400; }
+.conv-item.unread .ci-preview { color:var(--text-1); font-weight:500; }
+.ci-row3 { display:flex; align-items:center; gap:5px; flex-wrap:wrap; }
+.ci-agent-row { position:absolute; top:12px; right:14px; display:flex; align-items:center; gap:2px; }
+.ci-agent-av { width:22px; height:22px; border-radius:11px; background:#9CA3AF; display:flex; align-items:center; justify-content:center; font-size:9px; color:#fff; font-weight:700; border:1.5px solid var(--surface); }
+.ci-agent-plus { font-size:10px; color:var(--blue); font-weight:700; background:var(--surface); border:1.5px solid var(--blue); border-radius:10px; padding:0 4px; line-height:18px; }
+
+/* tag pills */
+.tag-pill {
+  display:inline-flex; align-items:center; gap:3px;
+  padding:2px 8px; border-radius:12px; font-size:10.5px; font-weight:500;
+  white-space:nowrap;
+}
+.tag-pill.talk2 { background:var(--talk2-bg); color:var(--talk2-text); border:1px solid #B2DFDB; }
+.tag-pill.geral  { background:var(--tag-geral); color:var(--text-2); border:1px solid var(--border2); }
+.tag-pill.num    { background:var(--surface); color:var(--text-2); border:1px solid var(--border2); }
+.tag-dashed { width:20px; height:20px; border-radius:10px; border:1.5px dashed var(--border2); display:inline-flex; align-items:center; justify-content:center; font-size:10px; color:var(--text-3); flex-shrink:0; }
+
+/* FAB */
+.fab {
+  position:absolute; bottom:16px; right:16px;
+  width:48px; height:48px; border-radius:24px; background:var(--blue);
+  display:flex; align-items:center; justify-content:center;
+  font-size:22px; color:#fff; cursor:pointer; z-index:10;
+  box-shadow:0 4px 14px rgba(59,106,228,.4);
+  border:none;
+}
+.fab:hover { background:var(--blue-dark); }
+
+/* ════════════════════════════════════
+   CONVERSATION
+════════════════════════════════════ */
+#view-conv { background:var(--bg); }
+
+.conv-topbar {
+  background:var(--surface); padding:8px 14px;
+  border-bottom:1px solid var(--border);
+  display:flex; align-items:center; gap:10px; flex-shrink:0;
+}
+.conv-back-btn { background:none; border:none; cursor:pointer; font-size:20px; color:var(--text-2); padding:2px 6px 2px 0; }
+.conv-contact-av {
+  width:36px; height:36px; border-radius:18px;
+  display:flex; align-items:center; justify-content:center;
+  font-size:13px; font-weight:600; color:#fff; flex-shrink:0;
+  position:relative;
+}
+.conv-channel-dot {
+  position:absolute; bottom:-1px; left:-1px;
+  width:16px; height:16px; border-radius:4px;
+  border:2px solid var(--surface); background:var(--green-wa);
+  display:flex; align-items:center; justify-content:center; font-size:7px;
+}
+.conv-topbar-info { flex:1; min-width:0; }
+.conv-topbar-name { font-size:15px; font-weight:700; color:var(--text-1); }
+.conv-topbar-tags { display:flex; align-items:center; gap:5px; margin-top:3px; }
+.conv-more { background:none; border:none; cursor:pointer; font-size:20px; color:var(--text-2); flex-shrink:0; }
+
+/* Connecting banner */
+.conv-connecting {
+  background:#F1F1F3; padding:10px 14px;
+  display:flex; align-items:center; gap:10px; flex-shrink:0;
+  font-size:13px; color:var(--text-2);
+}
+.rainbow-spin {
+  width:22px; height:22px; border-radius:11px; flex-shrink:0;
+  background:conic-gradient(from 0deg, #3B6AE4, #F06060, #F59E0B, #10B981, #3B6AE4);
+  animation:spin .8s linear infinite;
+  display:flex; align-items:center; justify-content:center;
+}
+.rainbow-spin::after { content:''; width:14px; height:14px; border-radius:7px; background:#F1F1F3; }
+
+/* Messages */
+.msg-list {
+  flex:1; overflow-y:auto; padding:10px 12px;
+  display:flex; flex-direction:column; gap:2px;
+}
+.msg-date-sep {
+  align-self:center; font-size:11px; color:var(--text-3);
+  background:rgba(255,255,255,.7); border-radius:10px;
+  padding:3px 10px; margin:6px 0;
+}
+.msg-bubble-wrap { display:flex; flex-direction:column; gap:2px; }
+
+.msg-card {
+  background:var(--surface); border-radius:12px; padding:10px 13px;
+  box-shadow:0 1px 3px rgba(0,0,0,.07); max-width:82%;
+  font-size:13.5px; line-height:1.5; color:var(--text-1);
+  word-break:break-word;
+}
+.msg-card.incoming { background:var(--bubble-in); align-self:flex-start; border-bottom-left-radius:3px; }
+.msg-card.outgoing { background:#E8F0FE; align-self:flex-end; border-bottom-right-radius:3px; }
+.msg-card.system   { background:#FFFDE7; border:1px solid #FFF176; align-self:flex-start; font-size:12.5px; color:var(--text-2); }
+.msg-sender { font-size:11.5px; font-weight:700; color:var(--blue); margin-bottom:3px; }
+.msg-footer { display:flex; align-items:center; justify-content:flex-end; gap:6px; margin-top:5px; }
+.msg-time   { font-size:10.5px; color:var(--text-3); }
+.msg-status { display:flex; align-items:center; gap:3px; font-size:11px; }
+.msg-warn   { color:#F59E0B; }
+.msg-count  { font-size:10px; color:var(--text-3); background:#F3F4F6; border-radius:8px; padding:0 5px; }
+.msg-retry  { color:var(--text-3); cursor:pointer; }
+
+/* Locked state */
+.conv-locked {
+  background:var(--surface); padding:14px 16px;
+  border-top:1px solid var(--border); flex-shrink:0;
+}
+.conv-locked-icon { font-size:22px; margin-bottom:6px; display:block; color:var(--blue); }
+.conv-locked-text { font-size:12.5px; color:var(--text-2); line-height:1.5; margin-bottom:12px; }
+.conv-locked-actions { display:flex; gap:8px; }
+.btn-template { flex:1; padding:10px; background:var(--blue); color:#fff; border:none; border-radius:10px; font-size:13px; font-weight:600; cursor:pointer; font-family:'Poppins',sans-serif; }
+.btn-bot { flex:1; padding:10px; background:#fff; color:var(--text-1); border:1.5px solid var(--border2); border-radius:10px; font-size:13px; font-weight:600; cursor:pointer; font-family:'Poppins',sans-serif; }
+
+/* Composer */
+.composer-area { background:var(--surface); flex-shrink:0; border-top:1px solid var(--border); }
+.agent-bar {
+  padding:7px 14px; display:flex; align-items:center; gap:8px;
+  border-bottom:1px solid var(--border);
+}
+.toggle { width:34px; height:18px; border-radius:9px; background:var(--teal); position:relative; cursor:pointer; transition:background .2s; flex-shrink:0; }
+.toggle-knob { width:14px; height:14px; border-radius:7px; background:#fff; position:absolute; top:2px; left:18px; transition:left .2s; box-shadow:0 1px 3px rgba(0,0,0,.2); }
+.toggle.off { background:var(--border2); }
+.toggle.off .toggle-knob { left:2px; }
+.agent-label { font-size:12.5px; font-weight:600; color:var(--text-1); }
+.edit-lbl { color:var(--text-3); font-size:12px; cursor:pointer; }
+.agent-bar .spacer { flex:1; }
+
+.composer-wrap { padding:7px 12px; display:flex; align-items:flex-end; gap:8px; }
+.composer-input {
+  flex:1; background:var(--bg); border:1.5px solid var(--border);
+  border-radius:20px; padding:8px 14px;
+  font-size:13.5px; font-family:'Poppins',sans-serif; color:var(--text-1);
+  resize:none; outline:none; max-height:90px; min-height:36px;
+  transition:border-color .15s;
+}
+.composer-input:focus { border-color:var(--blue); }
+.composer-input.notes-mode { background:#FFFBEB; border-color:#FDE68A; }
+.send-fab { width:36px; height:36px; border-radius:18px; background:var(--teal); border:none; cursor:pointer; display:flex; align-items:center; justify-content:center; flex-shrink:0; transition:background .15s; }
+.send-fab:hover { background:var(--teal-dark); }
+.send-fab.notes { background:var(--notes-gold); }
+.send-fab svg { width:15px; height:15px; fill:#fff; }
+
+.bottom-tabs { display:flex; border-top:1px solid var(--border); padding:4px 12px 7px; gap:5px; align-items:center; }
+.add-btn { width:30px; height:30px; border-radius:15px; background:var(--bg); border:1.5px solid var(--border); font-size:17px; cursor:pointer; display:flex; align-items:center; justify-content:center; color:var(--text-2); flex-shrink:0; }
+.tab-btn { flex:1; padding:6px 10px; border-radius:18px; border:none; font-size:12.5px; font-weight:600; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:4px; transition:all .15s; font-family:'Poppins',sans-serif; }
+.tab-btn.msg-tab { background:var(--blue); color:#fff; }
+.tab-btn.msg-tab:not(.active) { background:var(--bg); color:var(--text-2); }
+.tab-btn.notes-tab { background:var(--bg); color:var(--text-2); }
+.tab-btn.notes-tab.active { background:var(--notes-gold); color:#fff; }
+
+/* ════════════════════════════════════
+   SETTINGS
+════════════════════════════════════ */
+#view-settings { background:var(--bg); }
+.settings-header { background:var(--surface); padding:14px 16px; border-bottom:1px solid var(--border); }
+.settings-header h1 { font-size:18px; font-weight:700; color:var(--text-1); }
+.settings-body { flex:1; overflow-y:auto; padding:16px; display:flex; flex-direction:column; gap:14px; }
+.settings-section { background:var(--surface); border-radius:14px; overflow:hidden; }
+.settings-section-title { font-size:10.5px; font-weight:700; color:var(--text-2); text-transform:uppercase; letter-spacing:.6px; padding:10px 14px 5px; }
+.settings-row { padding:11px 14px; border-bottom:1px solid var(--border); display:flex; justify-content:space-between; align-items:center; }
+.settings-row:last-child { border-bottom:none; }
+.settings-row-label { font-size:14px; color:var(--text-1); font-weight:500; }
+.settings-row-value { font-size:12px; color:var(--text-2); font-family:monospace; }
+.btn-danger { width:100%; padding:13px; background:#FEF2F2; color:var(--error); border:1.5px solid #FECACA; border-radius:12px; font-size:14px; font-weight:700; cursor:pointer; transition:all .15s; font-family:'Poppins',sans-serif; }
+.btn-danger:hover { background:#FEE2E2; }
+
+/* ════════════════════════════════════
+   NOTIFICATIONS
+════════════════════════════════════ */
+#view-notif { background:var(--surface); }
+.notif-header { padding:12px 16px; border-bottom:1px solid var(--border); display:flex; align-items:center; gap:10px; }
+.notif-header h1 { flex:1; text-align:center; font-size:16px; font-weight:700; color:var(--text-1); }
+.notif-tabs { display:flex; border-bottom:1px solid var(--border); }
+.notif-tab { flex:1; padding:11px 6px; font-size:12.5px; font-weight:600; color:var(--text-2); border:none; background:none; cursor:pointer; border-bottom:2.5px solid transparent; transition:all .15s; font-family:'Poppins',sans-serif; }
+.notif-tab.active { color:var(--blue); border-bottom-color:var(--blue); }
+.notif-body { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:10px; padding:24px; }
+.notif-empty-icon { font-size:64px; opacity:.1; }
+.notif-empty-text { font-size:14.5px; color:var(--text-2); font-weight:500; }
+
+/* ════════════════════════════════════
+   BOTTOM NAV
+════════════════════════════════════ */
+.bottom-nav { background:var(--surface); border-top:1px solid var(--border); display:flex; height:56px; flex-shrink:0; }
+.nav-tab { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:3px; cursor:pointer; border:none; background:none; color:var(--text-3); transition:color .15s; }
+.nav-tab.active { color:var(--blue); }
+.nav-tab svg { width:21px; height:21px; }
+.nav-tab span { font-size:9.5px; font-weight:600; }
+
+/* ════════════════════════════════════
+   OVERLAYS
+════════════════════════════════════ */
+.overlay { display:none; position:absolute; inset:0; background:rgba(0,0,0,.4); z-index:100; align-items:flex-end; }
+.overlay.open { display:flex; animation:su .2s ease; }
+@keyframes su { from{opacity:0;transform:translateY(28px)} to{opacity:1;transform:translateY(0)} }
+.sheet { background:var(--surface); width:100%; border-radius:20px 20px 0 0; padding:10px 0 26px; }
+.sheet-handle { width:36px; height:4px; background:var(--border2); border-radius:2px; margin:0 auto 8px; }
+.sheet-item { display:flex; align-items:center; gap:14px; padding:12px 20px; cursor:pointer; transition:background .1s; font-size:14px; color:var(--text-1); }
+.sheet-item:hover { background:var(--bg); }
+.sheet-item .si { font-size:16px; width:22px; text-align:center; color:var(--text-2); }
+.sheet-item.danger { color:var(--error); }
+.sheet-item.danger .si { color:var(--error); }
+
+/* Toast */
+.toast { position:absolute; top:54px; left:10px; right:10px; padding:10px 14px; border-radius:12px; font-size:13px; font-weight:600; color:#fff; z-index:200; display:none; animation:tin .2s ease; }
+@keyframes tin { from{opacity:0;transform:translateY(-6px)} to{opacity:1;transform:translateY(0)} }
+.toast.success { background:var(--teal); display:block; }
+.toast.error   { background:var(--error); display:block; }
+.toast.info    { background:var(--blue); display:block; }
+
+.home-bar { height:22px; display:flex; align-items:center; justify-content:center; background:var(--surface); flex-shrink:0; }
+.home-bar div { width:120px; height:4px; background:#111; border-radius:2px; }
+</style>
+</head>
+<body>
+<div class="phone">
+  <div class="status-bar">
+    <span class="time" id="clock">09:41</span>
+    <div class="icons">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M1 5h2v14H1zm4 3h2v11H5zm4-1h2v12H9zm4-3h2v15h-2z"/></svg>
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M1.5 8.5A13 13 0 0 1 12 4a13 13 0 0 1 10.5 4.5l-1.5 1.5A11 11 0 0 0 12 6 11 11 0 0 0 3 10zM12 12a7 7 0 0 1 5 2.1L15.5 15.5A5 5 0 0 0 12 14a5 5 0 0 0-3.5 1.5L7 14A7 7 0 0 1 12 12zm0 4a3 3 0 0 1 2.1.9L12 19l-2.1-2.1A3 3 0 0 1 12 16z"/></svg>
+      <svg viewBox="0 0 24 24" fill="currentColor"><rect x="2" y="7" width="15" height="11" rx="2"/><path d="M19 10h1a2 2 0 0 1 2 2v1a2 2 0 0 1-2 2h-1"/></svg>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+  <div class="screen">
+
+    <!-- ══ SPLASH ══ -->
+    <div class="view active" id="view-splash">
+      <div class="splash-center">
+        <!-- Official Umbler Talk logo -->
+        <svg width="200" height="80" viewBox="0 0 200 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <!-- Icon: outer blue U-arc -->
+          <path d="M 8 38 A 32 32 0 1 0 72 38" stroke="#3B6AE4" stroke-width="11" fill="none" stroke-linecap="round"/>
+          <!-- Icon: inner coral smile -->
+          <path d="M 20 42 Q 40 62 60 42" stroke="#F06060" stroke-width="9" fill="none" stroke-linecap="round"/>
+          <!-- Text: umbler -->
+          <text x="84" y="52" font-family="Poppins,sans-serif" font-size="26" font-weight="300" fill="#1A1A2E" letter-spacing="-0.5">umbler</text>
+          <!-- Text: tal -->
+          <text x="84" y="76" font-family="Poppins,sans-serif" font-size="26" font-weight="300" fill="#1A1A2E" letter-spacing="-0.5">tal</text>
+          <!-- Special k with cutout -->
+          <g transform="translate(152,52)">
+            <rect x="0" y="-24" width="6" height="24" fill="#1A1A2E" rx="1.5"/>
+            <path d="M4,-16 L22,-24 L26,-18 L10,-10Z" fill="#1A1A2E"/>
+            <path d="M4,-16 L22,0 L26,-6 L10,-14Z" fill="#1A1A2E"/>
+            <circle cx="18" cy="-18" r="5.5" fill="white"/>
+          </g>
+        </svg>
+
+        <div class="splash-progress">
+          <span class="splash-init">Inicializando...</span>
+          <div class="splash-bar-bg">
+            <div class="splash-bar-fill" id="splash-bar"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ ONBOARDING ══ -->
+    <div class="view" id="view-onboarding">
+      <button class="ob-skip" onclick="skipOnboarding()">IGNORAR</button>
+      <div class="ob-slider">
+        <div class="ob-track" id="ob-track">
+
+          <!-- Slide 1: Responda rapidamente -->
+          <div class="ob-slide" id="ob-slide-0">
+            <svg class="ob-illo" viewBox="0 0 240 200" fill="none">
+              <g class="illo-item">
+                <rect x="10" y="10" width="220" height="50" rx="10" fill="white" stroke="#E5E7EB" stroke-width="1.5"/>
+                <circle cx="42" cy="35" r="16" fill="#EEF2FF" stroke="#3B6AE4" stroke-width="1.5"/>
+                <text x="42" y="41" text-anchor="middle" font-size="14">😊</text>
+                <rect x="68" y="24" width="72" height="6" rx="3" fill="#C7D7FF"/>
+                <rect x="68" y="36" width="100" height="6" rx="3" fill="#E5E7EB"/>
+              </g>
+              <g class="illo-item">
+                <rect x="10" y="74" width="220" height="50" rx="10" fill="white" stroke="#E5E7EB" stroke-width="1.5"/>
+                <circle cx="42" cy="99" r="16" fill="#EEF2FF" stroke="#3B6AE4" stroke-width="1.5"/>
+                <text x="42" y="105" text-anchor="middle" font-size="14">😄</text>
+                <rect x="68" y="88" width="55" height="6" rx="3" fill="#C7D7FF"/>
+                <rect x="68" y="100" width="92" height="6" rx="3" fill="#E5E7EB"/>
+              </g>
+              <g class="illo-item">
+                <rect x="10" y="138" width="220" height="50" rx="10" fill="#EEF2FF" stroke="#3B6AE4" stroke-width="1.5"/>
+                <circle cx="42" cy="163" r="16" fill="#C7D7FF" stroke="#3B6AE4" stroke-width="1.5"/>
+                <text x="42" y="169" text-anchor="middle" font-size="14">😁</text>
+                <rect x="68" y="152" width="92" height="6" rx="3" fill="#93B4FF"/>
+                <rect x="68" y="164" width="65" height="6" rx="3" fill="#C7D7FF"/>
+              </g>
+            </svg>
+            <div class="ob-title">Responda rapidamente</div>
+            <div class="ob-desc">Mantenha os clientes satisfeitos resolvendo tickets de qualquer lugar.</div>
+          </div>
+
+          <!-- Slide 2: Notificações inteligentes -->
+          <div class="ob-slide" id="ob-slide-1">
+            <svg class="ob-illo" viewBox="0 0 240 200" fill="none">
+              <rect x="20" y="10" width="150" height="170" rx="12" fill="#F8FAFF" stroke="#C7D7F5" stroke-width="1.5" stroke-dasharray="5 4"/>
+              <rect x="45" y="28" width="76" height="130" rx="9" fill="white" stroke="#3B6AE4" stroke-width="1.8"/>
+              <rect x="52" y="40" width="62" height="7" rx="3" fill="#C7D7FF"/>
+              <rect x="52" y="52" width="62" height="7" rx="3" fill="#E5E7EB"/>
+              <rect x="52" y="64" width="38" height="7" rx="3" fill="#E5E7EB"/>
+              <circle cx="83" cy="108" r="18" fill="#EEF2FF" stroke="#3B6AE4" stroke-width="1.5"/>
+              <text x="83" y="114" text-anchor="middle" font-size="14">😊</text>
+              <circle cx="83" cy="147" r="5" fill="#E5E7EB"/>
+              <g transform="translate(162,22)">
+                <path d="M38 48 Q38 8 0 8 Q-38 8 -38 48" fill="#E5E7EB"/>
+                <line x1="0" y1="8" x2="0" y2="72" stroke="#9CA3AF" stroke-width="2" stroke-linecap="round"/>
+                <line x1="0" y1="72" x2="7" y2="82" stroke="#9CA3AF" stroke-width="2" stroke-linecap="round"/>
+                <line x1="0" y1="8" x2="-38" y2="48" stroke="#C7D7FF" stroke-width="1.2"/>
+                <line x1="0" y1="8" x2="-19" y2="40" stroke="#C7D7FF" stroke-width="1.2"/>
+                <line x1="0" y1="8" x2="19" y2="40" stroke="#C7D7FF" stroke-width="1.2"/>
+                <line x1="0" y1="8" x2="38" y2="48" stroke="#C7D7FF" stroke-width="1.2"/>
+              </g>
+              <g transform="translate(184,148)">
+                <path d="M9 0L11 7L18 7L13 11L15 18L9 14L3 18L5 11L0 7L7 7Z" fill="none" stroke="#D1D5DB" stroke-width="1.3"/>
+              </g>
+            </svg>
+            <div class="ob-title">Notificações inteligentes</div>
+            <div class="ob-desc">Receba atualizações de ticket apenas quando e onde você desejar.</div>
+          </div>
+
+          <!-- Slide 3: Automatize seu fluxo -->
+          <div class="ob-slide" id="ob-slide-2">
+            <svg class="ob-illo" viewBox="0 0 240 200" fill="none">
+              <rect x="10" y="150" width="220" height="9" rx="3" fill="#E5E7EB"/>
+              <rect x="24" y="159" width="9" height="34" rx="3" fill="#E5E7EB"/>
+              <rect x="207" y="159" width="9" height="34" rx="3" fill="#E5E7EB"/>
+              <rect x="40" y="110" width="98" height="40" rx="5" fill="#F3F4F6" stroke="#E5E7EB" stroke-width="1.5"/>
+              <rect x="46" y="115" width="86" height="28" rx="3" fill="#C7D7FF"/>
+              <rect x="50" y="119" width="78" height="4" rx="2" fill="#93B4FF"/>
+              <rect x="50" y="127" width="56" height="4" rx="2" fill="#93B4FF"/>
+              <rect x="50" y="135" width="72" height="5" rx="2" fill="#B0C4FF"/>
+              <rect x="140" y="132" width="14" height="18" rx="4" fill="#3B6AE4"/>
+              <line x1="147" y1="132" x2="168" y2="92" stroke="#3B6AE4" stroke-width="5.5" stroke-linecap="round"/>
+              <line x1="168" y1="92" x2="198" y2="108" stroke="#3B6AE4" stroke-width="5.5" stroke-linecap="round"/>
+              <circle cx="147" cy="132" r="5" fill="white" stroke="#3B6AE4" stroke-width="2"/>
+              <circle cx="168" cy="92" r="5" fill="white" stroke="#3B6AE4" stroke-width="2"/>
+              <circle cx="198" cy="108" r="6" fill="#3B6AE4"/>
+              <rect x="0" y="0" width="68" height="54" rx="5" fill="#F9FAFB" stroke="#E5E7EB" stroke-width="1.5"/>
+              <line x1="34" y1="0" x2="34" y2="-9" stroke="#E5E7EB" stroke-width="1.5"/>
+              <circle cx="34" cy="-13" r="4" fill="#E5E7EB"/>
+              <text x="34" y="34" text-anchor="middle" font-size="22">🐱</text>
+              <g transform="translate(148,40)">
+                <rect x="0" y="0" width="58" height="36" rx="9" fill="#EEF2FF" stroke="#3B6AE4" stroke-width="1.5"/>
+                <polygon points="10,36 20,47 30,36" fill="#EEF2FF" stroke="#3B6AE4" stroke-width="1.5"/>
+                <polygon points="10,36 20,47 30,36" fill="#EEF2FF"/>
+                <circle cx="14" cy="18" r="4" fill="#3B6AE4"/>
+                <rect x="24" y="12" width="26" height="4" rx="2" fill="#93B4FF"/>
+                <rect x="24" y="20" width="18" height="4" rx="2" fill="#C7D7FF"/>
+              </g>
+            </svg>
+            <div class="ob-title">Automatize seu fluxo de trabalho</div>
+            <div class="ob-desc">Economize tempo usando macros para automatizar as respostas de suporte ao cliente.</div>
+          </div>
+
+        </div>
+      </div>
+      <div class="ob-footer">
+        <div style="width:50px"></div>
+        <div class="ob-dots" id="ob-dots">
+          <div class="ob-dot active"></div>
+          <div class="ob-dot"></div>
+          <div class="ob-dot"></div>
+        </div>
+        <button class="ob-next-btn" id="ob-next-btn" onclick="obNext()">
+          <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- ══ LOGIN ══ -->
+    <div class="view" id="view-login">
+      <div class="login-logo-block">
+        <!-- Umbler Talk logo -->
+        <svg width="64" height="64" viewBox="0 0 80 80" fill="none">
+          <path d="M 10 48 A 36 36 0 1 0 70 48" stroke="#3B6AE4" stroke-width="13" fill="none" stroke-linecap="round"/>
+          <path d="M 22 54 Q 40 72 58 54" stroke="#F06060" stroke-width="10" fill="none" stroke-linecap="round"/>
+        </svg>
+        <svg width="160" height="28" viewBox="0 0 200 32" fill="none">
+          <text x="0" y="26" font-family="Poppins,sans-serif" font-size="28" font-weight="300" fill="#1A1A2E" letter-spacing="-0.5">umbler talk</text>
+        </svg>
+      </div>
+      <div class="login-card">
+        <h2>Conectar à API</h2>
+        <p>Informe suas credenciais para começar</p>
+        <div class="field">
+          <label>API Key</label>
+          <input type="password" id="inp-apikey" placeholder="sk-xxxxxxxxxxxxxxxx" value="sk-demo-key-123"/>
+        </div>
+        <div class="field">
+          <label>Organization ID</label>
+          <input type="text" id="inp-orgid" placeholder="org-xxxxxxxx" value="org-umbler-demo"/>
+        </div>
+        <button class="btn-login" id="btn-login" onclick="doLogin()">Entrar</button>
+      </div>
+      <div class="login-footer">🔒 Credenciais armazenadas com segurança</div>
+    </div>
+
+    <!-- ══ INBOX ══ -->
+    <div class="view" id="view-inbox">
+      <!-- Top header -->
+      <div class="inbox-topbar">
+        <button class="hamburger-btn">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        </button>
+        <div class="topbar-logo">
+          <!-- Umbler U icon -->
+          <svg width="32" height="32" viewBox="0 0 80 80" fill="none">
+            <path d="M10 48 A36 36 0 1 0 70 48" stroke="#3B6AE4" stroke-width="13" fill="none" stroke-linecap="round"/>
+            <path d="M22 54 Q40 72 58 54" stroke="#F06060" stroke-width="10" fill="none" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div class="topbar-actions">
+          <button class="topbar-icon-btn" onclick="">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          </button>
+          <button class="topbar-icon-btn">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
+          </button>
+          <button class="topbar-icon-btn" onclick="showView('notif')">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+          </button>
+          <div class="topbar-avatar">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          </div>
+        </div>
+      </div>
+
+      <!-- Second toolbar -->
+      <div class="inbox-toolbar">
+        <button class="tb-icon-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        </button>
+        <div class="tb-count-badge">17</div>
+        <button class="tb-icon-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        </button>
+        <button class="tb-icon-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+        </button>
+        <button class="tb-icon-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+        </button>
+        <button class="tb-icon-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg>
+        </button>
+        <div class="tb-divider"></div>
+        <button class="tb-dropdown">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+      </div>
+
+      <!-- Tab pills -->
+      <div class="inbox-tabs">
+        <button class="inbox-tab active" onclick="setInboxTab(0,this)">Entrada +99</button>
+        <button class="inbox-tab" onclick="setInboxTab(1,this)">Esperando</button>
+        <button class="inbox-tab" onclick="setInboxTab(2,this)">Finalizados</button>
+      </div>
+
+      <div class="conv-list" id="conv-list" style="position:relative">
+        <!-- items injected by JS -->
+        <button class="fab" onclick="">+</button>
+      </div>
+    </div>
+
+    <!-- ══ CONVERSATION ══ -->
+    <div class="view" id="view-conv">
+      <div class="conv-topbar">
+        <button class="conv-back-btn" onclick="goBack()">‹</button>
+        <div class="conv-contact-av" id="ch-av">
+          <div class="conv-channel-dot">
+            <svg width="8" height="8" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.126.555 4.122 1.528 5.856L.072 23.927 6.28 22.5A11.934 11.934 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0z"/></svg>
+          </div>
+        </div>
+        <div class="conv-topbar-info">
+          <div class="conv-topbar-name" id="ch-name">—</div>
+          <div class="conv-topbar-tags">
+            <div class="tag-dashed">🏷</div>
+            <span class="tag-pill geral">Geral</span>
+          </div>
+        </div>
+        <button class="conv-more" onclick="openActions()">⋮</button>
+      </div>
+
+      <!-- connecting banner -->
+      <div class="conv-connecting" id="conv-connecting">
+        <div class="rainbow-spin"></div>
+        <span>Estabelecendo comunicação em tempo real...</span>
+      </div>
+
+      <div class="msg-list" id="msg-list"></div>
+
+      <!-- Locked state (shown for resolved) -->
+      <div class="conv-locked" id="conv-locked" style="display:none">
+        <span class="conv-locked-icon">🔒</span>
+        <div class="conv-locked-text">Já faz mais de 24 horas que esta conversa não recebe mensagens do contato.</div>
+        <div class="conv-locked-actions">
+          <button class="btn-template">Enviar template</button>
+          <button class="btn-bot">Executar bot</button>
+        </div>
+      </div>
+
+      <div class="agent-bar">
+        <div class="toggle" id="agent-toggle" onclick="toggleAgent()"><div class="toggle-knob"></div></div>
+        <span class="agent-label">Guilherme Disou</span>
+        <span class="edit-lbl">✏️</span>
+        <div class="spacer"></div>
+        <button style="background:none;border:none;cursor:pointer;font-size:15px;color:var(--text-2)">🕐</button>
+      </div>
+      <div class="composer-area">
+        <div class="composer-wrap">
+          <textarea class="composer-input" id="composer" rows="1"
+            placeholder="Digite sua mensagem ou arraste um arquivo…"
+            onkeydown="handleKey(event)" oninput="autoResize(this)"></textarea>
+          <button class="send-fab" id="send-fab" onclick="sendMessage()">
+            <svg viewBox="0 0 24 24"><path d="M2 21l21-9L2 3v7l15 2-15 2z"/></svg>
+          </button>
+        </div>
+        <div class="bottom-tabs">
+          <button class="add-btn">+</button>
+          <button class="tab-btn msg-tab active" id="tab-msg" onclick="setMode('msg')">🗨 Mensagem</button>
+          <button class="tab-btn notes-tab" id="tab-notes" onclick="setMode('notes')">📋 Notas</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ NOTIFICATIONS ══ -->
+    <div class="view" id="view-notif">
+      <div class="notif-header">
+        <button class="conv-back-btn" onclick="showTab('inbox')" style="font-size:20px;color:var(--blue)">‹</button>
+        <h1>Notificações</h1>
+        <div style="width:32px"></div>
+      </div>
+      <div class="notif-tabs">
+        <button class="notif-tab active" onclick="setNotifTab(0,this)">@ Menções</button>
+        <button class="notif-tab" onclick="setNotifTab(1,this)">🔔 Atividades</button>
+        <button class="notif-tab" onclick="setNotifTab(2,this)">✨ Novidades</button>
+      </div>
+      <div class="notif-body" id="notif-body">
+        <div class="notif-empty-icon">@</div>
+        <div class="notif-empty-text">Nenhuma menção.</div>
+      </div>
+    </div>
+
+    <!-- ══ SETTINGS ══ -->
+    <div class="view" id="view-settings">
+      <div class="settings-header"><h1>Configurações</h1></div>
+      <div class="settings-body">
+        <div class="settings-section">
+          <div class="settings-section-title">Conta</div>
+          <div class="settings-row"><span class="settings-row-label">API Key</span><span class="settings-row-value">sk-demo-key-***</span></div>
+          <div class="settings-row"><span class="settings-row-label">Organization ID</span><span class="settings-row-value">org-umbler-demo</span></div>
+          <div class="settings-row"><span class="settings-row-label">Agente</span><span class="settings-row-value">Guilherme Disou</span></div>
+        </div>
+        <div class="settings-section">
+          <div class="settings-section-title">App</div>
+          <div class="settings-row"><span class="settings-row-label">Versão</span><span class="settings-row-value">1.0.0</span></div>
+          <div class="settings-row"><span class="settings-row-label">Plataforma</span><span class="settings-row-value">Expo SDK 52</span></div>
+        </div>
+        <button class="btn-danger" onclick="doLogout()">Desconectar</button>
+      </div>
+    </div>
+
+  </div><!-- .screen -->
+
+  <div class="bottom-nav" id="bottom-nav" style="display:none">
+    <button class="nav-tab active" id="tab-inbox" onclick="showTab('inbox')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      <span>Inbox</span>
+    </button>
+    <button class="nav-tab" id="tab-settings" onclick="showTab('settings')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+      <span>Config</span>
+    </button>
+  </div>
+
+  <!-- Action sheet -->
+  <div class="overlay" id="overlay-actions">
+    <div class="sheet">
+      <div class="sheet-handle"></div>
+      <div class="sheet-item" onclick="sheetAction('contact')"><span class="si">👤</span> Detalhes do contato</div>
+      <div class="sheet-item" onclick="sheetAction('details')"><span class="si">📄</span> Detalhes da conversa</div>
+      <div class="sheet-item" onclick="sheetAction('transfer')"><span class="si">↗️</span> Transferir conversa</div>
+      <div class="sheet-item" onclick="sheetAction('private')"><span class="si">🔒</span> Privar atendimento</div>
+      <div class="sheet-item" onclick="sheetAction('schedule')"><span class="si">📅</span> Agendar envio de mensagem</div>
+      <div class="sheet-item" onclick="sheetAction('finish')"><span class="si">✓</span> Finalizar conversa</div>
+      <div class="sheet-item" onclick="sheetAction('search')"><span class="si">🔍</span> Pesquisar mensagem</div>
+      <div class="sheet-item danger" onclick="closeOverlay('overlay-actions')"><span class="si">✕</span> Ocultar essa janela</div>
+    </div>
+  </div>
+
+  <!-- Transfer sheet -->
+  <div class="overlay" id="overlay-transfer">
+    <div class="sheet">
+      <div class="sheet-handle"></div>
+      <div style="font-size:15px;font-weight:700;color:var(--text-1);padding:2px 18px 10px">Transferir conversa</div>
+      <div id="agents-list"></div>
+      <div style="padding:8px 14px 0"><button onclick="closeOverlay('overlay-transfer')" style="width:100%;padding:11px;background:var(--bg);border:none;border-radius:12px;font-size:13.5px;font-weight:600;color:var(--text-2);cursor:pointer;font-family:'Poppins',sans-serif">Cancelar</button></div>
+    </div>
+  </div>
+
+  <div class="home-bar"><div></div></div>
+</div>
+
+<script>
+// ── DATA ─────────────────────────────────────────────────────
+const contacts=[
+  {id:'c1',name:'Disou',         phone:'(11) 98765-4321'},
+  {id:'c2',name:'Ryan',          phone:'(21) 99123-4567'},
+  {id:'c3',name:'+55 31 8756-5581',phone:'(31) 97654-3210'},
+  {id:'c4',name:'uTalk dev',     phone:'(41) 98888-0101'},
+  {id:'c5',name:'Elaine Martins',phone:'(51) 99000-1234'},
+];
+const agents=[
+  {id:'a1',name:'Carlos Mendonça',email:'carlos@umbler.com'},
+  {id:'a2',name:'Fernanda Lima',  email:'fernanda@umbler.com'},
+  {id:'a3',name:'Rafael Andrade', email:'rafael@umbler.com'},
+];
+const chColor={whatsapp:'#25D366',instagram:'#E1306C',telegram:'#2AABEE',email:'#6B7280',webchat:'#3B6AE4'};
+const chEmoji={whatsapp:'🟢',instagram:'💗',telegram:'🔵',email:'📧',webchat:'💬'};
+const stColor={open:'#10B981',pending:'#F59E0B',resolved:'#9CA3AF',transferred:'#3B82F6'};
+const avColors=['#3B6AE4','#10B981','#3B82F6','#F59E0B','#EF4444','#8B5CF6','#F06060'];
+
+const convData=[
+  {id:'c1',contact:contacts[0],channel:'whatsapp',status:'open',   unread:0,agent:agents[0],lastMsg:'Olá tudo bem? O ...',tag:'Geral', time:Date.now()-9*3600000},
+  {id:'c2',contact:contacts[1],channel:'whatsapp',status:'open',   unread:0,agent:agents[1],lastMsg:'teste',              tag:'teste Sa...', time:Date.now()-15*3600000},
+  {id:'c3',contact:contacts[2],channel:'instagram',status:'open',  unread:0,agent:null,      lastMsg:'test',              tag:'Geral', time:Date.now()-2*86400000},
+  {id:'c4',contact:contacts[3],channel:'whatsapp',status:'open',   unread:0,agent:null,      lastMsg:'Unsupported',       tag:'Geral', time:Date.now()-2*86400000},
+  {id:'c5',contact:contacts[4],channel:'email',    status:'pending',unread:2,agent:agents[2], lastMsg:'Boa tarde, uma dúvida sobre a fatura', tag:'Geral', time:Date.now()-5*60000},
+];
+
+const seedMsgs=[
+  {sender:'system',content:'Chatbot "Teste Template Samuel->Início" iniciado manualmente.'},
+  {sender:'bot',   senderName:'teste 1', content:'Olá tudo bem?\n\nO que posso te ajudar?', warn:true},
+  {sender:'bot',   senderName:'teste',   content:'Olá tudo bem?\n\nO que posso te ajudar?', warn:true},
+];
+
+// ── HELPERS ────────────────────────────────────────────────────
+function initials(n){return n.replace('+','').trim().split(/\s+/).slice(0,2).map(w=>w[0]||'?').join('').toUpperCase();}
+function avColor(n){let h=0;for(let c of n)h=(h*31+c.charCodeAt(0))%avColors.length;return avColors[h];}
+function relTime(ts){const d=Date.now()-ts;if(d<60000)return 'agora';if(d<3600000)return 'há '+Math.floor(d/60000)+' min';if(d<86400000)return 'há '+Math.floor(d/3600000)+' horas';return 'há '+Math.floor(d/86400000)+' dias';}
+function fmtTime(ts){return new Date(ts).toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});}
+
+// ── CLOCK ──────────────────────────────────────────────────────
+function tick(){document.getElementById('clock').textContent=new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});}
+tick();setInterval(tick,10000);
+
+// ── TOAST ─────────────────────────────────────────────────────
+function toast(msg,type='success'){const t=document.getElementById('toast');t.textContent=msg;t.className='toast '+type;setTimeout(()=>{t.className='toast';},2600);}
+
+// ── SPLASH ────────────────────────────────────────────────────
+(function(){
+  const bar=document.getElementById('splash-bar');
+  const steps=[{to:25,d:80},{to:48,d:160},{to:70,d:200},{to:87,d:150},{to:96,d:80},{to:100,d:60}];
+  let i=0;
+  function next(){
+    if(i>=steps.length){setTimeout(()=>{document.getElementById('view-splash').classList.remove('active');document.getElementById('view-onboarding').classList.add('active');animateSlide(0);},320);return;}
+    const s=steps[i++];bar.style.width=s.to+'%';setTimeout(next,s.d);
+  }
+  setTimeout(next,500);
+})();
+
+// ── ONBOARDING ────────────────────────────────────────────────
+let obIdx=0;
+function animateSlide(i){
+  document.querySelectorAll('.ob-slide').forEach((s,j)=>{s.classList.remove('anim-in');if(j===i)setTimeout(()=>s.classList.add('anim-in'),40);});
+}
+function obNext(){
+  if(obIdx<2){
+    obIdx++;
+    document.getElementById('ob-track').style.transform=`translateX(-${obIdx*100}%)`;
+    document.querySelectorAll('.ob-dot').forEach((d,i)=>d.classList.toggle('active',i===obIdx));
+    animateSlide(obIdx);
+    if(obIdx===2){
+      const nb=document.getElementById('ob-next-btn');
+      nb.style.display='none';
+      const b=document.createElement('button');b.className='ob-start-btn';b.textContent='Começar';b.onclick=skipOnboarding;
+      nb.parentNode.appendChild(b);
+    }
+  } else { skipOnboarding(); }
+}
+function skipOnboarding(){
+  document.getElementById('view-onboarding').classList.remove('active');
+  document.getElementById('view-login').classList.add('active');
+}
+
+// ── LOGIN ──────────────────────────────────────────────────────
+function doLogin(){
+  const btn=document.getElementById('btn-login');
+  const k=document.getElementById('inp-apikey').value.trim();
+  const o=document.getElementById('inp-orgid').value.trim();
+  if(!k||!o){toast('Preencha todos os campos','error');return;}
+  btn.innerHTML='<div class="spinner"></div> Conectando…';btn.classList.add('loading');
+  setTimeout(()=>{
+    btn.innerHTML='Entrar';btn.classList.remove('loading');
+    document.getElementById('view-login').classList.remove('active');
+    document.getElementById('bottom-nav').style.display='flex';
+    showTab('inbox');toast('Conectado com sucesso!');
+  },1400);
+}
+function doLogout(){
+  document.getElementById('bottom-nav').style.display='none';
+  ['inbox','settings','conv','notif'].forEach(v=>document.getElementById('view-'+v)?.classList.remove('active'));
+  obIdx=0;document.getElementById('ob-track').style.transform='';
+  document.querySelectorAll('.ob-dot').forEach((d,i)=>d.classList.toggle('active',i===0));
+  document.getElementById('view-login').classList.add('active');
+  toast('Desconectado','error');
+}
+
+// ── VIEWS ─────────────────────────────────────────────────────
+function showView(name){
+  ['inbox','settings','conv','notif'].forEach(v=>document.getElementById('view-'+v).classList.remove('active'));
+  document.getElementById('view-'+name).classList.add('active');
+}
+function showTab(tab){
+  ['inbox','settings'].forEach(t=>{document.getElementById('view-'+t).classList.remove('active');const tb=document.getElementById('tab-'+t);if(tb)tb.classList.remove('active');});
+  document.getElementById('view-conv').classList.remove('active');
+  document.getElementById('view-notif').classList.remove('active');
+  document.getElementById('view-'+tab).classList.add('active');
+  const tb=document.getElementById('tab-'+tab);if(tb)tb.classList.add('active');
+  document.getElementById('bottom-nav').style.display='flex';
+  if(tab==='inbox') renderConvList();
+}
+
+// ── INBOX TABS ────────────────────────────────────────────────
+function setInboxTab(i,el){
+  document.querySelectorAll('.inbox-tab').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+  renderConvList(i);
+}
+
+// ── INBOX RENDER ──────────────────────────────────────────────
+function renderConvList(tabIdx=0){
+  const list=document.getElementById('conv-list');
+  const data=tabIdx===0?convData:tabIdx===1?convData.filter(c=>c.status==='pending'):convData.filter(c=>c.status==='resolved');
+  list.innerHTML=data.map(conv=>{
+    const c=conv.contact,ic=initials(c.name),ac=avColor(c.name);
+    const agentAv=conv.agent?`<div class="ci-agent-av" style="background:${avColor(conv.agent.name)}">${initials(conv.agent.name)}</div>`:'';
+    const agentExtra=conv.agent?`<span class="ci-agent-plus">+</span>`:'';
+    return`<div class="conv-item" onclick="openConv('${conv.id}')">
+      <div class="ci-avatar-wrap">
+        <div class="ci-avatar" style="background:${ac}">${ic}</div>
+        <div class="ci-channel-badge" style="background:${chColor[conv.channel]}">${chEmoji[conv.channel]}</div>
+      </div>
+      <div class="ci-body">
+        <div class="ci-row1">
+          <span class="ci-name">${c.name}</span>
+          <span class="ci-time">${relTime(conv.time)}</span>
+        </div>
+        <div class="ci-row2">
+          <span class="ci-status-icon">🕐</span>
+          <span class="ci-preview">${conv.lastMsg}</span>
+        </div>
+        <div class="ci-row3">
+          <div class="tag-dashed">🏷</div>
+          ${conv.tag==='Geral'?`<span class="tag-pill geral">Geral</span>`:`<span class="tag-pill talk2"><svg width="10" height="10" viewBox="0 0 24 24" fill="#00837C"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg> 💚 Talk2</span><span class="tag-pill num">+1</span><span class="tag-pill geral">${conv.tag}</span>`}
+        </div>
+      </div>
+      <div class="ci-agent-row">${agentAv}${agentExtra}</div>
+    </div>`;
+  }).join('')+`<button class="fab">+</button>`;
+}
+
+// ── CONVERSATION ────────────────────────────────────────────
+let currentConvId=null, notesMode=false;
+let liveMessages=[...seedMsgs.map((m,i)=>({...m,id:'s'+i,time:Date.now()-(seedMsgs.length-i)*65*60000}))];
+
+function openConv(id){
+  currentConvId=id;
+  const conv=convData.find(c=>c.id===id);if(!conv)return;
+  const ac=avColor(conv.contact.name);
+  const av=document.getElementById('ch-av');
+  av.style.background=ac;
+  // keep channel dot; set initials as text node before the channel dot child
+  av.childNodes[0]?.nodeType===3 && av.childNodes[0].remove();
+  av.insertBefore(document.createTextNode(initials(conv.contact.name)),av.firstChild);
+  document.getElementById('ch-name').textContent=conv.contact.name;
+
+  const locked=conv.status==='resolved';
+  document.getElementById('conv-locked').style.display=locked?'block':'none';
+  document.querySelector('.composer-area').style.display=locked?'none':'block';
+  document.getElementById('conv-connecting').style.display=id==='c1'?'flex':'none';
+
+  if(id!=='c1') liveMessages=[
+    {id:'x1',sender:'system',content:'Conversa iniciada via '+conv.channel+'.',time:Date.now()-15*60000},
+    {id:'x2',sender:'contact',content:'Olá! Preciso de ajuda.',time:Date.now()-12*60000},
+    {id:'x3',sender:'agent',senderName:'Guilherme',content:'Olá! Como posso ajudá-lo?',time:Date.now()-10*60000},
+    {id:'x4',sender:'contact',content:conv.lastMsg,time:Date.now()-2*60000},
+  ];
+  renderMessages();
+  document.getElementById('bottom-nav').style.display='none';
+  ['inbox','settings','notif'].forEach(v=>document.getElementById('view-'+v).classList.remove('active'));
+  document.getElementById('view-conv').classList.add('active');
+  setTimeout(()=>{const ml=document.getElementById('msg-list');ml.scrollTop=ml.scrollHeight;},40);
+}
+
+function renderMessages(){
+  const ml=document.getElementById('msg-list');
+  let html='<div class="msg-date-sep">Hoje</div>';
+  liveMessages.forEach(m=>{
+    const t=fmtTime(m.time||Date.now());
+    if(m.sender==='system'){
+      html+=`<div class="msg-card system">${m.content}<div class="msg-footer"><span class="msg-time">${t}</span></div></div>`;
+    } else if(m.sender==='bot'){
+      html+=`<div class="msg-card incoming">
+        <div class="msg-sender">${m.senderName||'Bot'}</div>
+        ${m.content.replace(/\n/g,'<br>')}
+        <div class="msg-footer">
+          <span class="msg-time">${t}</span>
+          ${m.warn?`<span class="msg-status"><span class="msg-warn">⚠️</span><span class="msg-count">99</span><span class="msg-retry">🔄</span></span>`:''}
+        </div>
+      </div>`;
+    } else if(m.sender==='contact'){
+      html+=`<div class="msg-card incoming" style="background:#fff">${m.content}<div class="msg-footer"><span class="msg-time">${t}</span></div></div>`;
+    } else if(m.sender==='note'){
+      html+=`<div class="msg-card outgoing" style="background:#FEF3C7;color:#92400E;border:1px solid #FDE68A">${m.content}<div class="msg-footer"><span class="msg-time" style="color:#92400E80">${t} · nota</span></div></div>`;
+    } else {
+      html+=`<div class="msg-card outgoing">${m.content}<div class="msg-footer"><span class="msg-time">${t}</span><span style="color:#3B6AE4;font-size:11px">✓✓</span></div></div>`;
+    }
+  });
+  ml.innerHTML=html;
+  setTimeout(()=>{ml.scrollTop=ml.scrollHeight;},20);
+}
+
+function goBack(){
+  document.getElementById('view-conv').classList.remove('active');
+  document.getElementById('bottom-nav').style.display='flex';
+  document.getElementById('tab-inbox').classList.add('active');
+  document.getElementById('view-inbox').classList.add('active');
+  renderConvList();
+}
+
+function sendMessage(){
+  const inp=document.getElementById('composer');
+  const text=inp.value.trim();if(!text)return;
+  inp.value='';inp.style.height='';
+  liveMessages.push({id:'u'+Date.now(),sender:notesMode?'note':'agent',content:text,time:Date.now()});
+  const conv=convData.find(c=>c.id===currentConvId);
+  if(conv&&!notesMode){conv.lastMsg=text;conv.time=Date.now();}
+  renderMessages();
+  if(notesMode)toast('📋 Nota interna salva','info');
+}
+function handleKey(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendMessage();}}
+function autoResize(el){el.style.height='auto';el.style.height=Math.min(el.scrollHeight,90)+'px';}
+function setMode(m){
+  notesMode=m==='notes';
+  const inp=document.getElementById('composer'),fab=document.getElementById('send-fab');
+  document.getElementById('tab-msg').classList.toggle('active',!notesMode);
+  document.getElementById('tab-notes').classList.toggle('active',notesMode);
+  inp.classList.toggle('notes-mode',notesMode);
+  fab.classList.toggle('notes',notesMode);
+  inp.placeholder=notesMode?'Digite uma nota que só os atendentes do Umbler Talk podem ver…':'Digite sua mensagem ou arraste um arquivo…';
+}
+function toggleAgent(){const t=document.getElementById('agent-toggle');t.classList.toggle('off');toast(t.classList.contains('off')?'Bot desativado':'Bot ativado');}
+
+function openActions(){document.getElementById('overlay-actions').classList.add('open');}
+function closeOverlay(id){document.getElementById(id).classList.remove('open');}
+function sheetAction(a){
+  closeOverlay('overlay-actions');
+  if(a==='transfer'){buildAgentsList();document.getElementById('overlay-transfer').classList.add('open');return;}
+  if(a==='finish'){const conv=convData.find(c=>c.id===currentConvId);if(conv)conv.status='resolved';toast('✅ Conversa finalizada');return;}
+  const L={contact:'👤 Detalhes do contato',details:'📄 Detalhes da conversa',private:'🔒 Atendimento privado ativado',schedule:'📅 Agendamento em breve',search:'🔍 Pesquisa em breve'};
+  toast(L[a]||a,'info');
+}
+function buildAgentsList(){
+  document.getElementById('agents-list').innerHTML=agents.map(a=>
+    `<div class="sheet-item" onclick="transferTo('${a.id}','${a.name}')">
+      <span class="si" style="width:32px;height:32px;border-radius:16px;background:var(--blue);color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:11px;font-weight:700">${initials(a.name)}</span>
+      <div><div style="font-size:13.5px;font-weight:600;color:var(--text-1)">${a.name}</div><div style="font-size:11.5px;color:var(--text-2)">${a.email}</div></div>
+    </div>`).join('');
+}
+function transferTo(id,name){
+  closeOverlay('overlay-transfer');
+  const conv=convData.find(c=>c.id===currentConvId);
+  if(conv){conv.status='transferred';conv.agent=agents.find(a=>a.id===id);}
+  toast('↗️ Transferida para '+name);
+}
+
+const notifEmpty={0:['@','Nenhuma menção.'],1:['🔔','Nenhuma atividade.'],2:['✨','Sem novidades.']};
+function setNotifTab(i,el){
+  document.querySelectorAll('.notif-tab').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+  const [icon,text]=notifEmpty[i];
+  document.getElementById('notif-body').innerHTML=`<div class="notif-empty-icon">${icon}</div><div class="notif-empty-text">${text}</div>`;
+}
+
+renderConvList();
+document.querySelectorAll('.overlay').forEach(o=>o.addEventListener('click',e=>{if(e.target===o)o.classList.remove('open');}));
+</script>
+</body>
+</html>
