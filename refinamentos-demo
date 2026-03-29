@@ -1,0 +1,1192 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Umbler Talk Mobile Demo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#07142c;
+  --bg-2:#0c1d3d;
+  --phone:#f7f8fc;
+  --surface:#ffffff;
+  --line:#e8ecf4;
+  --line-2:#dfe5f0;
+  --text:#2d3343;
+  --muted:#8f97aa;
+  --muted-2:#b6bccb;
+  --blue:#5a82ff;
+  --blue-2:#4a73f0;
+  --blue-soft:#eef3ff;
+  --tab:#eef2fb;
+  --danger:#f26c71;
+  --success:#25bb78;
+  --green-soft:#eaf9f2;
+  --purple:#8b68f7;
+  --pink:#eb5aa7;
+  --orange:#f6a623;
+  --shadow:0 24px 90px rgba(0,8,30,.45);
+}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0;font-family:'Poppins',system-ui,-apple-system,sans-serif;background:radial-gradient(1200px 600px at 50% 0%, #153266 0%, #09162f 48%, #050d1f 100%);overflow:hidden;color:var(--text)}
+body{display:flex;align-items:center;justify-content:center;padding:20px}
+.phone-shell{width:min(392px,100%);aspect-ratio:9/19.5;max-height:calc(100vh - 28px);padding:10px;border-radius:42px;background:linear-gradient(180deg,#2c3f63,#182846);box-shadow:var(--shadow);position:relative}
+.phone-shell:before{content:"";position:absolute;inset:9px;border-radius:34px;border:1px solid rgba(255,255,255,.12);pointer-events:none}
+.phone{height:100%;border-radius:34px;overflow:hidden;background:var(--phone);position:relative}
+.notch{position:absolute;top:9px;left:50%;transform:translateX(-50%);width:120px;height:24px;border-radius:16px;background:#0d1527;z-index:30}
+.screen{position:absolute;inset:0;display:none;flex-direction:column;background:var(--phone)}
+.screen.active{display:flex}
+.status{height:48px;padding:18px 22px 0;display:flex;align-items:center;justify-content:space-between;font-size:12px;font-weight:600;flex-shrink:0}
+.status-icons{display:flex;gap:8px;align-items:center;color:#131b2e}
+.status-dot{width:17px;height:10px;border:1.8px solid currentColor;border-radius:2.5px;position:relative}
+.status-dot:after{content:"";position:absolute;right:-3.2px;top:2px;width:2px;height:4px;background:currentColor;border-radius:1px}
+.signal{display:flex;gap:1.6px;align-items:flex-end}
+.signal span{display:block;width:1.9px;background:currentColor;border-radius:2px}
+.signal span:nth-child(1){height:5px}.signal span:nth-child(2){height:7px}.signal span:nth-child(3){height:9px}.signal span:nth-child(4){height:11px}
+.wifi{width:12px;height:10px;border:1.7px solid transparent;border-top-color:currentColor;border-radius:50%;position:relative;transform:translateY(2px)}
+.wifi:before,.wifi:after{content:"";position:absolute;left:50%;transform:translateX(-50%);border:1.7px solid transparent;border-top-color:currentColor;border-radius:50%}
+.wifi:before{width:9px;height:7px;top:-1px}.wifi:after{width:4px;height:3px;top:2px}
+
+.lock-bg{flex:1;position:relative;background:
+linear-gradient(180deg,#091426 0%,#10294d 22%,#2257a0 54%,#4c7ff0 100%);overflow:hidden}
+.lock-bg:before{content:"";position:absolute;left:-8%;right:-8%;bottom:-4%;height:58%;
+background:radial-gradient(78% 98% at 50% 100%, rgba(255,255,255,.34) 0%, rgba(255,255,255,.12) 42%, rgba(255,255,255,0) 74%)}
+.lock-bg:after{content:"";position:absolute;right:-12%;top:14%;width:82%;height:28%;border-radius:50%;
+background:rgba(255,255,255,.12);filter:blur(18px)}
+.lock-clock{padding-top:40px;text-align:center;color:#fff;position:relative;z-index:1}
+.lock-time{font-size:60px;line-height:1;font-weight:600;letter-spacing:-1.8px}
+.lock-date{font-size:14px;margin-top:8px;opacity:.92;font-weight:500}
+.lock-hint{margin-top:auto;text-align:center;color:#fff;padding-bottom:26px;font-size:12px;font-weight:500;opacity:.9}
+.swipe-pill{width:152px;height:5px;border-radius:999px;background:rgba(255,255,255,.84);margin:0 auto 14px}
+
+.android-panel{flex:1;background:linear-gradient(180deg,#f5f7ff 0%, #edf2ff 100%);position:relative;overflow:hidden}
+.app-grid-wrap{padding:8px 18px 18px;flex:1;overflow:auto}
+.searchbar{height:42px;border-radius:21px;background:rgba(255,255,255,.85);border:1px solid #e5ebf8;display:flex;align-items:center;padding:0 14px;gap:10px;color:#98a0b5;font-size:13px;margin:8px 0 14px;backdrop-filter:blur(4px)}
+.app-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px 10px}
+.app{display:flex;flex-direction:column;align-items:center;gap:7px;border:none;background:transparent;font:inherit;cursor:pointer;color:#30374a}
+.app-icon{width:58px;height:58px;border-radius:17px;background:#fff;border:1px solid #e6ebf6;box-shadow:0 8px 20px rgba(76,101,170,.1);display:flex;align-items:center;justify-content:center;font-size:24px;position:relative}
+.app-label{font-size:11px;font-weight:500;text-align:center;line-height:1.2;max-width:74px}
+.app.umbler .app-icon{background:linear-gradient(180deg,#ffffff 0%, #f1f5ff 100%)}
+
+.app-return{
+  position:absolute; top:14px; left:14px; z-index:45; width:30px; height:30px;
+  border:none; border-radius:15px; background:rgba(255,255,255,.88); color:#667085;
+  box-shadow:0 6px 18px rgba(15,23,42,.12); display:flex; align-items:center; justify-content:center;
+  backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);
+}
+.app-return svg{display:block}
+.app-return.dark{background:rgba(246,248,252,.96)}
+.app-icon img.talk-icon-img{width:34px;height:34px;object-fit:cover;border-radius:10px;display:block}
+
+.app.umbler .app-label{font-weight:600;color:#3558d9}
+.bottom-dock{display:flex;justify-content:space-around;padding:10px 16px 18px;border-top:1px solid rgba(216,223,241,.8);background:rgba(255,255,255,.55);backdrop-filter:blur(8px)}
+.dock-icon{width:54px;height:54px;border-radius:18px;background:#fff;border:1px solid #e6ebf7;display:flex;align-items:center;justify-content:center;font-size:24px;box-shadow:0 8px 18px rgba(76,101,170,.12)}
+
+.notification{background:rgba(249,251,255,.96);border:1px solid rgba(221,229,245,.92);border-radius:24px;
+box-shadow:0 20px 46px rgba(13,28,68,.22);padding:10px 12px;position:absolute;left:12px;right:12px;top:88px;z-index:20;
+transform:translateY(-150%);transition:transform .32s cubic-bezier(.4,0,.2,1), max-height .24s ease, padding .24s ease, box-shadow .24s ease;
+backdrop-filter:blur(16px);max-height:88px;overflow:hidden}
+.notification.show{transform:translateY(0)}
+.notification.expanded{max-height:min(64vh,560px);padding:10px 12px 14px;box-shadow:0 26px 54px rgba(13,28,68,.26)}
+.n-topline{height:4px;width:74px;background:#d6ddeb;border-radius:999px;margin:0 auto 10px;opacity:0;transition:opacity .2s}
+.notification.expanded .n-topline{opacity:1}
+.n-head{display:flex;align-items:center;gap:11px}
+.avatar{width:42px;height:42px;border-radius:50%;object-fit:cover;background:#d8dded;flex-shrink:0}
+.n-meta{flex:1;min-width:0}.n-name{font-size:13px;font-weight:700;line-height:1.2}.n-sub{font-size:11px;color:var(--muted);margin-top:2px}
+.n-close{width:28px;height:28px;border-radius:50%;border:none;background:#f2f4fb;color:#aeb5c7;font-size:16px;cursor:pointer}
+.n-msg{margin:10px 0 0;padding:10px 12px;border-radius:13px;background:#f2f4fb;font-size:13px;line-height:1.3}
+.n-label{font-size:10px;font-weight:700;letter-spacing:.5px;color:#a3aaba;text-transform:uppercase;margin:10px 0 8px}
+.quick-list{display:flex;flex-direction:column;gap:8px;margin-top:0}
+.quick-btn{padding:12px 14px;border-radius:14px;border:1.5px solid #c8d5ff;background:var(--blue-soft);color:#426bf0;font-family:inherit;font-size:13px;font-weight:600;text-align:left;cursor:pointer}
+.n-actions{display:grid;grid-template-columns:1fr 48px;gap:8px;margin-top:10px}
+.primary-btn{border:none;border-radius:15px;background:var(--blue);color:#fff;font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;padding:13px}
+.audio-btn{border:none;border-radius:15px;background:#edf2ff;color:var(--blue);font-size:18px;font-weight:700;cursor:pointer}
+.transfer-row{display:flex;gap:8px;margin-top:8px}
+.ghost-btn{flex:1;padding:11px 13px;border-radius:14px;border:1px solid var(--line-2);background:#fff;color:#5d6578;font-family:inherit;font-size:12.5px;font-weight:600;cursor:pointer}
+.inline-sheet{margin-top:10px;padding:10px;border-radius:16px;background:#f7f8fc;border:1px solid #e7ecf5;display:none}
+.inline-sheet.show{display:block}
+.inline-sheet button{width:100%;text-align:left;padding:12px 12px;border:none;background:#fff;border-radius:12px;margin-top:8px;font-family:inherit;font-weight:600;color:#42506a;cursor:pointer;border:1px solid #e7ebf5}
+.inline-sheet button:first-child{margin-top:0}
+.notification:not(.expanded) .n-label,.notification:not(.expanded) .quick-list,.notification:not(.expanded) .n-actions,.notification:not(.expanded) .transfer-row,.notification:not(.expanded) .inline-sheet,.notification:not(.expanded) .audio-state,.notification:not(.expanded) .transfer-pop{display:none !important}
+.notification:not(.expanded) .n-msg{margin-bottom:0}
+.notification.compact{cursor:pointer}
+.notification.compact .n-head,.notification.compact .n-msg{pointer-events:none}
+.n-sub{font-size:11.5px;color:#8f97aa;font-weight:500}
+.n-name{font-size:15px;font-weight:700;color:#1f2940}
+.n-msg{margin:8px 0 0;font-size:14px;line-height:1.32;color:#2a3247;background:#f2f5fb;border-radius:16px;padding:11px 12px}
+.n-actions{margin-top:10px;display:flex;gap:8px}
+.n-actions .primary-btn{flex:1}
+.transfer-row{margin-top:8px;display:flex;gap:8px}
+.lock-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.14);color:#fff;border:1px solid rgba(255,255,255,.18);padding:7px 12px;border-radius:999px;font-size:11px;font-weight:600;backdrop-filter:blur(10px);margin-top:16px}
+.system-homebar{position:absolute;left:50%;transform:translateX(-50%);bottom:10px;width:132px;height:5px;border-radius:999px;background:rgba(17,24,39,.18);z-index:35}
+.system-homebar.light{background:rgba(255,255,255,.7)}
+@media (max-width:520px){
+  .notification{left:10px;right:10px;top:62px;max-height:82px;padding:9px 10px;border-radius:22px}
+  .notification.expanded{max-height:min(58vh,460px)}
+  .n-name{font-size:14px}
+  .n-sub{font-size:11px}
+  .n-msg{font-size:13.5px;padding:10px 11px;border-radius:15px}
+  .lock-time{font-size:56px}
+}
+
+.n-head{display:flex;align-items:center;gap:10px}
+.n-close{width:30px;height:30px;border:none;background:#f3f6fd;border-radius:50%;font-size:18px;line-height:1;color:#97a3bb;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.n-msg{font-size:14px;line-height:1.35;color:#30384b;background:#f4f6fc;border-radius:14px;padding:11px 12px;margin-top:8px}
+.quick-list{display:flex;flex-direction:column;gap:8px}
+.quick-btn{padding:12px 14px;border-radius:13px;border:1px solid #ced8ff;background:#f4f7ff;color:#4d74ef;font:600 14px 'Poppins',sans-serif;text-align:left}
+.n-actions,.transfer-row{display:flex;gap:8px;margin-top:10px}
+.primary-btn,.ghost-btn{flex:1;min-height:42px;border-radius:12px;font:600 13px 'Poppins',sans-serif}
+.primary-btn{border:none;background:#5a82ff;color:#fff}
+.ghost-btn{border:1px solid #d7deef;background:#fff;color:#4a5367}
+.audio-btn{width:42px;height:42px;border:none;border-radius:12px;background:#eef3ff;color:#5a82ff;font-size:18px;flex-shrink:0}
+
+
+.app-header{height:74px;padding:20px 16px 10px;display:flex;align-items:center;justify-content:space-between;background:#fff;flex-shrink:0;border-bottom:1px solid var(--line)}
+.left-pack,.right-pack{display:flex;align-items:center;gap:16px}
+.icon-btn{border:none;background:transparent;padding:0;cursor:pointer;color:#5e6fdf;display:flex;align-items:center;justify-content:center}
+.icon-btn svg{display:block}
+.top-avatar{width:34px;height:34px;border-radius:50%;object-fit:cover}
+.filters-row{height:54px;background:#fff;display:flex;align-items:center;gap:18px;padding:0 16px;border-bottom:1px solid var(--line);color:#5d6475;flex-shrink:0}
+.badge{min-width:24px;height:22px;padding:0 8px;border-radius:999px;background:var(--blue);color:#fff;font-size:12px;font-weight:700;display:inline-flex;align-items:center;justify-content:center}
+.top-tabs{padding:8px 14px 10px;background:#fff;border-bottom:1px solid var(--line);flex-shrink:0}
+.tab-pills{background:#eef1f8;border-radius:18px;padding:4px;display:flex;gap:4px}
+.tab-pill{flex:1;border:none;background:transparent;border-radius:14px;padding:11px 10px;font-family:inherit;font-size:13px;font-weight:500;color:#596172;cursor:pointer}
+.tab-pill.active{background:var(--blue);color:#fff;box-shadow:0 8px 16px rgba(89,129,255,.26)}
+.list{flex:1;overflow:auto;background:#fff}
+.conv-item{display:flex;gap:12px;padding:14px 14px;border-bottom:1px solid var(--line);cursor:pointer;background:#fff}
+.conv-item:hover{background:#fafbfe}
+.conv-main{flex:1;min-width:0}
+.conv-top{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
+.conv-name{font-size:15px;font-weight:600;line-height:1.2}.conv-time{font-size:12px;color:#7f8798;white-space:nowrap}
+.conv-line{display:flex;align-items:center;gap:7px;margin-top:4px;color:#7e879a;font-size:13px;min-width:0}
+.conv-line .txt{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.conv-badges{display:flex;gap:6px;flex-wrap:wrap;margin-top:7px}
+.tag{height:22px;padding:0 9px;border-radius:999px;border:1px solid #d8deea;font-size:11px;font-weight:500;color:#7b8394;display:inline-flex;align-items:center;gap:5px;background:#fff}
+.tag.blue{background:#e8f8f1;color:#0c9360;border-color:#b7ead3}
+.tag.purple{background:#eef0ff;color:#6a62e6;border-color:#d8dbff}
+.channel-dot{width:18px;height:18px;border-radius:50%;background:#25d366;color:#fff;font-size:11px;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0}
+.plus-fab{position:absolute;right:18px;bottom:18px;width:54px;height:54px;border-radius:50%;background:var(--blue);color:#fff;border:none;font-size:32px;line-height:1;box-shadow:0 16px 32px rgba(76,105,228,.34);cursor:pointer;z-index:5}
+
+.drawer-bg{position:absolute;inset:0;background:rgba(16,22,39,.34);opacity:0;pointer-events:none;transition:.25s;z-index:24}
+.drawer-bg.show{opacity:1;pointer-events:auto}
+.drawer{position:absolute;top:0;left:0;bottom:0;width:83%;max-width:315px;background:#fff;border-radius:0 28px 28px 0;transform:translateX(-100%);transition:.28s cubic-bezier(.4,0,.2,1);z-index:25;display:flex;flex-direction:column;overflow:hidden}
+.drawer.show{transform:translateX(0)}
+.drawer-head{padding:18px 18px 12px;display:flex;align-items:flex-start;justify-content:space-between}
+.drawer-top-left{display:flex;align-items:center;gap:14px}.drawer-icons-top{display:flex;align-items:center;gap:10px;color:#5e6fdf}.org-block{display:flex;align-items:center;gap:10px;padding:4px 18px 12px}.org-info small{display:block;color:#9ca3b4;font-size:10px}.org-info strong{display:block;font-size:19px;line-height:1.15}
+.drawer-scroll{flex:1;overflow:auto;padding:4px 0 20px}.drawer-section{padding:12px 22px 10px;font-size:13px;color:#a0a7b7;border-top:1px solid #eff2f8;margin-top:8px}.drawer-item{display:flex;align-items:center;gap:14px;padding:12px 22px;font-size:14px;color:#4b5162}.drawer-item svg{color:#4b5162;flex-shrink:0}.drawer-item.exit{color:#ef6167;margin-top:10px}.drawer-item.exit svg{color:#ef6167}
+
+.chat-head{height:80px;background:#fff;padding:22px 14px 10px;display:flex;align-items:center;gap:12px;border-bottom:1px solid var(--line);flex-shrink:0}
+.back-btn{border:none;background:none;color:#5662d9;cursor:pointer;padding:0;display:flex;align-items:center;justify-content:center}
+.chat-user{display:flex;align-items:center;gap:12px;flex:1;min-width:0}.chat-user .meta{min-width:0}.chat-user .meta .name{font-size:15px;font-weight:700}.chat-user .meta .sub{font-size:12px;color:#8e96a8}
+.chat-head-actions{display:flex;align-items:center;gap:8px}.chat-head-actions .icon-btn{width:40px;height:40px;border-radius:14px;background:#f4f7ff;border:1px solid #dfe7fb;color:#5a82ff}
+.quickbar{display:flex;gap:8px;overflow:auto;padding:10px 12px;background:#fff;border-bottom:1px solid #d9e3ff;flex-shrink:0}.quickbar::-webkit-scrollbar{display:none}
+.qb{white-space:nowrap;border:1.5px solid #cad6ff;background:#f5f8ff;color:#496eef;padding:10px 13px;border-radius:999px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit}
+.messages{flex:1;overflow:auto;padding:14px 12px 110px;background:#f5f7fc;display:flex;flex-direction:column;gap:12px}
+.day-chip{align-self:center;background:#fff;border:1px solid #e5e9f2;border-radius:999px;padding:5px 11px;font-size:11px;color:#98a1b4}
+.msg{max-width:78%;padding:12px 14px;border-radius:18px;background:#fff;border:1px solid #e7ebf4;box-shadow:0 8px 14px rgba(44,68,136,.04);position:relative}
+.msg.self{align-self:flex-end;background:#edf3ff;border-color:#dce6ff;border-bottom-right-radius:8px}.msg.other{align-self:flex-start;border-bottom-left-radius:8px}
+.msg .time{margin-top:5px;font-size:11px;color:#a1a9ba;text-align:right}
+.reply-pad{position:absolute;left:0;right:0;bottom:0;background:#fff;border-top:1px solid var(--line);padding:10px 12px 14px;display:flex;flex-direction:column;gap:10px}
+.reply-suggestions{display:flex;gap:8px;overflow:auto}.reply-suggestions::-webkit-scrollbar{display:none}
+.suggest{white-space:nowrap;padding:9px 11px;border-radius:999px;background:#f3f6fd;border:1px solid #dde5f4;color:#5f6980;font-size:12px;font-weight:500;cursor:pointer}
+.composer{display:flex;gap:8px;align-items:center}.input{flex:1;background:#f5f7fc;border:1px solid #e4e9f4;border-radius:18px;padding:13px 14px;font-family:inherit;font-size:14px;outline:none}.send{width:48px;height:48px;border-radius:16px;border:none;background:var(--blue);color:#fff;cursor:pointer;font-size:18px;font-weight:700}
+.hidden{display:none !important}
+.toast{position:absolute;left:50%;bottom:118px;transform:translateX(-50%) translateY(12px);background:#20283b;color:#fff;padding:11px 14px;border-radius:14px;font-size:13px;font-weight:600;opacity:0;pointer-events:none;transition:.22s;z-index:40;white-space:nowrap}.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.loading-shell{flex:1;background:#f3f4f7;display:flex;flex-direction:column}
+.browser-top{height:84px;padding:24px 14px 10px;display:flex;align-items:center;gap:10px;border-bottom:1px solid #e7e7ec;background:#f7f7fa;flex-shrink:0}
+.browser-icon{width:34px;height:34px;border-radius:17px;display:flex;align-items:center;justify-content:center;color:#1d1e23}
+.address-pill{flex:1;height:44px;border-radius:22px;background:#eaeaf0;display:flex;align-items:center;gap:10px;padding:0 14px;font-size:13px;color:#4c4f59;font-weight:500}
+.browser-count{width:34px;height:34px;border:2px solid #1d1e23;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700}
+.loading-body{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:30px 28px 90px}
+.loading-logo{font-size:42px;font-weight:300;letter-spacing:-1.6px;color:#000;display:flex;align-items:center;gap:8px}
+.loading-logo .strike{position:relative;display:inline-block}
+.loading-logo .strike:after{content:"";position:absolute;left:-2px;right:-2px;top:57%;height:3px;background:#000;opacity:.9}
+.loading-text{font-size:22px;color:#2f3138;margin-top:42px}
+.loading-progress{width:100%;max-width:360px;height:12px;background:#d4d5da;border-radius:999px;overflow:hidden;margin-top:36px}
+.loading-progress span{display:block;height:100%;width:0;background:#5a82ff;border-radius:999px;animation:loadbar 1.6s ease forwards}
+@keyframes loadbar{0%{width:8%}70%{width:78%}100%{width:84%}}
+.android-nav{height:40px;display:flex;justify-content:center;gap:56px;align-items:center;color:#6e7079;background:#f7f7fa;flex-shrink:0;padding-bottom:env(safe-area-inset-bottom,0px)}
+.android-nav .pill{width:20px;height:20px;border:2px solid currentColor;border-radius:7px}
+.android-nav .lines{display:flex;gap:5px}.android-nav .lines span{display:block;width:3px;height:28px;background:currentColor;border-radius:3px}
+.android-nav .back{width:18px;height:18px;border-left:3px solid currentColor;border-bottom:3px solid currentColor;transform:rotate(45deg)}
+
+@media (max-width:520px){html,body{height:100dvh;overflow:hidden;background:#fff}body{padding:0;align-items:stretch;justify-content:stretch}.phone-shell{width:100vw;height:100dvh;aspect-ratio:auto;max-height:none;border-radius:0;padding:0;background:#fff;box-shadow:none}.phone-shell:before{display:none}.phone{border-radius:0;height:100dvh}.notch{display:none}.status{padding-top:max(12px, env(safe-area-inset-top,0px));height:44px}.notification{left:8px;right:8px;top:58px}.toast{bottom:calc(98px + env(safe-area-inset-bottom,0px))}}
+
+.notification.show{animation:notifIn .46s cubic-bezier(.2,.9,.2,1.08)}
+@keyframes notifIn{0%{transform:translateY(120%) scale(.98);opacity:0}70%{transform:translateY(-6px) scale(1.01);opacity:1}100%{transform:translateY(0) scale(1);opacity:1}}
+.audio-btn.recording,.mic-btn.recording{background:linear-gradient(180deg,#5a82ff,#4a73f0)!important;color:#fff!important;position:relative;overflow:hidden}
+.audio-btn.recording:before,.mic-btn.recording:before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.2),transparent);animation:shine 1s linear infinite}
+@keyframes shine{0%{transform:translateX(-100%)}100%{transform:translateX(100%)}}
+.audio-state{display:none;align-items:center;gap:10px;margin-top:10px;padding:10px 12px;border-radius:14px;background:#f5f8ff;border:1px solid #d7e2ff;color:#486df1;font-size:13px;font-weight:600}
+.audio-state.show{display:flex}
+.wave{display:flex;align-items:center;gap:3px;height:16px}
+.wave span{display:block;width:3px;background:currentColor;border-radius:999px;animation:wave 1s ease-in-out infinite}
+.wave span:nth-child(1){height:8px;animation-delay:.0s}
+.wave span:nth-child(2){height:14px;animation-delay:.12s}
+.wave span:nth-child(3){height:10px;animation-delay:.24s}
+.wave span:nth-child(4){height:16px;animation-delay:.36s}
+.wave span:nth-child(5){height:11px;animation-delay:.48s}
+@keyframes wave{0%,100%{transform:scaleY(.55);opacity:.6}50%{transform:scaleY(1);opacity:1}}
+.android-top{padding:8px 18px 0}
+.android-title{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.android-title strong{font-size:23px;letter-spacing:-.5px;color:#1f2c48}
+.android-title span{font-size:13px;color:#8d97ad}
+.page-dots{display:flex;justify-content:center;gap:7px;padding:10px 0 2px}
+.page-dots i{width:7px;height:7px;border-radius:50%;background:#cfd7eb;display:block}
+.page-dots i.active{width:18px;border-radius:999px;background:#5a82ff}
+.lock-shortcuts{display:flex;justify-content:space-between;align-items:center;padding:0 18px 18px;position:relative;z-index:1}
+.lock-shortcuts .ls{width:42px;height:42px;border-radius:50%;background:rgba(255,255,255,.18);backdrop-filter:blur(10px);display:flex;align-items:center;justify-content:center;color:#fff;border:1px solid rgba(255,255,255,.25)}
+.reply-pad{padding-bottom:calc(14px + env(safe-area-inset-bottom,0px))}
+.composer{display:flex;gap:8px}
+.input{flex:1;height:46px;border-radius:16px;border:1px solid #dfe6f4;padding:0 16px;font-family:inherit;font-size:14px;outline:none}
+.input:focus{border-color:#5a82ff;box-shadow:0 0 0 3px rgba(90,130,255,.12)}
+.send,.mic-btn{width:46px;height:46px;border:none;border-radius:16px;cursor:pointer;font-size:18px}
+.send{background:#5a82ff;color:#fff;box-shadow:0 10px 20px rgba(90,130,255,.28)}
+.mic-btn{background:#edf2ff;color:#5a82ff}
+.suggest{white-space:nowrap;border:1px solid #d8e2ff;background:#f5f8ff;color:#496eef;padding:10px 13px;border-radius:999px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit}
+.audio-msg{display:flex;align-items:center;gap:10px;min-width:160px}
+.audio-msg .play{width:28px;height:28px;border-radius:50%;background:#fff;color:#486df1;display:flex;align-items:center;justify-content:center;font-size:12px}
+.audio-msg .progress{flex:1;height:4px;border-radius:999px;background:rgba(72,109,241,.2);position:relative;overflow:hidden}
+.audio-msg .progress:after{content:"";position:absolute;left:0;top:0;bottom:0;width:64%;background:#486df1;border-radius:999px}
+.audio-msg .dur{font-size:11px;color:#7c88a5}
+@media (max-width: 520px){
+  html,body{overflow:auto;background:#fff}
+  body{padding:0;display:block;background:#fff}
+  .phone-shell{width:100vw;height:100dvh;max-height:none;padding:0;border-radius:0;background:#fff;box-shadow:none}
+  .phone-shell:before{display:none}
+  .phone{border-radius:0}
+  .notch{display:none}
+  .status{padding-top:max(14px, env(safe-area-inset-top, 0px));height:calc(40px + env(safe-area-inset-top,0px))}
+  .app-header{padding-top:max(16px, env(safe-area-inset-top, 0px));height:calc(70px + env(safe-area-inset-top,0px))}
+  .chat-head{padding-top:max(18px, env(safe-area-inset-top, 0px));height:calc(76px + env(safe-area-inset-top,0px))}
+  .notification{left:10px;right:10px;bottom:calc(78px + env(safe-area-inset-bottom,0px))}
+  .plus-fab{bottom:calc(18px + env(safe-area-inset-bottom,0px))}
+}
+
+
+.overlay-sheet{position:absolute;inset:0;background:rgba(7,20,44,.24);display:none;align-items:flex-end;z-index:80;overflow:hidden}
+.overlay-sheet.show{display:flex}
+.sheet-card{width:100%;background:#fff;border-radius:24px 24px 0 0;padding:10px 16px calc(16px + env(safe-area-inset-bottom,0));box-shadow:0 -18px 40px rgba(19,32,60,.18);max-height:86%;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;touch-action:pan-y}
+.sheet-handle{width:46px;height:5px;border-radius:999px;background:#d7dcea;margin:0 auto 14px}
+.sheet-title{font-size:20px;font-weight:700;color:#1d2942;margin-bottom:6px}
+.sheet-sub{font-size:12px;color:#93a0b8;margin-bottom:14px}
+.sheet-option{display:flex;align-items:center;gap:12px;padding:13px 12px;border:1px solid var(--line);border-radius:16px;background:#fff;font-family:inherit;font-size:14px;font-weight:600;color:#34415f;width:100%;margin-bottom:10px;cursor:pointer}
+.sheet-option small{display:block;font-size:11px;color:#97a2b9;font-weight:500}
+.transfer-list{display:flex;flex-direction:column;gap:10px;max-height:52vh;overflow-y:auto;-webkit-overflow-scrolling:touch;padding-bottom:4px}
+.profile-grid{display:grid;gap:10px;margin-top:8px}
+.profile-row{padding:12px 14px;border-radius:16px;background:#f7f9ff;border:1px solid #e9eef8}
+.profile-row label{display:block;font-size:11px;text-transform:uppercase;letter-spacing:.4px;color:#96a0b5;font-weight:700;margin-bottom:5px}
+.profile-row div{font-size:14px;font-weight:600;color:#2f3b58}
+.chips{display:flex;gap:8px;flex-wrap:wrap}
+.chip-btn{padding:11px 14px;border-radius:14px;background:#fff;border:2px solid #dbe3f7;font-family:inherit;font-size:13px;font-weight:600;color:#4d5c7a;cursor:pointer}
+.chip-btn.selected{border-color:var(--blue);background:var(--blue-soft);color:#426bf0}
+.sheet-actions{display:flex;gap:10px;margin-top:16px}
+.sheet-actions button{flex:1;padding:13px 14px;border-radius:15px;border:none;font-family:inherit;font-size:14px;font-weight:700;cursor:pointer}
+.sheet-actions .secondary{background:#f2f5fb;color:#5b6781}
+.sheet-actions .primary{background:var(--blue);color:#fff}
+.transfer-pop .sheet-option{margin-bottom:8px}
+.avatar-btn{border:none;background:none;padding:0;border-radius:50%;cursor:pointer}
+.mini-logo{display:flex;align-items:center;gap:6px}
+.send svg{display:block;margin-left:2px}
+@media (max-width: 480px){
+  html,body{background:#fff;overflow:auto}
+  body{display:block;padding:0}
+  .phone-shell{width:100vw;height:100dvh;max-height:none;aspect-ratio:auto;border-radius:0;padding:0;background:#fff;box-shadow:none}
+  .phone-shell:before,.notch,.status,.page-dots,.bottom-dock,.android-nav,.browser-top{display:none!important}
+  .phone,.screen{border-radius:0}
+  .notification{left:10px;right:10px;top:10px;max-height:84px;padding:9px 10px}
+  .notification.expanded{max-height:min(56vh,420px)}
+  .android-panel{padding-top:0}
+  .lock-clock{padding-top:42px}
+  .loading-body{padding-top:34vh}
+  .app-header{padding-top:14px;height:66px}
+  .filters-row{height:50px}
+  .top-tabs{padding-top:10px}
+}
+
+.search-head{flex:1;height:42px;border-radius:21px;background:#f3f5fb;border:1px solid #e4e9f4;display:flex;align-items:center;gap:10px;padding:0 14px;color:#9aa3b4;font-size:14px;min-width:0}
+.search-head input{border:none;background:transparent;outline:none;font:inherit;color:#4b5263;width:100%}
+.search-head svg{flex-shrink:0;color:#8f99af}
+.filters-row span, .filters-row button{display:inline-flex;align-items:center;justify-content:center;background:none;border:none;padding:0;color:inherit;font:inherit;cursor:pointer}
+.filters-row .active-eye{color:var(--blue)}
+.selection-toolbar{display:none;align-items:center;gap:10px;padding:12px 14px;background:#fff;border-bottom:1px solid var(--line);flex-shrink:0}
+.selection-toolbar.show{display:flex}
+.selection-toolbar .select-label{font-size:14px;font-weight:600;color:#323a4b;flex:1}
+.bulk-actions{display:flex;gap:8px;padding:0 14px 10px;background:#fff;border-bottom:1px solid var(--line);display:none}
+.bulk-actions.show{display:flex}
+.bulk-actions select,.bulk-actions button{height:38px;border-radius:19px;border:1px solid #dde4ef;background:#fff;font-family:inherit;font-size:13px;padding:0 14px}
+.bulk-actions button{background:#eff2f7;color:#a5adbb;font-weight:600}
+.bulk-actions button.enabled{background:var(--blue);border-color:var(--blue);color:#fff}
+.conv-item.select-mode{align-items:flex-start}
+.conv-check{margin-top:10px;display:none}
+.conv-item.select-mode .conv-check{display:block}
+.conv-item.compact .conv-line{margin-top:7px}
+.conv-item.compact .conv-badges{display:none}
+.mini-menu{position:absolute;top:132px;right:14px;background:#fff;border:1px solid #e5ebf4;border-radius:16px;box-shadow:0 20px 40px rgba(40,52,90,.18);padding:8px;z-index:28;display:none;min-width:170px}
+.mini-menu.show{display:block}
+.mini-menu button{width:100%;text-align:left;border:none;background:#fff;padding:10px 12px;border-radius:10px;font-family:inherit;font-size:13px;color:#465069;cursor:pointer}
+.mini-menu button:hover{background:#f4f7fc}
+.newconv-sheet .sheet-card{max-height:82vh;overflow:hidden;display:flex;flex-direction:column}
+.newconv-body{overflow:auto;padding:0 16px 14px}
+.newconv-tabs{display:flex;gap:6px;background:#eef2f8;border-radius:18px;padding:4px;margin:6px 0 16px}
+.newconv-tabs button{flex:1;border:none;background:transparent;border-radius:14px;padding:10px 8px;font-family:inherit;font-size:13px;color:#6a7488;cursor:pointer;transition:.18s}
+.newconv-tabs button.active{background:var(--blue);color:#fff;font-weight:600;box-shadow:0 6px 14px rgba(90,130,255,.22)}
+.newconv-search{display:flex;gap:10px;margin-bottom:12px}.newconv-search input{flex:1;height:42px;border-radius:14px;border:1.5px solid #d7def0;padding:0 14px;font-family:inherit;font-size:14px}
+.newconv-pill{height:42px;padding:0 16px;border-radius:14px;border:none;background:var(--blue);color:#fff;font-family:inherit;font-weight:600;white-space:nowrap}
+.newconv-list{display:flex;flex-direction:column;gap:0;border-top:1px solid #edf1f7;margin-top:6px}.newconv-item{display:flex;align-items:center;gap:12px;padding:12px 2px;border-bottom:1px solid #edf1f7;background:transparent;border-left:none;border-right:none;border-top:none;border-radius:0;width:100%;cursor:pointer;text-align:left}.newconv-item:last-child{border-bottom:none}.newconv-item .meta{flex:1;min-width:0}.newconv-item .nm{font-size:14px;font-weight:600;color:#232d44}.newconv-item .sb{font-size:12px;color:#95a0b3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.newconv-item .pick{width:20px;height:20px;border-radius:50%;border:1.5px solid #cfd7e8;display:flex;align-items:center;justify-content:center;color:#fff;font-size:12px;flex-shrink:0}.newconv-item.selected{background:#f6f8ff}.newconv-item.selected .pick{background:var(--blue);border-color:var(--blue)}
+
+.addcontact-form{display:flex;flex-direction:column;gap:10px;padding-top:6px}
+.addcontact-form input,.addcontact-form select{height:46px;border-radius:14px;border:1.5px solid #d7def0;padding:0 14px;font-family:inherit;font-size:14px;background:#fff;color:#25304a;outline:none}
+.addcontact-form input:focus,.addcontact-form select:focus{border-color:var(--blue)}
+.addcontact-form .two-cols{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.sheet-bottom-actions{display:flex;gap:10px;padding:12px 16px 16px;border-top:1px solid #edf1f7}.sheet-bottom-actions button{flex:1;height:44px;border-radius:22px;font-family:inherit;font-size:14px}.sheet-bottom-actions .cancel{border:1px solid #d9dfeb;background:#fff;color:#687286}.sheet-bottom-actions .go{border:none;background:var(--blue);color:#fff;font-weight:600}
+
+</style>
+</head>
+<body>
+<div class="phone-shell">
+  <div class="phone">
+    <div class="notch"></div>
+
+    <section class="screen active" id="lockScreen">
+      <div class="status"><span>10:32</span><div class="status-icons"><div class="signal"><span></span><span></span><span></span><span></span></div><div class="wifi"></div><div class="status-dot"></div></div></div>
+      <div class="lock-bg">
+        <div class="lock-clock">
+          <div class="lock-time">10:32</div>
+          <div class="lock-date">Sáb, 29 de março</div>
+          <div class="lock-badge">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h10"/></svg>
+            Umbler Talk · notificações ativas
+          </div>
+        </div>
+
+        <div class="notification compact show" id="lockNotif" onclick="toggleNotifExpand('lockNotif', event)">
+          <div class="n-topline"></div>
+          <div class="n-head">
+            <img class="avatar" id="lockNotifAvatar" src="" alt="Ryan"/>
+            <div class="n-meta"><div class="n-name">Ryan</div><div class="n-sub">WhatsApp · agora</div></div>
+            <button class="n-close" onclick="dismissNotif('lockNotif');event.stopPropagation()">×</button>
+          </div>
+          <div class="n-msg">Pode me ajudar? 🙏</div>
+          <div class="n-label">Resposta rápida</div>
+          <div class="quick-list" id="quickListLock">
+            <button class="quick-btn" onclick="replyFromNotification('Sim, qual sua dúvida? 👂', event)">Sim, qual sua dúvida? 👂</button>
+            <button class="quick-btn" onclick="replyFromNotification('Claro. Me conta o que você precisa 😊', event)">Claro. Me conta o que você precisa 😊</button>
+            <button class="quick-btn" onclick="replyFromNotification('Posso te responder por áudio rapidinho 🎙️', event)">Posso te responder por áudio rapidinho 🎙️</button>
+          </div>
+          <div class="tool-row">
+            <button class="tool-icon" onclick="toggleQuickReplies(this,'quickListLock',event)" aria-label="Resposta rápida"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/><path d="M8 9h8"/><path d="M8 13h6"/></svg></button>
+            <button class="transfer-btn-notif" onclick="toggleInlineTransfer(this,'inlineTransferLock',event)" aria-label="Transferir"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7"/><path d="M9 7h8v8"/><path d="M5 12v7h7"/></svg>Transferir</button>
+            <div class="tool-spacer"></div>
+            <button class="tool-icon" onclick="audioReply(this,event)" aria-label="Responder por áudio"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1a3 3 0 0 1 3 3v8a3 3 0 0 1-6 0V4a3 3 0 0 1 3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><path d="M12 19v4"/><path d="M8 23h8"/></svg></button>
+          </div>
+          <div class="transfer-pop" id="inlineTransferLock"><div class="sheet-sub" style="margin:0 0 8px">Escolha o destino</div><button class="sheet-option" onclick="transferNotif('Larissa Monteiro',event)">👤 <span>Larissa Monteiro<small>Membro • Comercial</small></span></button><button class="sheet-option" onclick="transferNotif('Suporte Técnico',event)">🛠️ <span>Suporte Técnico<small>Setor • Enviar para fila de suporte</small></span></button><button class="sheet-option" onclick="transferNotif('Fila de suporte',event)">📥 <span>Enviar para fila de suporte<small>Direcionar para atendimento geral</small></span></button><button class="sheet-option" onclick="transferNotif('Financeiro',event)">💸 <span>Financeiro<small>Pagamentos e cobranças</small></span></button></div>
+          <div class="audio-state" id="audioStateLock"><div class="wave"><span></span><span></span><span></span><span></span><span></span></div><span id="audioStateLockText">Gravando áudio…</span></div>
+        </div>
+
+        <div class="lock-shortcuts"><div class="ls">📷</div><div class="ls">🔦</div></div>
+        <div class="lock-hint">
+          <div class="swipe-pill"></div>
+          Deslize para abrir o Android
+        </div>
+        <div class="lock-gesture-zone" id="lockGestureZone" aria-label="Deslize para abrir">
+          <div class="lock-gesture-text">Deslize para cima</div>
+          <div class="lock-drag-indicator" id="lockDragIndicator"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="screen" id="androidScreen">
+      <div class="status"><span>10:33</span><div class="status-icons"><div class="signal"><span></span><span></span><span></span><span></span></div><div class="wifi"></div><div class="status-dot"></div></div></div>
+      <div class="android-panel">
+        <div class="app-grid-wrap">
+          <div class="android-top">
+            <div class="android-title"><strong>Apps</strong><span>Deslize e toque para abrir</span></div>
+          </div>
+          <div class="searchbar">🔎 Pesquisar apps</div>
+          <div class="app-grid">
+            <button class="app" onclick="openPlaceholderApp('Calculadora')"><div class="app-icon">🧮</div><div class="app-label">Calculadora</div></button>
+            <button class="app" onclick="openPlaceholderApp('Google')"><div class="app-icon">G</div><div class="app-label">Google</div></button>
+            <button class="app" onclick="openPlaceholderApp('Galeria')"><div class="app-icon">🖼️</div><div class="app-label">Galeria</div></button>
+            <button class="app" onclick="openPlaceholderApp('Configurações')"><div class="app-icon">⚙️</div><div class="app-label">Config.</div></button>
+            <button class="app" onclick="openPlaceholderApp('Câmera')"><div class="app-icon">📷</div><div class="app-label">Câmera</div></button>
+            <button class="app" onclick="openPlaceholderApp('Chrome')"><div class="app-icon">🌐</div><div class="app-label">Chrome</div></button>
+            <button class="app" onclick="openPlaceholderApp('Telefone')"><div class="app-icon">📞</div><div class="app-label">Telefone</div></button>
+            <button class="app" onclick="openPlaceholderApp('Mensagens')"><div class="app-icon">💬</div><div class="app-label">Mensagens</div></button>
+            <button class="app" onclick="openPlaceholderApp('Maps')"><div class="app-icon">📍</div><div class="app-label">Maps</div></button>
+            <button class="app" onclick="openPlaceholderApp('Gmail')"><div class="app-icon">📧</div><div class="app-label">Gmail</div></button>
+            <button class="app" onclick="openPlaceholderApp('Agenda')"><div class="app-icon">🗓️</div><div class="app-label">Agenda</div></button>
+            <button class="app umbler" onclick="openUmblerApp()">
+              <div class="app-icon"><img class="talk-icon-img" src="data:image/jpeg;base64,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" alt="talk"></div>
+              <div class="app-label">Umbler Talk</div>
+            </button>
+          </div>
+        </div>
+        <div class="page-dots"><i class="active"></i><i></i><i></i></div>
+        <div class="notification compact" id="androidNotif" onclick="toggleNotifExpand('androidNotif', event)">
+          <div class="n-topline"></div>
+          <div class="n-head">
+            <img class="avatar" id="androidNotifAvatar" src="" alt="Disou"/>
+            <div class="n-meta"><div class="n-name">Disou</div><div class="n-sub">Umbler Talk · agora</div></div>
+            <button class="n-close" onclick="dismissNotif('androidNotif');event.stopPropagation()">×</button>
+          </div>
+          <div class="n-msg">Você conseguiu ver minha proposta? 📋</div>
+          <div class="n-label">Resposta rápida</div>
+          <div class="quick-list">
+            <button class="quick-btn" onclick="replyFromNotification('Sim, estou analisando agora 👀', event)">Sim, estou analisando agora 👀</button>
+            <button class="quick-btn" onclick="replyFromNotification('Pode me reenviar? Não recebi 📩', event)">Pode me reenviar? Não recebi 📩</button>
+            <button class="quick-btn" onclick="replyFromNotification('Te mando um áudio agora 🎙️', event)">Te mando um áudio agora 🎙️</button>
+          </div>
+          <div class="n-actions">
+            <button class="primary-btn" onclick="openUmblerApp()">Ver conversa</button>
+            <button class="audio-btn" onclick="audioReply(this,event)" aria-label="Responder por áudio">🎙️</button>
+          </div>
+          <div class="transfer-row">
+            <button class="ghost-btn" onclick="toggleInlineTransfer(this, 'inlineTransferAndroid',event)">Transferir</button>
+            <button class="ghost-btn" onclick="toast('Respondido sem abrir o app')">Responder sem abrir</button>
+          </div>
+          <div class="transfer-pop" id="inlineTransferAndroid"><div class="sheet-sub" style="margin:0 0 8px">Escolha o destino</div><button class="sheet-option" onclick="transferNotif('Larissa Monteiro',event)">👤 <span>Larissa Monteiro<small>Membro • Comercial</small></span></button><button class="sheet-option" onclick="transferNotif('Suporte Técnico',event)">🛠️ <span>Suporte Técnico<small>Setor • Enviar para fila de suporte</small></span></button><button class="sheet-option" onclick="transferNotif('Fila de suporte',event)">📥 <span>Enviar para fila de suporte<small>Direcionar para atendimento geral</small></span></button><button class="sheet-option" onclick="transferNotif('Financeiro',event)">💸 <span>Financeiro<small>Pagamentos e cobranças</small></span></button></div>
+          <div class="audio-state" id="audioStateAndroid"><div class="wave"><span></span><span></span><span></span><span></span><span></span></div><span id="audioStateAndroidText">Gravando áudio…</span></div>
+        </div>
+        <div class="bottom-dock">
+          <div class="dock-icon">📞</div>
+          <div class="dock-icon">💬</div>
+          <div class="dock-icon">🌐</div>
+          <div class="dock-icon">📷</div>
+        </div>
+        <button class="system-homebar" onclick="dismissNotif('androidNotif')" aria-label="Android home"></button>
+      </div>
+    </section>
+
+
+
+    <section class="screen" id="loadingScreen">
+      <div class="loading-shell">
+        <div class="browser-top">
+          <div class="browser-icon">⌂</div>
+          <div class="address-pill">☰ <span>utalk.umbler.com</span></div>
+          <div class="browser-icon">＋</div>
+          <div class="browser-count">3</div>
+          <div class="browser-icon">⋮</div>
+        </div>
+        <div class="loading-body">
+          <div class="loading-logo"><svg width='220' height='52' viewBox='0 0 220 52' xmlns='http://www.w3.org/2000/svg'><text x='0' y='38' font-family='Poppins,sans-serif' font-size='34' font-weight='500' fill='#0d1220'>umbler talk</text><rect x='150' y='25' width='46' height='4' rx='2' fill='#0d1220'/></svg></div>
+          <div class="loading-text">Inicializando...</div>
+          <div class="loading-progress"><span></span></div>
+        </div>
+        <div class="android-nav">
+          <div class="lines"><span></span><span></span><span></span></div>
+          <div class="pill"></div>
+          <div class="back"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="screen" id="appScreen">
+      <button class="app-return dark" onclick="returnToApps()" aria-label="Voltar para apps">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="m15 18-6-6 6-6"/></svg>
+      </button>
+      <div class="app-header" id="appHeader">
+        <div class="search-head">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+          <input id="inboxSearch" placeholder="Pesquisar conversas" oninput="renderConversations()" />
+        </div>
+        <div class="right-pack">
+          <button class="icon-btn" onclick="toggleFilterMenu()"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 5h18l-7 8v6l-4-2v-4z"/></svg></button>
+          <button class="icon-btn" onclick="apiConnect()" title="Conectar API"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 16v5"/><path d="M16 8a4 4 0 1 0-8 0c0 7-3 9-3 9h14s-3-2-3-9"/><circle cx="18.5" cy="6.5" r="3.5" fill="#5a82ff" stroke="none"/><path d="M18.5 5v3" stroke="#fff" stroke-width="1.5" stroke-linecap="round"/><path d="M17 6.5h3" stroke="#fff" stroke-width="1.5" stroke-linecap="round"/></svg></button>
+          <button class="avatar-btn" onclick="openProfile()"><img class="top-avatar" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='80' height='80'><defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'><stop stop-color='%23ff8c7b'/><stop offset='1' stop-color='%23f26c71'/></linearGradient></defs><rect rx='40' width='80' height='80' fill='url(%23g)'/><circle cx='40' cy='30' r='15' fill='%23fff' fill-opacity='.92'/><path d='M14 72c4-13 15-20 26-20s22 7 26 20' fill='%23fff' fill-opacity='.92'/></svg>" alt="perfil"/></button>
+        </div>
+      </div>
+      <div class="filters-row" id="filtersRow">
+        <button style="display:flex;align-items:center;gap:8px;color:#6780ea"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 5h14v10H9l-4 4z"/></svg> <span class="badge">17</span></button>
+        <button><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M16 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="10" cy="7" r="4"/><path d="M20 8v6"/><path d="M23 11h-6"/></svg></button>
+        <button id="eyeBtn" onclick="toggleSelectionMode()"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/></svg></button>
+        <button id="listBtn" onclick="toggleCompactMode()"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M8 6h13"/><path d="M8 12h13"/><path d="M8 18h13"/><path d="M3 6h.01"/><path d="M3 12h.01"/><path d="M3 18h.01"/></svg></button>
+        <button id="sortBtn" onclick="toggleSortMenu()"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 5v14"/><path d="m19 12-7 7-7-7"/></svg></button>
+        <button style="margin-left:auto"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 9l6 6 6-6"/></svg></button>
+      </div>
+      <div class="selection-toolbar" id="selectionToolbar">
+        <input type="checkbox" id="selectAllBox" onchange="toggleSelectAll(this.checked)">
+        <div class="select-label">Selecione uma conversa</div>
+        <button class="icon-btn" onclick="toggleSelectionMode(false)">✕</button>
+      </div>
+      <div class="bulk-actions" id="bulkActions">
+        <select id="bulkActionSelect"><option>Finalizar conversas</option><option>Transferir para esperando</option></select>
+        <button id="bulkApplyBtn" onclick="applyBulkAction()">Aplicar</button>
+      </div>
+      <div class="mini-menu" id="sortMenu">
+        <button onclick="setSortMode('recent')">Ordenar por mais recentes</button>
+        <button onclick="setSortMode('name')">Ordenar por nome</button>
+      </div>
+      <div class="mini-menu" id="filterMenu" style="top:86px;right:64px;min-width:150px">
+        <button onclick="filterByTag('')">Todas</button>
+        <button onclick="filterByTag('Geral')">Geral</button>
+        <button onclick="filterByTag('Suporte')">Suporte</button>
+        <button onclick="filterByTag('Financeiro')">Financeiro</button>
+      </div>
+      <div class="top-tabs" id="tabsView">
+        <div class="tab-pills">
+          <button class="tab-pill active" data-tab="entrada">Entrada +99</button>
+          <button class="tab-pill" data-tab="esperando">Esperando</button>
+          <button class="tab-pill" data-tab="finalizados">Finalizados</button>
+        </div>
+      </div>
+      <div class="list" id="conversationList"></div>
+      <button class="plus-fab" onclick="openNewConversation()">+</button>
+      <button class="system-homebar" onclick="exitAppToAndroid()" aria-label="Sair do app"></button>
+</section>
+
+    <section class="screen" id="chatScreen">
+      <button class="app-return dark" onclick="returnToApps()" aria-label="Voltar para apps">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="m15 18-6-6 6-6"/></svg>
+      </button>
+      <div class="chat-head">
+        <button class="back-btn" onclick="backToInbox()"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 18-6-6 6-6"/></svg></button>
+        <div class="chat-user">
+          <button class="avatar-btn" onclick="openProfile()"><img class="avatar" id="chatAvatar" src="" alt="avatar"></button>
+          <div class="meta"><div class="name" id="chatName">Ryan</div><div class="sub" id="chatChannel">WhatsApp · agora</div></div>
+        </div>
+        <div class="chat-head-actions"><button class="icon-btn" onclick="openNewConversation()" title="Nova conversa"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14"/><path d="M5 12h14"/></svg></button><button class="icon-btn" onclick="openAddContact()" title="Adicionar contato"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="10" cy="7" r="4"/><path d="M19 8v6"/><path d="M22 11h-6"/></svg></button></div>
+      </div>
+      <div class="quickbar">
+        <button class="qb" onclick="openProfile()">👤 Contato</button>
+        <button class="qb" onclick="openLabels()">🏷️ Etiquetas</button>
+        <button class="qb" onclick="openTransfer()">↗️ Transferir</button>
+        <button class="qb" onclick="finishConversation()">✅ Finalizar</button>
+      </div>
+      <div class="messages" id="messages"></div>
+      <div class="reply-pad">
+        <div class="reply-suggestions">
+          <button class="suggest" onclick="seedSuggestion(this.textContent)">Sim, posso te ajudar</button>
+          <button class="suggest" onclick="seedSuggestion(this.textContent)">Me passa mais detalhes</button>
+          <button class="suggest" onclick="seedSuggestion(this.textContent)">Vou verificar agora</button>
+        </div>
+        <div class="composer">
+          <input class="input" id="composerInput" placeholder="Digite uma mensagem" />
+          <button class="mic-btn" id="chatMicBtn" onclick="sendAudioFromChat(this)">🎙️</button>
+          <button class="send" onclick="sendMessage()" aria-label="Enviar mensagem"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 20.25L21 12L3 3.75V10.17L15.86 12L3 13.83V20.25Z" fill="currentColor"/></svg></button>
+        </div>
+      </div>
+      <button class="system-homebar" onclick="exitAppToAndroid()" aria-label="Sair do app"></button>
+    </section>
+
+    
+    <div class="overlay-sheet" id="profileSheet" onclick="closeSheet(event,'profileSheet')"><div class="sheet-card"><div class="sheet-handle"></div><div class="sheet-title">Perfil do contato</div><div class="sheet-sub">Informações básicas do atendimento</div><div style="display:flex;align-items:center;gap:12px;margin-bottom:14px"><img class="avatar" id="profileAvatar" src="" alt=""><div><div style="font-size:18px;font-weight:700;color:#202b44" id="profileName">Ryan</div><div style="font-size:13px;color:#8f97aa" id="profileChannel">WhatsApp</div></div></div><div class="profile-grid"><div class="profile-row"><label>Telefone</label><div id="profilePhone">+55 31 99999-0000</div></div><div class="profile-row"><label>Empresa</label><div id="profileCompany">Flexy Digital</div></div><div class="profile-row"><label>Última interação</label><div id="profileLast">Hoje, 10:28</div></div><div class="profile-row"><label>Etiquetas</label><div id="profileTags">Geral, Talk2</div></div></div><div class="sheet-actions"><button class="secondary" onclick="toggleSheet(false,'profileSheet')">Fechar</button><button class="primary" onclick="openLabels()">Editar etiquetas</button></div></div></div>
+    <div class="overlay-sheet" id="labelsSheet" onclick="closeSheet(event,'labelsSheet')"><div class="sheet-card"><div class="sheet-handle"></div><div class="sheet-title">Etiquetas</div><div class="sheet-sub">Toque para selecionar uma etiqueta principal</div><div class="chips" id="labelChips"></div><div class="sheet-actions"><button class="secondary" onclick="toggleSheet(false,'labelsSheet')">Cancelar</button><button class="primary" onclick="saveLabels()">Salvar etiquetas</button></div></div></div>
+    <div class="overlay-sheet" id="transferSheet" onclick="closeSheet(event,'transferSheet')"><div class="sheet-card" onclick="event.stopPropagation()"><div class="sheet-handle"></div><div class="sheet-title">Transferir conversa</div><div class="sheet-sub">Escolha para onde essa conversa deve ir</div><div class="transfer-list"><button class="sheet-option" onclick="applyTransfer('Comercial','esperando')">👤 <span>Larissa Monteiro<small>Membro • Comercial</small></span></button><button class="sheet-option" onclick="applyTransfer('Suporte Técnico','esperando')">🛠️ <span>Setor Suporte Técnico<small>Enviar para fila do suporte</small></span></button><button class="sheet-option" onclick="applyTransfer('Financeiro','esperando')">💸 <span>Setor Financeiro<small>Pagamentos e cobranças</small></span></button><button class="sheet-option" onclick="applyTransfer('Atendimento','esperando')">📞 <span>Setor Atendimento<small>Direcionar para fila geral</small></span></button><button class="sheet-option" onclick="applyTransfer('Juliana Rocha','esperando')">👩 <span>Juliana Rocha<small>Membro • Suporte</small></span></button></div><div class="sheet-actions"><button class="secondary" onclick="toggleSheet(false,'transferSheet')">Fechar</button></div></div></div>
+
+    <div class="overlay-sheet newconv-sheet" id="newConversationSheet" onclick="closeSheet(event,'newConversationSheet')"><div class="sheet-card"><div class="sheet-handle"></div><div class="sheet-title">Nova conversa</div><div class="sheet-sub">Escolha com quem deseja iniciar o atendimento</div><div class="newconv-body"><div class="newconv-tabs"><button class="active" data-tab="contato" onclick="setNewConversationTab('contato')">Contato</button><button data-tab="atendentes" onclick="setNewConversationTab('atendentes')">Atendentes</button><button data-tab="grupos" onclick="setNewConversationTab('grupos')">Grupos</button></div><div class="newconv-search"><input id="newConvSearch" placeholder="Pesquisar" oninput="renderNewConversationList()"><button class="newconv-pill" id="newConvActionBtn">+ Contato</button></div><div class="newconv-list" id="newConversationList"></div></div><div class="sheet-bottom-actions"><button class="cancel" onclick="toggleSheet(false,'newConversationSheet')">Cancelar</button><button class="go" onclick="startSelectedConversation()">Iniciar conversa</button></div></div></div>
+
+    <div class="toast" id="toast"></div>
+  </div>
+</div>
+<script>
+function makePhotoAvatar(bg1,bg2,skin,hair,shirt){
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="96" height="96" viewBox="0 0 96 96" fill="none">
+    <defs><linearGradient id="g" x1="10" y1="6" x2="86" y2="92" gradientUnits="userSpaceOnUse">
+      <stop stop-color="${bg1}"/><stop offset="1" stop-color="${bg2}"/></linearGradient></defs>
+    <rect width="96" height="96" rx="48" fill="url(#g)"/>
+    <ellipse cx="48" cy="101" rx="36" ry="28" fill="${shirt}" fill-opacity=".95"/>
+    <path d="M29 40c0-11.6 8.4-20 19-20s19 8.4 19 20v5c0 13.2-9.1 22.8-19 22.8S29 58.2 29 45z" fill="${skin}"/>
+    <path d="M28 40c0-13.1 8.8-21.5 20-21.5 10.3 0 18.5 6.7 19.7 17.3-3.8-.9-7.8-3.3-11.2-7-3.7 5.3-11.5 8.9-27.5 9.5V40z" fill="${hair}"/>
+    <path d="M34 68c4.2 4.5 8.9 6.8 14 6.8 5.3 0 9.8-2.2 14-6.8 9.4 2.4 15.8 7.8 19.2 16.2H14.8C18.2 75.8 24.6 70.4 34 68z" fill="${shirt}"/>
+    <circle cx="66.5" cy="67.5" r="10.5" fill="#fff" fill-opacity=".92"/>
+    <path d="M66.5 61v13M60 67.5h13" stroke="#98A4BF" stroke-width="2" stroke-linecap="round"/>
+  </svg>`;
+  return 'data:image/svg+xml;utf8,' + encodeURIComponent(svg);
+}
+const avatars={
+  ryan:makePhotoAvatar('#20C997','#1495FF','#F4D1B2','#2B2A33','#FFFFFF'),
+  disou:makePhotoAvatar('#6D7DFF','#B06BFF','#E8C09D','#3B2A25','#F4F6FA'),
+  amanda:makePhotoAvatar('#FFA748','#FF6F61','#F2C4A2','#5F392B','#FFF2D7'),
+  bruno:makePhotoAvatar('#1FB6FF','#4F7DFF','#E2B18D','#1F2434','#E8EEF9'),
+  julia:makePhotoAvatar('#FF72C7','#C06BFF','#F1C3A3','#592F38','#FDF1F7'),
+  natalia:makePhotoAvatar('#52D2C8','#5A82FF','#F0C6A8','#3C2D2E','#F5F8FF')
+};
+
+const data={
+  entrada:[
+    {id:'disou',name:'Disou',avatar:avatars.disou,time:'15:04',channel:'Instagram',preview:'Você conseguiu ver minha proposta? 📋',tags:['Geral'],status:'pending'},
+    {id:'ryan',name:'Ryan',avatar:avatars.ryan,time:'10:28',channel:'WhatsApp',preview:'Pode me ajudar? 🙏',tags:['Geral','Talk2'],status:'online'},
+    {id:'amanda',name:'Amanda Souza',avatar:avatars.amanda,time:'ontem',channel:'WhatsApp',preview:'Conseguiu liberar o acesso do financeiro?',tags:['Financeiro'],status:'waiting'},
+    {id:'bruno',name:'Bruno Costa',avatar:avatars.bruno,time:'ontem',channel:'WhatsApp',preview:'Quero falar com suporte técnico',tags:['Suporte'],status:'new'},
+    {id:'julia',name:'Julia Martins',avatar:avatars.julia,time:'sex',channel:'Instagram',preview:'Pode me passar os valores atualizados?',tags:['Comercial'],status:'new'}
+  ],
+  esperando:[
+    {id:'amanda2',name:'Amanda Souza',avatar:avatars.amanda,time:'09:41',channel:'WhatsApp',preview:'Estou aguardando o retorno do financeiro.',tags:['Aguardando'],status:'waiting'},
+    {id:'bruno2',name:'Bruno Costa',avatar:avatars.bruno,time:'08:55',channel:'WhatsApp',preview:'Pode me avisar quando o time técnico assumir?',tags:['Transferido'],status:'waiting'}
+  ],
+  finalizados:[
+    {id:'julia2',name:'Julia Martins',avatar:avatars.julia,time:'ontem',channel:'Instagram',preview:'Perfeito, obrigada pelo retorno!',tags:['Finalizado'],status:'done'},
+    {id:'natalia',name:'Natália Lima',avatar:avatars.natalia,time:'qui',channel:'WhatsApp',preview:'Consegui resolver por aqui, valeu!',tags:['Finalizado'],status:'done'}
+  ]
+};
+
+const chatScenarios={
+  ryan:[
+    {from:'other',text:'Olá! Preciso de ajuda.'},
+    {from:'self',text:'Olá! Como posso ajudá-lo?'},
+    {from:'other',text:'Pode me ajudar? 🙏'},
+  ],
+  disou:[
+    {from:'other',text:'Oi! tudo bem? Queria saber se viram minha proposta.'},
+    {from:'other',text:'Você conseguiu ver minha proposta? 📋'}
+  ]
+};
+
+const scriptedReplies={
+  ryan:[
+    'Claro. Você consegue me dizer o que aconteceu?',
+    'Perfeito, acabei de localizar seu atendimento.',
+    'Vou verificar com o setor responsável agora.',
+    'Já transferi para o time certo e sigo acompanhando por aqui.',
+    'Tudo certo. Me avise se quiser que eu mande um áudio com o resumo.'
+  ],
+  disou:[
+    'Sim. Estou olhando sua proposta agora.',
+    'Vi sim. O orçamento está alinhado com o escopo atual.',
+    'Se quiser, te mando um resumo dos pontos principais por aqui.',
+    'Também posso transferir para o comercial fechar com você.',
+    'Fechado. Já deixei marcado para te retornar ainda hoje.'
+  ]
+};
+
+const autoCustomerReplies={
+  ryan:[
+    'É sobre o meu acesso. Não consegui entrar ainda.',
+    'Aparece uma mensagem dizendo que minha conta está pendente.',
+    'Perfeito, obrigado por verificar.',
+    'Ótimo, fico no aguardo então.',
+    'Pode mandar sim, vai ajudar bastante.'
+  ],
+  disou:[
+    'Boa! Queria confirmar se o prazo continua o mesmo.',
+    'Ótimo, isso já me ajuda bastante.',
+    'Pode sim, principalmente a parte de implementação.',
+    'Perfeito, transfere para o comercial então.',
+    'Combinado, obrigado pelo retorno.'
+  ]
+};
+
+let currentTab='entrada';
+let currentChat='ryan';
+let currentStep=0;
+const contactDetails={
+  ryan:{phone:'+55 31 8756-5581',company:'Flexy Digital',last:'Hoje, 10:28',channel:'WhatsApp',tags:['Geral','Talk2']},
+  disou:{phone:'+55 11 99888-1234',company:'Disou Studio',last:'Hoje, 15:04',channel:'Instagram',tags:['Geral']},
+  amanda:{phone:'+55 21 97777-1020',company:'Mercuri Finance',last:'Ontem, 18:44',channel:'WhatsApp',tags:['Financeiro']},
+  bruno:{phone:'+55 41 96666-8877',company:'Bluehost Tech',last:'Ontem, 16:12',channel:'WhatsApp',tags:['Suporte']},
+  julia:{phone:'+55 48 95555-2244',company:'JMA Soluções',last:'Sex, 14:03',channel:'Instagram',tags:['Comercial']}
+};
+const availableLabels=['Geral','Talk2','Financeiro','Suporte','Comercial','Urgente','VIP','Aguardando'];
+let selectedLabels=[];
+let currentChatItemRef=null;
+let selectionMode=false;
+let compactMode=false;
+let selectedConversationIds=[];
+let sortMode='recent';
+let activeTagFilter='';
+let newConversationSelection=null;
+let exitNotifTimer=null;
+
+const API_BASE="https://app-utalk.umbler.com";
+function getApiCfg(){
+  try{return JSON.parse(localStorage.getItem("utalk_api_cfg")||"{}")}catch(e){return {}}
+}
+function setApiCfg(cfg){ localStorage.setItem("utalk_api_cfg", JSON.stringify(cfg)); }
+async function apiConnect(){
+  const cfg=getApiCfg();
+  const token=prompt("Cole o token da API Umbler Talk (sem 'Bearer'):", cfg.token||"");
+  if(token===null) return;
+  const fromPhone=prompt("Número do canal ativo (FromPhone, com DDD):", cfg.fromPhone||"");
+  if(fromPhone===null) return;
+  let organizationId=prompt("OrganizationId (deixe vazio para tentar descobrir automaticamente):", cfg.organizationId||"");
+  if(organizationId===null) return;
+  const next={token:token.trim(),fromPhone:(fromPhone||"").trim(),organizationId:(organizationId||"").trim()};
+  if(!next.token || !next.fromPhone){ toast("Preencha token e FromPhone"); return; }
+  try{
+    if(!next.organizationId){
+      next.organizationId=await discoverOrganizationId(next.token);
+    }
+    setApiCfg(next);
+    toast(next.organizationId?"API conectada":"API salva, mas faltou OrganizationId");
+  }catch(err){
+    console.error(err);
+    toast("Falha ao validar API");
+    alert("Não consegui validar a API no navegador. Salvei os dados mesmo. Se houver bloqueio de CORS, use um proxy local.\n\nErro: "+err.message);
+    setApiCfg(next);
+  }
+}
+async function discoverOrganizationId(token){
+  const res=await fetch(API_BASE+"/v1/member/me",{headers:{Authorization:"Bearer "+token,Accept:"application/json"}});
+  if(!res.ok) throw new Error("/v1/member/me retornou "+res.status);
+  const data=await res.json();
+  const orgId=extractOrgId(data);
+  if(!orgId) throw new Error("OrganizationId não encontrado em /v1/member/me");
+  return String(orgId);
+}
+function extractOrgId(data){
+  if(!data) return '';
+  if(Array.isArray(data)){
+    for(const item of data){ const found=extractOrgId(item); if(found) return found; }
+  }
+  if(typeof data==='object'){
+    if(data.organizationId) return data.organizationId;
+    if(data.OrganizationId) return data.OrganizationId;
+    if(data.id && (data.name||data.organizationName||data.slug)) return data.id;
+    for(const key of ['organizations','Organizations','items','data','memberOrganizations']){
+      if(data[key]){ const found=extractOrgId(data[key]); if(found) return found; }
+    }
+  }
+  return '';
+}
+async function sendMessageToApi(text){
+  const cfg=getApiCfg();
+  if(!cfg.token || !cfg.fromPhone || !cfg.organizationId) return {ok:false, skipped:true, message:'API não configurada'};
+  const target=(contactDetails[currentChat]?.phone||'').replace(/\D/g,'');
+  const fromPhone=(cfg.fromPhone||'').replace(/\D/g,'');
+  if(!target) return {ok:false, message:'Contato sem telefone'};
+  const fd=new FormData();
+  fd.append('ToPhone', target);
+  fd.append('FromPhone', fromPhone);
+  fd.append('OrganizationId', String(cfg.organizationId));
+  fd.append('Message', text);
+  const res=await fetch(API_BASE+"/v1/messages/simplified/",{method:'POST',headers:{Authorization:'Bearer '+cfg.token,Accept:'application/json'},body:fd});
+  let bodyText='';
+  try{ bodyText=await res.text(); }catch(e){}
+  if(!res.ok) throw new Error('Envio falhou ('+res.status+'): '+bodyText.slice(0,180));
+  return {ok:true, data:bodyText};
+}
+
+function getNotificationChatIdFromElement(notif){
+  if(!notif) return currentChat || 'ryan';
+  if(notif.id==='androidNotif') return 'disou';
+  if(notif.id==='lockNotif') return 'ryan';
+  const name=(notif.querySelector('.n-name')?.textContent||'').trim().toLowerCase();
+  if(name.includes('disou')) return 'disou';
+  if(name.includes('ryan')) return 'ryan';
+  return currentChat || 'ryan';
+}
+function appendNotificationReplyToChat(chatId, payload){
+  if(!chatScenarios[chatId]) chatScenarios[chatId]=[];
+  chatScenarios[chatId].push(payload);
+  const item=findItemById(chatId);
+  if(item){
+    item.preview = payload.audio ? 'Você enviou um áudio' : payload.text;
+    item.time = 'agora';
+  }
+}
+const notifState={
+  activeChat:'ryan',
+  pendingText:{ryan:'Pode me ajudar? 🙏', disou:'Você conseguiu ver minha proposta? 📋'}
+};
+function syncNotificationAvatars(){
+  const a=document.getElementById('lockNotifAvatar'); if(a) a.src=avatars.ryan;
+  const b=document.getElementById('androidNotifAvatar'); if(b) b.src=avatars.disou;
+}
+function showAndroidNotification(name, avatar, channel, message){
+  const notif=document.getElementById('androidNotif');
+  notif.classList.remove('expanded');
+  notif.querySelector('.n-name').textContent=name;
+  notif.querySelector('.n-sub').textContent=(name==='Disou' ? 'Umbler Talk' : channel)+' · agora';
+  notif.querySelector('.n-msg').textContent=message;
+  notif.querySelector('.avatar').src=avatar;
+  notif.classList.add('show');
+}
+function queueClientFollowup(){
+  clearTimeout(exitNotifTimer);
+  const id=currentChat==='disou'?'disou':'ryan';
+  const item=findItemById(id) || data.entrada.find(x=>x.id==='ryan');
+  const replyList=autoCustomerReplies[id] || [];
+  const idx=Math.min(currentStep, replyList.length-1);
+  const text=replyList[idx] || notifState.pendingText[id] || 'Cliente respondeu novamente.';
+  exitNotifTimer=setTimeout(()=>showAndroidNotification(item.name, item.avatar, item.channel, text), 1300);
+}
+function exitAppToAndroid(){
+  showScreen('androidScreen');
+  queueClientFollowup();
+  toast('Voltando para o Android');
+}
+function returnToApps(){
+  showScreen('androidScreen');
+  dismissNotif('androidNotif');
+  setTimeout(()=>queueClientFollowup(), 650);
+  toast('Voltou para os apps');
+}
+
+
+function showScreen(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+let lockTouchStartY=null;
+let lockTouchCurrentY=null;
+function bindLockSwipe(){
+  const zone=document.getElementById('lockGestureZone');
+  const indicator=document.getElementById('lockDragIndicator');
+  if(!zone||!indicator) return;
+  const reset=()=>{ indicator.style.transform='translateX(-50%) translateY(0)'; indicator.style.opacity='1'; lockTouchStartY=null; lockTouchCurrentY=null; };
+  zone.addEventListener('touchstart',e=>{ lockTouchStartY=e.touches[0].clientY; lockTouchCurrentY=lockTouchStartY; }, {passive:true});
+  zone.addEventListener('touchmove',e=>{ if(lockTouchStartY==null) return; lockTouchCurrentY=e.touches[0].clientY; const delta=Math.max(0, Math.min(90, lockTouchStartY-lockTouchCurrentY)); indicator.style.transform=`translateX(-50%) translateY(${-delta}px)`; indicator.style.opacity=String(1-delta/120); }, {passive:true});
+  zone.addEventListener('touchend',()=>{ const delta=lockTouchStartY!=null&&lockTouchCurrentY!=null ? (lockTouchStartY-lockTouchCurrentY) : 0; if(delta>58){ unlockToAndroid(); } else { reset(); } });
+  zone.addEventListener('click',()=>unlockToAndroid());
+}
+function openPlaceholderApp(name){ toast(name+' disponível só como atalho visual'); }
+
+function dismissNotif(id){ document.getElementById(id)?.classList.remove('show'); }
+function toggleNotifExpand(id, event){
+  if(event && event.target.closest('button')) return;
+  const el=document.getElementById(id);
+  el.classList.toggle('expanded');
+}
+function unlockToAndroid(){ 
+  showScreen('androidScreen'); 
+  const n=document.getElementById('androidNotif');
+  n.classList.remove('expanded');
+  setTimeout(()=>n.classList.add('show'),700); 
+}
+
+function enterAndroid(){ unlockToAndroid(); }
+let loadingTimer=null;
+function openUmblerApp(){
+  showScreen('loadingScreen');
+  clearTimeout(loadingTimer);
+  loadingTimer=setTimeout(()=>{ showScreen('appScreen'); dismissNotif('androidNotif'); renderConversations(); }, 1650);
+}
+function toggleDrawer(force){ return; }
+function toggleInlineTransfer(btn, id='inlineTransferLock', ev){
+  ev?.stopPropagation?.();
+  const notif = btn.closest('.notification');
+  notif?.classList.add('expanded');
+  notif?.querySelectorAll('.quick-list').forEach(el=>el.classList.remove('show'));
+  notif?.querySelectorAll('.tool-icon, .transfer-btn-notif').forEach(el=>el.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.transfer-pop').forEach(el=>{ if(el.id!==id) el.classList.remove('show'); });
+  document.getElementById(id)?.classList.toggle('show');
+}
+function toggleQuickReplies(btn, listId, ev){
+  ev?.stopPropagation?.();
+  const notif = btn.closest('.notification');
+  notif?.classList.add('expanded');
+  document.querySelectorAll('.transfer-pop').forEach(el=>el.classList.remove('show'));
+  notif?.querySelectorAll('.tool-icon, .transfer-btn-notif').forEach(el=>el.classList.remove('active'));
+  btn.classList.add('active');
+  const list=document.getElementById(listId);
+  list?.classList.toggle('show');
+}
+function transferNotif(kind, ev){
+  ev?.stopPropagation?.();
+  const notif=ev?.target?.closest('.notification');
+  const chatId=getNotificationChatIdFromElement(notif)||currentChat||'ryan';
+  const item=findItemById(chatId) || {id:chatId,name:chatId,avatar:avatars[chatId],channel:'WhatsApp',preview:'Conversa transferida',time:'agora',status:'waiting',tags:['Aguardando']};
+  removeItemFromLists(chatId);
+  item.status='waiting';
+  item.tags=[kind];
+  item.time='agora';
+  data.esperando.unshift(item);
+  currentTab='esperando';
+  document.querySelectorAll('.tab-pill').forEach(b=>b.classList.toggle('active',b.dataset.tab==='esperando'));
+  renderConversations();
+  document.querySelectorAll('.transfer-pop').forEach(el=>el.classList.remove('show'));
+  if(notif) notif.classList.remove('expanded');
+  toast('Conversa transferida para '+kind);
+}
+function toggleSheet(show,id){ document.getElementById(id)?.classList.toggle('show',show); }
+function closeSheet(e,id){ if(e.target.id===id) toggleSheet(false,id); }
+function getCurrentItem(){
+  return currentChatItemRef || data.entrada.find(x=>x.id===currentChat) || data.esperando.find(x=>x.id===currentChat) || data.finalizados.find(x=>x.id===currentChat) || {id:currentChat,name:currentChat,avatar:avatars[currentChat],channel:'WhatsApp',tags:['Geral']};
+}
+function openProfile(){
+  const item=getCurrentItem(); const info=contactDetails[item.id]||contactDetails[currentChat]||{phone:'-',company:'-',last:'-',channel:item.channel||'WhatsApp',tags:item.tags||[]};
+  profileName.textContent=item.name; profileAvatar.src=item.avatar; profileChannel.textContent=info.channel+' · contato';
+  profilePhone.textContent=info.phone; profileCompany.textContent=info.company; profileLast.textContent=info.last; profileTags.textContent=(item.tags||info.tags||[]).join(', ');
+  toggleSheet(true,'profileSheet');
+}
+function openLabels(){ const item=getCurrentItem(); selectedLabels=[...(item.tags||[])]; buildLabelChips(); toggleSheet(true,'labelsSheet'); }
+function buildLabelChips(){ labelChips.innerHTML=availableLabels.map(l=>`<button class="chip-btn ${selectedLabels.includes(l)?'selected':''}" onclick="toggleLabel(event,'${l}')">${l}</button>`).join(''); }
+function toggleLabel(ev,label){ ev.stopPropagation(); if(selectedLabels.includes(label)) selectedLabels=selectedLabels.filter(x=>x!==label); else { if(selectedLabels.length>=2) selectedLabels.shift(); selectedLabels.push(label);} buildLabelChips(); }
+function saveLabels(){ const item=getCurrentItem(); item.tags=[...selectedLabels]; if(contactDetails[item.id]) contactDetails[item.id].tags=[...selectedLabels]; renderConversations(); if(document.getElementById('chatScreen').classList.contains('active')) openChat(item.id,item.name,item.avatar,item.channel); toggleSheet(false,'labelsSheet'); toast('Etiquetas atualizadas'); }
+function openTransfer(){ toggleSheet(true,'transferSheet'); }
+function removeItemFromLists(id){ ['entrada','esperando','finalizados'].forEach(tab=>{ const idx=data[tab].findIndex(x=>x.id===id); if(idx>-1) data[tab].splice(idx,1); }); }
+function applyTransfer(label,dest='esperando'){ const item={...getCurrentItem()}; removeItemFromLists(item.id); item.tags=[label]; data[dest].unshift(item); currentTab=dest; document.querySelectorAll('.tab-pill').forEach(b=>b.classList.toggle('active',b.dataset.tab===dest)); renderConversations(); toggleSheet(false,'transferSheet'); showScreen('appScreen'); toast('Conversa transferida para '+label); }
+function finishConversation(){ const item={...getCurrentItem()}; removeItemFromLists(item.id); item.tags=['Finalizado']; item.time='agora'; data.finalizados.unshift(item); currentTab='finalizados'; document.querySelectorAll('.tab-pill').forEach(b=>b.classList.toggle('active',b.dataset.tab==='finalizados')); renderConversations(); showScreen('appScreen'); toast('Conversa movida para Finalizados'); }
+function currentNotificationContext(btn){
+  const notif = btn?.closest('.notification');
+  if(!notif) return null;
+  if(notif.id==='lockNotif') return {state:'audioStateLock', text:'audioStateLockText'};
+  if(notif.id==='androidNotif') return {state:'audioStateAndroid', text:'audioStateAndroidText'};
+  return null;
+}
+function audioReply(btn, ev){
+  ev?.stopPropagation?.();
+  const notif=btn.closest('.notification');
+  notif?.classList.add('expanded');
+  const ctx=currentNotificationContext(btn);
+  if(!ctx) return;
+  const state=document.getElementById(ctx.state);
+  const text=document.getElementById(ctx.text);
+  const chatId=getNotificationChatIdFromElement(notif);
+  btn.classList.add('recording');
+  btn.textContent='◉';
+  state.classList.add('show');
+  text.textContent='Gravando áudio…';
+  setTimeout(()=>{ text.textContent='Enviando áudio…'; },850);
+  setTimeout(()=>{
+    btn.classList.remove('recording');
+    btn.textContent='🎙️';
+    text.textContent='Áudio enviado • 0:08';
+    appendNotificationReplyToChat(chatId,{from:'self',audio:true,duration:'0:08'});
+    toast('Áudio enviado sem abrir o app');
+  },1650);
+}
+function replyFromNotification(text, ev){
+  ev?.stopPropagation?.();
+  const notif=ev?.target?.closest('.notification');
+  notif?.classList.add('expanded');
+  const msg=notif?.querySelector('.n-msg');
+  if(msg) msg.textContent=text;
+  const chatId=getNotificationChatIdFromElement(notif);
+  appendNotificationReplyToChat(chatId,{from:'self',text});
+  toast('Resposta enviada direto da notificação');
+}
+function toggleSelectionMode(force){
+  selectionMode = typeof force==='boolean' ? force : !selectionMode;
+  if(!selectionMode) selectedConversationIds=[];
+  document.getElementById('selectionToolbar').classList.toggle('show', selectionMode);
+  document.getElementById('bulkActions').classList.toggle('show', selectionMode);
+  document.getElementById('eyeBtn').classList.toggle('active-eye', selectionMode);
+  updateBulkApplyState();
+  renderConversations();
+}
+function toggleSelectAll(checked){
+  const items=getRenderedConversationItems();
+  selectedConversationIds = checked ? items.map(x=>x.id) : [];
+  updateBulkApplyState();
+  renderConversations();
+}
+function toggleConversationSelection(id,checked){
+  if(checked){ if(!selectedConversationIds.includes(id)) selectedConversationIds.push(id); }
+  else selectedConversationIds=selectedConversationIds.filter(x=>x!==id);
+  updateBulkApplyState();
+}
+function updateBulkApplyState(){
+  const btn=document.getElementById('bulkApplyBtn');
+  if(!btn) return;
+  btn.classList.toggle('enabled', selectedConversationIds.length>0);
+}
+function applyBulkAction(){
+  if(!selectedConversationIds.length) return;
+  const action=document.getElementById('bulkActionSelect').value;
+  if(action.includes('Finalizar')){
+    selectedConversationIds.forEach(id=>{ const item=findItemById(id); if(item){ removeItemFromLists(id); item.tags=['Finalizado']; data.finalizados.unshift(item); } });
+    currentTab='finalizados';
+  } else {
+    selectedConversationIds.forEach(id=>{ const item=findItemById(id); if(item){ removeItemFromLists(id); item.tags=['Aguardando']; item.status='waiting'; data.esperando.unshift(item); } });
+    currentTab='esperando';
+  }
+  document.querySelectorAll('.tab-pill').forEach(b=>b.classList.toggle('active',b.dataset.tab===currentTab));
+  toggleSelectionMode(false);
+  renderConversations();
+  toast('Ação aplicada com sucesso');
+}
+function toggleCompactMode(){ compactMode=!compactMode; document.getElementById('listBtn').classList.toggle('active-eye', compactMode); renderConversations(); }
+function toggleSortMenu(){ document.getElementById('sortMenu').classList.toggle('show'); document.getElementById('filterMenu').classList.remove('show'); }
+function toggleFilterMenu(){ document.getElementById('filterMenu').classList.toggle('show'); document.getElementById('sortMenu').classList.remove('show'); }
+function setSortMode(mode){ sortMode=mode; document.getElementById('sortMenu').classList.remove('show'); renderConversations(); }
+function filterByTag(tag){ activeTagFilter=tag; document.getElementById('filterMenu').classList.remove('show'); renderConversations(); }
+function getRenderedConversationItems(){
+  let items=[...data[currentTab]];
+  const q=(document.getElementById('inboxSearch')?.value||'').trim().toLowerCase();
+  if(q) items=items.filter(item=> item.name.toLowerCase().includes(q) || item.preview.toLowerCase().includes(q));
+  if(activeTagFilter) items=items.filter(item=> (item.tags||[]).includes(activeTagFilter));
+  if(sortMode==='name') items.sort((a,b)=>a.name.localeCompare(b.name,'pt-BR'));
+  return items;
+}
+function findItemById(id){ return data.entrada.find(x=>x.id===id)||data.esperando.find(x=>x.id===id)||data.finalizados.find(x=>x.id===id); }
+function openNewConversation(){ newConversationSelection=null; renderNewConversationList(); toggleSheet(true,'newConversationSheet'); }
+function getNewConversationPool(){
+  if(newConversationTab==='atendentes') return attendantItems;
+  if(newConversationTab==='grupos') return groupItems;
+  return [...data.entrada, ...data.esperando, ...data.finalizados].filter((v,i,a)=>a.findIndex(x=>x.id===v.id)===i);
+}
+
+function openNewConversation(){
+  toggleSheet(true,'newConversationSheet');
+  renderNewConversationList();
+}
+function openAddContact(){
+  toggleSheet(false,'newConversationSheet');
+  toggleSheet(true,'addContactSheet');
+}
+function saveNewContact(){
+  const name=(document.getElementById('addContactName').value||'').trim();
+  const phone=(document.getElementById('addContactPhone').value||'').trim();
+  const channel=(document.getElementById('addContactChannel').value||'WhatsApp').trim();
+  const company=(document.getElementById('addContactCompany').value||'Lead Mobile').trim() || 'Lead Mobile';
+  const preview=(document.getElementById('addContactPreview').value||'Nova conversa iniciada agora').trim() || 'Nova conversa iniciada agora';
+  if(!name){ toast('Informe o nome do contato'); return; }
+  const id='lead_'+Date.now();
+  const avatar=makePhotoAvatar('#a8c4ff','#6d92ff','#f4c7a1','#3b2e2a','#f26c71');
+  const item={id,name,avatar,channel,preview,time:'agora',tags:['Novo']};
+  data.entrada.unshift(item);
+  contactDetails[id]={phone:phone||'+55 11 98888-7766',company,last:'Agora mesmo',channel,tags:['Novo']};
+  chatFlows[id]=[{from:'other',text:preview,time:'agora'}];
+  document.getElementById('addContactName').value='';
+  document.getElementById('addContactPhone').value='';
+  document.getElementById('addContactCompany').value='';
+  document.getElementById('addContactPreview').value='';
+  currentTab='entrada';
+  document.querySelectorAll('.tab-pill').forEach(b=>b.classList.toggle('active',b.dataset.tab==='entrada'));
+  renderConversations();
+  toggleSheet(false,'addContactSheet');
+  openChat(id,name,avatar,channel,item);
+  toast('Contato criado e conversa iniciada');
+}
+function renderNewConversationList(){
+  const q=(document.getElementById('newConvSearch')?.value||'').trim().toLowerCase();
+  const pool=getNewConversationPool().filter(item=> !q || item.name.toLowerCase().includes(q));
+  const el=document.getElementById('newConversationList');
+  el.innerHTML=pool.map(item=>`<button type="button" class="newconv-item ${newConversationSelection===item.id?'selected':''}" onclick="selectNewConversation('${item.id}')"><img class="avatar" src="${item.avatar}" alt="${item.name}"><div class="meta"><div class="nm">${item.name}</div><div class="sb">${item.channel} • ${item.preview}</div></div><div class="pick">${newConversationSelection===item.id?'✓':''}</div></button>`).join('');
+}
+function selectNewConversation(id){ newConversationSelection=id; renderNewConversationList(); }
+function startSelectedConversation(){
+  if(!newConversationSelection){ toast(newConversationTab==='contato' ? 'Selecione um contato' : 'Selecione uma opção'); return; }
+  const item=getNewConversationPool().find(v=>v.id===newConversationSelection) || findItemById(newConversationSelection);
+  toggleSheet(false,'newConversationSheet');
+  if(newConversationTab==='contato' && item){
+    openChat(item.id.replace(/2$/,''), item.name, item.avatar, item.channel, item);
+  } else if(item){
+    toast((newConversationTab==='atendentes'?'Atendente ':'Grupo ')+item.name+' selecionado');
+  }
+}
+
+function renderConversations(){
+  const list=document.getElementById('conversationList');
+  list.innerHTML='';
+  const items=getRenderedConversationItems();
+  items.forEach(item=>{
+    const isSelected=selectedConversationIds.includes(item.id);
+    const isWaiting=currentTab==='esperando' || item.status==='waiting';
+    const dotColor=isWaiting?'#f6a623':(item.channel==='Instagram'?'#e1306c':'#25d366');
+    const channelGlyph=item.channel==='Instagram'?'◎':'◉';
+    const el=document.createElement('div');
+    el.className='conv-item'+(selectionMode?' select-mode':'')+(compactMode?' compact':'');
+    el.innerHTML=`${selectionMode?`<input class="conv-check" type="checkbox" ${isSelected?'checked':''}>`:''}<img class="avatar" src="${item.avatar}" alt="${item.name}">
+      <div class="conv-main">
+        <div class="conv-top"><div class="conv-name">${item.name}</div><div class="conv-time">${item.time}</div></div>
+        <div class="conv-line"><span class="channel-dot" style="background:${dotColor}">${channelGlyph}</span><span class="txt">${item.preview}</span></div>
+        <div class="conv-badges">${item.tags.map((t,i)=>`<span class="tag ${i===1?'blue':''}">${i===1?'💬 ':''}${t}</span>`).join('')}</div>
+      </div>`;
+    if(selectionMode){
+      el.querySelector('.conv-check').addEventListener('click',ev=>ev.stopPropagation());
+      el.querySelector('.conv-check').addEventListener('change',e=>toggleConversationSelection(item.id,e.target.checked));
+      el.onclick=()=>{ const box=el.querySelector('.conv-check'); box.checked=!box.checked; toggleConversationSelection(item.id, box.checked); };
+    } else {
+      el.onclick=()=>openChat(item.id.replace(/2$/,''), item.name, item.avatar, item.channel, item);
+    }
+    list.appendChild(el);
+  });
+}
+
+document.querySelectorAll('.tab-pill').forEach(btn=>btn.addEventListener('click',()=>{
+  document.querySelectorAll('.tab-pill').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  currentTab=btn.dataset.tab; renderConversations();
+}));
+
+function openChat(id,name,avatar,channel,item){
+  currentChat=id; currentStep=0; currentChatItemRef=item || getCurrentItem();
+  document.getElementById('chatName').textContent=name;
+  document.getElementById('chatAvatar').src=avatar;
+  document.getElementById('chatChannel').textContent=channel+' · agora';
+  showScreen('chatScreen');
+  renderMessages(chatScenarios[id].slice());
+}
+function backToInbox(){ showScreen('appScreen'); }
+function renderMessages(msgs){
+  const wrap=document.getElementById('messages');
+  wrap.innerHTML='<div class="day-chip">Hoje</div>';
+  msgs.forEach((m,i)=>{
+    const d=document.createElement('div');
+    d.className='msg '+(m.from==='self'?'self':'other');
+    if(m.audio){
+      d.innerHTML=`<div class="audio-msg"><div class="play">▶</div><div class="wave"><span></span><span></span><span></span><span></span><span></span></div><div class="dur">${m.duration||'0:08'}</div></div><div class="time">10:${16+i}</div>`;
+    }else{
+      d.innerHTML=`<div>${m.text}</div><div class="time">10:${16+i}</div>`;
+    }
+    wrap.appendChild(d);
+  });
+  wrap.scrollTop=wrap.scrollHeight;
+  wrap.dataset.state=JSON.stringify(msgs);
+}
+function seedSuggestion(text){ document.getElementById('composerInput').value=text; }
+function pushAudioMessage(){
+  const msgs=JSON.parse(document.getElementById('messages').dataset.state||'[]');
+  msgs.push({from:'self',audio:true,duration:'0:08'});
+  renderMessages(msgs);
+}
+function sendAudioFromChat(btn){
+  btn.classList.add('recording');
+  btn.textContent='◉';
+  toast('Gravando áudio…');
+  setTimeout(()=>toast('Enviando áudio…'),700);
+  setTimeout(()=>{
+    btn.classList.remove('recording');
+    btn.textContent='🎙️';
+    pushAudioMessage();
+    autoReply(true);
+  },1450);
+}
+async function sendMessage(){
+  const input=document.getElementById('composerInput');
+  const text=input.value.trim(); if(!text) return;
+  const msgs=JSON.parse(document.getElementById('messages').dataset.state||'[]');
+  msgs.push({from:'self',text}); renderMessages(msgs); input.value='';
+  try{
+    const result=await sendMessageToApi(text);
+    if(result.ok) toast('Mensagem enviada via API');
+    else if(result.skipped) toast('Mensagem enviada na demo');
+  }catch(err){
+    console.error(err);
+    toast('Erro ao enviar na API');
+    msgs.push({from:'system',text:'Falha ao enviar na API oficial: '+err.message});
+    renderMessages(msgs);
+  }
+  setTimeout(()=>autoReply(),650);
+}
+function autoReply(fromAudio=false){
+  const msgs=JSON.parse(document.getElementById('messages').dataset.state||'[]');
+  const audioReplies={
+    ryan:'Ouvi seu áudio aqui. Ficou claro, obrigado! Pode seguir com a verificação.',
+    disou:'Perfeito, ouvi o áudio. Pode seguir por esse caminho sim.'
+  };
+  if(fromAudio){
+    msgs.push({from:'other',text:audioReplies[currentChat]||'Ouvi seu áudio aqui. Obrigado!'});
+    renderMessages(msgs);
+    currentStep=Math.min(currentStep+1, autoCustomerReplies[currentChat].length-1);
+    return;
+  }
+  const replies=autoCustomerReplies[currentChat];
+  const index=Math.min(currentStep, replies.length-1);
+  msgs.push({from:'other',text:replies[index]});
+  renderMessages(msgs); currentStep=Math.min(currentStep+1, replies.length-1);
+}
+function toast(text){
+  const el=document.getElementById('toast'); el.textContent=text; el.classList.add('show');
+  clearTimeout(window.__toastT); window.__toastT=setTimeout(()=>el.classList.remove('show'),1900);
+}
+
+document.addEventListener('click',e=>{ if(!e.target.closest('#sortBtn') && !e.target.closest('#sortMenu')) document.getElementById('sortMenu')?.classList.remove('show'); if(!e.target.closest('.app-header .icon-btn') && !e.target.closest('#filterMenu')) document.getElementById('filterMenu')?.classList.remove('show'); });
+// preload default
+syncNotificationAvatars();
+bindLockSwipe();
+renderConversations();
+if(getApiCfg().token){ setTimeout(()=>toast('API Umbler pronta para uso'), 600); }
+document.getElementById('lockNotif').classList.remove('expanded');
+</script>
+</body>
+</html>
