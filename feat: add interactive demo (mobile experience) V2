@@ -1,0 +1,780 @@
+ --tag-geral:  #F3F4F6;
+  --talk2-bg:   #E0FBF9;
+  --talk2-text: #00837C;
+  --orange:     #F97316;
+  --purple:     #8B5CF6;
+  --pink:       #EC4899;
+}
+ 
+/* ════ NOTIFICATION POPUP (bottom, thumb-zone) ═════════════════ */
+.notif-popup {
+  position:absolute; bottom:0; left:0; right:0; z-index:400;
+  background:var(--surface);
+  border-radius:20px 20px 0 0;
+  box-shadow:0 -6px 32px rgba(0,0,0,.18);
+  transform:translateY(100%);
+  transition:transform .35s cubic-bezier(.4,0,.2,1);
+  padding-bottom:env(safe-area-inset-bottom,0);
+}
+.notif-popup.open { transform:translateY(0); }
+.notif-timer-bar { height:3px; background:var(--border); border-radius:3px; overflow:hidden; margin:0 16px 0; }
+.notif-timer-fill { height:100%; background:var(--blue); width:100%; transition:width linear; }
+.notif-popup-inner { padding:10px 16px 0; }
+.notif-popup-head { display:flex; align-items:center; gap:10px; margin-bottom:8px; }
+.notif-pop-av { width:40px; height:40px; border-radius:20px; background:#3B6AE4; display:flex; align-items:center; justify-content:center; font-size:15px; font-weight:700; color:#fff; flex-shrink:0; position:relative; }
+.notif-pop-ch  { position:absolute; bottom:-2px; left:-2px; width:16px; height:16px; border-radius:4px; background:#25D366; border:2px solid #fff; display:flex; align-items:center; justify-content:center; font-size:7px; }
+.notif-pop-info { flex:1; }
+.notif-pop-name { font-size:14px; font-weight:700; color:var(--text-1); }
+.notif-pop-sub  { font-size:11px; color:var(--text-3); }
+.notif-pop-close { width:28px; height:28px; border-radius:14px; background:var(--bg); border:none; cursor:pointer; display:flex; align-items:center; justify-content:center; font-size:13px; color:var(--text-3); }
+.notif-pop-msg { font-size:14px; color:var(--text-1); line-height:1.4; margin-bottom:12px; background:var(--bg); padding:10px 12px; border-radius:12px; }
+.notif-qr-title { font-size:10px; font-weight:700; color:var(--text-3); text-transform:uppercase; letter-spacing:.7px; margin-bottom:7px; }
+.notif-qr-list { display:flex; flex-direction:column; gap:6px; margin-bottom:10px; }
+.notif-qr-btn {
+  width:100%; padding:13px 16px; background:var(--blue-light); color:var(--blue);
+  border:1.5px solid #C7D7FF; border-radius:12px; font-size:13.5px; font-weight:600;
+  cursor:pointer; text-align:left; font-family:'Poppins',sans-serif;
+  transition:background .12s, transform .08s;
+}
+.notif-qr-btn:active { transform:scale(.98); }
+.notif-qr-btn:hover { background:#dce8ff; }
+.notif-view-btn { width:100%; padding:12px; background:var(--blue); color:#fff; border:none; border-radius:12px; font-size:13.5px; font-weight:700; cursor:pointer; font-family:'Poppins',sans-serif; margin-bottom:14px; }
+.notif-handle { width:36px; height:4px; background:var(--border2); border-radius:2px; margin:8px auto 0; }
+ 
+/* ════ QUICK ACTION BAR (conv, one-hand) ═══════════════════════ */
+.quick-action-bar {
+  background:var(--blue-light); border-bottom:1px solid #C7D7FF;
+  padding:7px 10px; display:flex; gap:6px; overflow-x:auto; flex-shrink:0;
+  scrollbar-width:none;
+}
+.quick-action-bar::-webkit-scrollbar { display:none; }
+.qa-btn {
+  display:flex; align-items:center; gap:5px; padding:7px 13px;
+  background:var(--surface); border:1.5px solid #C7D7FF; border-radius:18px;
+  font-size:12px; font-weight:600; color:var(--blue); cursor:pointer; white-space:nowrap;
+  font-family:'Poppins',sans-serif; flex-shrink:0; transition:background .12s;
+}
+.qa-btn:hover { background:#dce8ff; }
+.qa-btn.danger { color:var(--error); border-color:#FECACA; }
+.qa-btn.danger:hover { background:#FEF2F2; }
+ 
+/* ════ TRANSFER SHEET (enhanced) ══════════════════════════════ */
+.transfer-search { margin:8px 14px 4px; position:relative; }
+.transfer-search input { width:100%; padding:10px 14px 10px 36px; background:var(--bg); border:1.5px solid var(--border); border-radius:20px; font-size:13px; font-family:'Poppins',sans-serif; color:var(--text-1); outline:none; }
+.transfer-search input:focus { border-color:var(--blue); }
+.transfer-search .search-icon { position:absolute; left:12px; top:50%; transform:translateY(-50%); font-size:13px; color:var(--text-3); pointer-events:none; }
+.sheet-section-title { font-size:10px; font-weight:700; color:var(--text-3); text-transform:uppercase; letter-spacing:.8px; padding:10px 18px 4px; }
+.transfer-item { display:flex; align-items:center; gap:12px; padding:12px 18px; cursor:pointer; transition:background .1s; }
+.transfer-item:hover { background:var(--bg); }
+.transfer-av { width:40px; height:40px; border-radius:20px; display:flex; align-items:center; justify-content:center; font-size:14px; font-weight:700; color:#fff; flex-shrink:0; position:relative; }
+.online-dot { position:absolute; bottom:0; right:0; width:10px; height:10px; background:#10B981; border-radius:5px; border:2px solid var(--surface); }
+.transfer-info { flex:1; }
+.transfer-name { font-size:14px; font-weight:600; color:var(--text-1); }
+.transfer-sub  { font-size:11.5px; color:var(--text-3); }
+.transfer-confirm-box { margin:10px 14px; background:var(--bg); border-radius:14px; padding:14px; }
+.transfer-confirm-box .tcb-title { font-size:12px; color:var(--text-2); margin-bottom:10px; }
+.transfer-confirm-box .tcb-target { font-size:15px; font-weight:700; color:var(--text-1); margin-bottom:12px; }
+.tcb-btns { display:flex; gap:8px; }
+.tcb-confirm { flex:1; padding:11px; background:var(--blue); color:#fff; border:none; border-radius:10px; font-size:14px; font-weight:700; cursor:pointer; font-family:'Poppins',sans-serif; }
+.tcb-cancel  { flex:1; padding:11px; background:var(--surface); color:var(--text-2); border:1.5px solid var(--border2); border-radius:10px; font-size:14px; font-weight:600; cursor:pointer; font-family:'Poppins',sans-serif; }
+ 
+/* ════ CONTACT SHEET ═══════════════════════════════════════════ */
+.contact-sheet-av { width:64px; height:64px; border-radius:32px; display:flex; align-items:center; justify-content:center; font-size:24px; font-weight:700; color:#fff; margin:12px auto 6px; }
+.contact-sheet-name { font-size:18px; font-weight:700; color:var(--text-1); text-align:center; }
+.contact-sheet-phone { font-size:13px; color:var(--text-2); text-align:center; margin-bottom:16px; }
+.contact-info-list { margin:0 14px 14px; background:var(--surface); border-radius:14px; overflow:hidden; border:1px solid var(--border); }
+.contact-info-row { display:flex; align-items:center; gap:10px; padding:12px 14px; border-bottom:1px solid var(--border); }
+.contact-info-row:last-child { border-bottom:none; }
+.ci-icon { font-size:16px; width:24px; text-align:center; flex-shrink:0; }
+.ci-label { font-size:11px; font-weight:600; color:var(--text-3); text-transform:uppercase; letter-spacing:.4px; }
+.ci-value { font-size:13.5px; font-weight:500; color:var(--text-1); }
+.contact-history-item { display:flex; gap:10px; padding:10px 14px; border-bottom:1px solid var(--border); cursor:pointer; }
+.contact-history-item:last-child { border-bottom:none; }
+.chi-dot { width:8px; height:8px; border-radius:4px; margin-top:5px; flex-shrink:0; }
+.chi-info { flex:1; }
+.chi-preview { font-size:13px; color:var(--text-1); }
+.chi-date    { font-size:11px; color:var(--text-3); margin-top:2px; }
+.sheet-content-scroll { overflow-y:auto; max-height:560px; }
+ 
+/* ════ LABELS SHEET ════════════════════════════════════════════ */
+.labels-applied { display:flex; flex-wrap:wrap; gap:5px; padding:6px 14px 10px; min-height:36px; }
+.labels-grid { display:grid; grid-template-columns:1fr 1fr; gap:8px; padding:4px 14px 14px; }
+.label-chip {
+  display:flex; align-items:center; gap:7px; padding:12px 14px;
+  border-radius:12px; border:2px solid; cursor:pointer;
+  font-size:13px; font-weight:600; font-family:'Poppins',sans-serif;
+  transition:all .15s; background:var(--surface); min-height:46px;
+}
+.label-chip .lc-dot { width:10px; height:10px; border-radius:5px; flex-shrink:0; }
+.label-chip.selected { color:#fff !important; }
+.label-chip.selected .lc-dot { background:rgba(255,255,255,.6) !important; }
+.labels-save-btn { margin:0 14px 14px; width:calc(100% - 28px); padding:13px; background:var(--blue); color:#fff; border:none; border-radius:12px; font-size:14px; font-weight:700; cursor:pointer; font-family:'Poppins',sans-serif; }
+ 
+/* applied tag pills in contact sheet */
+.applied-tag-pill { display:inline-flex; align-items:center; gap:4px; padding:3px 10px; border-radius:12px; font-size:11.5px; font-weight:600; border:2px solid; }
+ 
+body {
+  font-family: 'Poppins', -apple-system, sans-serif;
+  background: #0F172A;
+
+Expandir 394 linhas ocultas
+ 
+.home-bar { height:22px; display:flex; align-items:center; justify-content:center; background:var(--surface); flex-shrink:0; }
+.home-bar div { width:120px; height:4px; background:#111; border-radius:2px; }
+ 
+/* ── SIDE DRAWER ─────────────────────────────────────────────── */
+.drawer-overlay {
+  position:absolute; inset:0; background:rgba(0,0,0,.45);
+  z-index:300; opacity:0; pointer-events:none; transition:opacity .28s;
+}
+.drawer-overlay.open { opacity:1; pointer-events:auto; }
+.side-drawer {
+  position:absolute; top:0; left:0; bottom:0; width:85%;
+  background:#fff; z-index:310;
+  transform:translateX(-100%);
+  transition:transform .28s cubic-bezier(.4,0,.2,1);
+  display:flex; flex-direction:column; overflow:hidden;
+}
+.side-drawer.open { transform:translateX(0); }
+.drawer-head {
+  display:flex; align-items:center; padding:14px 12px 12px; gap:10px;
+  border-bottom:1px solid var(--border); flex-shrink:0;
+}
+.drawer-close {
+  width:30px; height:30px; border:none; background:none; cursor:pointer;
+  display:flex; align-items:center; justify-content:center;
+  color:var(--text-2); font-size:15px; flex-shrink:0; border-radius:8px;
+}
+.drawer-close:hover { background:var(--bg); }
+.drawer-org { flex:1; display:flex; align-items:center; gap:10px; min-width:0; }
+.drawer-org-av {
+  width:36px; height:36px; border-radius:18px; background:#dce8ff;
+  display:flex; align-items:center; justify-content:center;
+  font-size:14px; font-weight:700; color:var(--blue); flex-shrink:0;
+  overflow:hidden;
+}
+.drawer-org-info { flex:1; min-width:0; }
+.drawer-org-label { font-size:10px; color:var(--text-3); font-weight:500; }
+.drawer-org-name  { font-size:13px; font-weight:700; color:var(--blue); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.drawer-apps-btn {
+  width:30px; height:30px; border:none; background:none; cursor:pointer;
+  display:flex; align-items:center; justify-content:center; flex-shrink:0;
+  color:var(--text-2); border-radius:8px;
+}
+.drawer-apps-btn:hover { background:var(--bg); }
+.drawer-body { flex:1; overflow-y:auto; padding:4px 0; }
+.drawer-item {
+  display:flex; align-items:center; gap:14px; padding:12px 18px;
+  cursor:pointer; transition:background .1s;
+  font-size:13.5px; color:var(--text-1); font-weight:500;
+}
+.drawer-item:hover { background:var(--bg); }
+.dicon { width:20px; display:flex; align-items:center; justify-content:center; color:var(--text-2); flex-shrink:0; }
+.drawer-section {
+  font-size:10.5px; font-weight:700; color:var(--text-3);
+  text-transform:uppercase; letter-spacing:.7px; padding:12px 18px 4px;
+}
+.drawer-divider { height:1px; background:var(--border); margin:4px 18px; }
+.drawer-footer { padding:10px 18px 16px; border-top:1px solid var(--border); flex-shrink:0; }
+.drawer-logout {
+  display:flex; align-items:center; gap:12px; font-size:14px; font-weight:600;
+  color:var(--error); background:none; border:none; cursor:pointer; padding:10px 0;
+  font-family:'Poppins',sans-serif; width:100%;
+}
+</style>
+</head>
+<body>
+
+Expandir 15 linhas ocultas
+      <div class="splash-center">
+        <!-- Official Umbler Talk logo -->
+        <svg width="200" height="80" viewBox="0 0 200 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <!-- Icon: outer blue U-arc -->
+          <path d="M 8 38 A 32 32 0 1 0 72 38" stroke="#3B6AE4" stroke-width="11" fill="none" stroke-linecap="round"/>
+          <!-- Icon: inner coral smile -->
+          <path d="M 20 42 Q 40 62 60 42" stroke="#F06060" stroke-width="9" fill="none" stroke-linecap="round"/>
+          <!-- Blue outer arc: open at top -->
+          <path d="M26 16 A28 28 0 1 0 54 16" stroke="#3B6AE4" stroke-width="14" fill="none" stroke-linecap="round"/>
+          <!-- Coral inner smile: CW semicircle through bottom -->
+          <path d="M22 40 A18 18 0 0 1 58 40" stroke="#F06060" stroke-width="11" fill="none" stroke-linecap="round"/>
+          <!-- Text: umbler -->
+          <text x="84" y="52" font-family="Poppins,sans-serif" font-size="26" font-weight="300" fill="#1A1A2E" letter-spacing="-0.5">umbler</text>
+          <!-- Text: tal -->
+
+Expandir 133 linhas ocultas
+      <div class="login-logo-block">
+        <!-- Umbler Talk logo -->
+        <svg width="64" height="64" viewBox="0 0 80 80" fill="none">
+          <path d="M 10 48 A 36 36 0 1 0 70 48" stroke="#3B6AE4" stroke-width="13" fill="none" stroke-linecap="round"/>
+          <path d="M 22 54 Q 40 72 58 54" stroke="#F06060" stroke-width="10" fill="none" stroke-linecap="round"/>
+          <path d="M26 16 A28 28 0 1 0 54 16" stroke="#3B6AE4" stroke-width="14" fill="none" stroke-linecap="round"/>
+          <path d="M22 40 A18 18 0 0 1 58 40" stroke="#F06060" stroke-width="11" fill="none" stroke-linecap="round"/>
+        </svg>
+        <svg width="160" height="28" viewBox="0 0 200 32" fill="none">
+          <text x="0" y="26" font-family="Poppins,sans-serif" font-size="28" font-weight="300" fill="#1A1A2E" letter-spacing="-0.5">umbler talk</text>
+
+Expandir 19 linhas ocultas
+    <div class="view" id="view-inbox">
+      <!-- Top header -->
+      <div class="inbox-topbar">
+        <button class="hamburger-btn">
+        <button class="hamburger-btn" onclick="openDrawer()">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        </button>
+        <div class="topbar-logo">
+          <!-- Umbler U icon -->
+          <svg width="32" height="32" viewBox="0 0 80 80" fill="none">
+            <path d="M10 48 A36 36 0 1 0 70 48" stroke="#3B6AE4" stroke-width="13" fill="none" stroke-linecap="round"/>
+            <path d="M22 54 Q40 72 58 54" stroke="#F06060" stroke-width="10" fill="none" stroke-linecap="round"/>
+            <path d="M26 16 A28 28 0 1 0 54 16" stroke="#3B6AE4" stroke-width="14" fill="none" stroke-linecap="round"/>
+            <path d="M22 40 A18 18 0 0 1 58 40" stroke="#F06060" stroke-width="11" fill="none" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div class="topbar-actions">
+
+Expandir 68 linhas ocultas
+        <button class="conv-more" onclick="openActions()">⋮</button>
+      </div>
+ 
+      <!-- quick action bar -->
+      <div class="quick-action-bar">
+        <button class="qa-btn" onclick="openContact()">👤 Contato</button>
+        <button class="qa-btn" onclick="openOverlay('overlay-labels')">🏷️ Etiquetas</button>
+        <button class="qa-btn" onclick="openOverlay('overlay-transfer')">↗️ Transferir</button>
+        <button class="qa-btn" onclick="sheetAction('finish')">✅ Finalizar</button>
+        <button class="qa-btn" onclick="setMode('notes')">📋 Notas</button>
+      </div>
+ 
+      <!-- connecting banner -->
+      <div class="conv-connecting" id="conv-connecting">
+        <div class="rainbow-spin"></div>
+
+Expandir 86 linhas ocultas
+    </button>
+  </div>
+ 
+  <!-- Action sheet -->
+  <!-- NOTIFICATION POPUP -->
+  <div class="notif-popup" id="notif-popup">
+    <div class="notif-handle"></div>
+    <div class="notif-timer-bar"><div class="notif-timer-fill" id="notif-timer-fill"></div></div>
+    <div class="notif-popup-inner">
+      <div class="notif-popup-head">
+        <div class="notif-pop-av" id="notif-av">R
+          <div class="notif-pop-ch">
+            <svg width="8" height="8" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.126.555 4.122 1.528 5.856L.072 23.927 6.28 22.5A11.934 11.934 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0z"/></svg>
+          </div>
+        </div>
+        <div class="notif-pop-info">
+          <div class="notif-pop-name" id="notif-name">Ryan</div>
+          <div class="notif-pop-sub">WhatsApp · agora</div>
+        </div>
+        <button class="notif-pop-close" onclick="dismissNotif()">✕</button>
+      </div>
+      <div class="notif-pop-msg" id="notif-msg">Pode me ajudar? 🙏</div>
+      <div class="notif-qr-title">Resposta rápida</div>
+      <div class="notif-qr-list">
+        <button class="notif-qr-btn" onclick="quickReply('Sim, qual sua dúvida? 👂')">Sim, qual sua dúvida? 👂</button>
+        <button class="notif-qr-btn" onclick="quickReply('Olá! Claro, pode falar 😊')">Olá! Claro, pode falar 😊</button>
+        <button class="notif-qr-btn" onclick="quickReply('Aguarde um momento ⏳')">Aguarde um momento ⏳</button>
+      </div>
+      <button class="notif-view-btn" onclick="openNotifConv()">Ver conversa →</button>
+    </div>
+  </div>
+ 
+  <!-- ACTION SHEET -->
+  <div class="overlay" id="overlay-actions">
+    <div class="sheet">
+      <div class="sheet-handle"></div>
+      <div class="sheet-item" onclick="sheetAction('contact')"><span class="si">👤</span> Detalhes do contato</div>
+      <div class="sheet-item" onclick="openContact()"><span class="si">👤</span> Detalhes do contato</div>
+      <div class="sheet-item" onclick="openOverlay('overlay-labels')"><span class="si">🏷️</span> Etiquetas</div>
+      <div class="sheet-item" onclick="sheetAction('details')"><span class="si">📄</span> Detalhes da conversa</div>
+      <div class="sheet-item" onclick="sheetAction('transfer')"><span class="si">↗️</span> Transferir conversa</div>
+      <div class="sheet-item" onclick="openOverlay('overlay-transfer')"><span class="si">↗️</span> Transferir conversa</div>
+      <div class="sheet-item" onclick="sheetAction('private')"><span class="si">🔒</span> Privar atendimento</div>
+      <div class="sheet-item" onclick="sheetAction('schedule')"><span class="si">📅</span> Agendar envio de mensagem</div>
+      <div class="sheet-item" onclick="sheetAction('schedule')"><span class="si">📅</span> Agendar envio</div>
+      <div class="sheet-item" onclick="sheetAction('finish')"><span class="si">✓</span> Finalizar conversa</div>
+      <div class="sheet-item" onclick="sheetAction('search')"><span class="si">🔍</span> Pesquisar mensagem</div>
+      <div class="sheet-item danger" onclick="closeOverlay('overlay-actions')"><span class="si">✕</span> Ocultar essa janela</div>
+      <div class="sheet-item danger" onclick="closeOverlay('overlay-actions')"><span class="si">✕</span> Ocultar</div>
+    </div>
+  </div>
+ 
+  <!-- Transfer sheet -->
+  <!-- TRANSFER SHEET (agents + sectors + confirm) -->
+  <div class="overlay" id="overlay-transfer">
+    <div class="sheet" style="max-height:80vh;overflow:hidden;display:flex;flex-direction:column">
+      <div class="sheet-handle"></div>
+      <div style="font-size:15px;font-weight:700;color:var(--text-1);padding:2px 18px 8px;flex-shrink:0">Transferir conversa</div>
+      <div class="transfer-search">
+        <span class="search-icon">🔍</span>
+        <input type="text" placeholder="Buscar agente ou setor…" id="transfer-search-inp" oninput="filterTransfer(this.value)"/>
+      </div>
+      <!-- confirm box (hidden until selection) -->
+      <div class="transfer-confirm-box" id="transfer-confirm" style="display:none">
+        <div class="tcb-title">Transferir esta conversa para:</div>
+        <div class="tcb-target" id="transfer-target-name">—</div>
+        <div class="tcb-btns">
+          <button class="tcb-confirm" onclick="confirmTransfer()">Confirmar</button>
+          <button class="tcb-cancel"  onclick="cancelTransferSelect()">Cancelar</button>
+        </div>
+      </div>
+      <div id="transfer-list" style="overflow-y:auto;flex:1;padding-bottom:12px"></div>
+    </div>
+  </div>
+ 
+  <!-- CONTACT SHEET -->
+  <div class="overlay" id="overlay-contact">
+    <div class="sheet" style="max-height:88vh;overflow:hidden;display:flex;flex-direction:column">
+      <div class="sheet-handle"></div>
+      <div class="sheet-content-scroll" id="contact-sheet-body">
+        <!-- filled by JS -->
+      </div>
+      <div style="padding:0 14px 14px;flex-shrink:0">
+        <button onclick="closeOverlay('overlay-contact')" style="width:100%;padding:12px;background:var(--bg);border:none;border-radius:12px;font-size:14px;font-weight:600;color:var(--text-2);cursor:pointer;font-family:'Poppins',sans-serif">Fechar</button>
+      </div>
+    </div>
+  </div>
+ 
+  <!-- LABELS SHEET -->
+  <div class="overlay" id="overlay-labels">
+    <div class="sheet">
+      <div class="sheet-handle"></div>
+      <div style="font-size:15px;font-weight:700;color:var(--text-1);padding:2px 18px 10px">Transferir conversa</div>
+      <div id="agents-list"></div>
+      <div style="padding:8px 14px 0"><button onclick="closeOverlay('overlay-transfer')" style="width:100%;padding:11px;background:var(--bg);border:none;border-radius:12px;font-size:13.5px;font-weight:600;color:var(--text-2);cursor:pointer;font-family:'Poppins',sans-serif">Cancelar</button></div>
+      <div style="font-size:15px;font-weight:700;color:var(--text-1);padding:2px 18px 6px">Etiquetas</div>
+      <div style="font-size:11px;font-weight:600;color:var(--text-3);text-transform:uppercase;letter-spacing:.7px;padding:0 18px 6px">Aplicadas</div>
+      <div class="labels-applied" id="labels-applied-row">
+        <span style="font-size:12px;color:var(--text-3);font-style:italic">Nenhuma etiqueta</span>
+      </div>
+      <div style="height:1px;background:var(--border);margin:0 14px 10px"></div>
+      <div class="labels-grid" id="labels-grid"></div>
+      <button class="labels-save-btn" onclick="saveLabels()">Salvar etiquetas</button>
+    </div>
+  </div>
+ 
+  <div class="home-bar"><div></div></div>
+ 
+  <!-- ══ SIDE DRAWER ══ -->
+  <div class="drawer-overlay" id="drawer-overlay" onclick="closeDrawer()"></div>
+  <div class="side-drawer" id="side-drawer">
+    <div class="drawer-head">
+      <button class="drawer-close" onclick="closeDrawer()">✕</button>
+      <svg width="26" height="26" viewBox="0 0 80 80" fill="none">
+        <path d="M26 16 A28 28 0 1 0 54 16" stroke="#3B6AE4" stroke-width="14" fill="none" stroke-linecap="round"/>
+        <path d="M22 40 A18 18 0 0 1 58 40" stroke="#F06060" stroke-width="11" fill="none" stroke-linecap="round"/>
+      </svg>
+      <div class="drawer-org">
+        <div class="drawer-org-av">🐕</div>
+        <div class="drawer-org-info">
+          <div class="drawer-org-label">Organização</div>
+          <div class="drawer-org-name">Umblerito</div>
+        </div>
+      </div>
+      <button class="drawer-apps-btn">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+      </button>
+    </div>
+    <div class="drawer-body">
+      <div class="drawer-item" onclick="closeDrawer()">
+        <span class="dicon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></span>Conversas
+      </div>
+      <div class="drawer-item">
+        <span class="dicon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span>Contatos
+      </div>
+      <div class="drawer-item">
+        <span class="dicon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></span>Board de contatos
+      </div>
+      <div class="drawer-item">
+        <span class="dicon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></span>Relatórios
+      </div>
+      <div class="drawer-item">
+        <span class="dicon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></span>Envios de campanhas de marketing
+      </div>
+      <div class="drawer-item">
+        <span class="dicon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 12 20 22 4 22 4 12"/><rect x="2" y="7" width="20" height="5"/><path d="M12 22V7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/></svg></span>Indique um amigo
+      </div>
+      <div class="drawer-item">
+        <span class="dicon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></span>Suporte
+      </div>
+ 
+      <div class="drawer-divider"></div>
+      <div class="drawer-section">Dados da conta</div>
+ 
+      <div class="drawer-item">
+        <span class="dicon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></span>Preferências pessoais
+      </div>
+      <div class="drawer-item">
+        <span class="dicon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></span>Configurações da organização
+      </div>
+      <div class="drawer-item">
+        <span class="dicon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></span>Financeiro
+      </div>
+ 
+      <div class="drawer-divider"></div>
+      <div class="drawer-section">Outras configurações</div>
+ 
+      <div class="drawer-item">
+        <span class="dicon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></span>Canais de atendimento
+      </div>
+      <div class="drawer-item">
+        <span class="dicon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>Atendentes
+      </div>
+      <div class="drawer-item">
+        <span class="dicon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/></svg></span>Setores
+      </div>
+      <div class="drawer-item">
+        <span class="dicon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></span>Agentes de IA
+      </div>
+      <div class="drawer-item">
+        <span class="dicon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/><circle cx="12" cy="16" r="1" fill="currentColor"/></svg></span>Chatbots
+      </div>
+      <div class="drawer-item">
+        <span class="dicon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg></span>Etiquetas
+      </div>
+      <div class="drawer-item">
+        <span class="dicon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg></span>Templates WhatsApp Business API
+      </div>
+      <div class="drawer-item">
+        <span class="dicon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></span>Mensagens agendadas
+      </div>
+      <div class="drawer-item">
+        <span class="dicon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/><line x1="9" y1="10" x2="15" y2="10"/><line x1="12" y1="7" x2="12" y2="13"/></svg></span>Respostas rápidas
+      </div>
+      <div class="drawer-item">
+        <span class="dicon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 3a3 3 0 0 0-3 3v12a3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3H6a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3V6a3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3h12a3 3 0 0 0 3-3 3 3 0 0 0-3-3z"/></svg></span>Webhooks
+      </div>
+      <div class="drawer-item">
+        <span class="dicon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></span>Logs de atividade
+      </div>
+    </div>
+    <div class="drawer-footer">
+      <button class="drawer-logout" onclick="closeDrawer();doLogout()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        Sair
+      </button>
+    </div>
+  </div>
+</div>
+ 
+<script>
+
+Expandir 90 linhas ocultas
+    document.getElementById('view-login').classList.remove('active');
+    document.getElementById('bottom-nav').style.display='flex';
+    showTab('inbox');toast('Conectado com sucesso!');
+    scheduleNotification();
+  },1400);
+}
+function doLogout(){
+
+Expandir 184 linhas ocultas
+ 
+renderConvList();
+document.querySelectorAll('.overlay').forEach(o=>o.addEventListener('click',e=>{if(e.target===o)o.classList.remove('open');}));
+ 
+// ── OVERLAY HELPERS ──────────────────────────────────────────
+function openOverlay(id){
+  closeOverlay('overlay-actions');
+  document.getElementById(id).classList.add('open');
+  if(id==='overlay-transfer') buildTransferList('');
+  if(id==='overlay-labels')   buildLabelsGrid();
+}
+ 
+// ── NOTIFICATION POPUP ───────────────────────────────────────
+let notifTimer=null, currentNotifDef=null;
+ 
+const notifDefs=[
+  {
+    convId:'c2', av:'R', avBg:'#3B6AE4', name:'Ryan',
+    sub:'WhatsApp · agora', chBg:'#25D366', chIcon:'whatsapp',
+    msg:'Pode me ajudar? 🙏',
+    replies:['Sim, qual sua dúvida? 👂','Olá! Claro, pode falar 😊','Aguarde um momento ⏳']
+  },
+  {
+    convId:'c1', av:'D', avBg:'#10B981', name:'Disou',
+    sub:'Instagram · agora', chBg:'#E1306C', chIcon:'instagram',
+    msg:'Você conseguiu ver minha proposta? 📋',
+    replies:['Sim, estou analisando agora 👀','Pode me reenviar? Não recebi 📩','Agendei uma reunião sobre isso! 📅']
+  }
+];
+ 
+function scheduleNotification(){
+  setTimeout(()=>showNotifByDef(notifDefs[0]), 4000);
+  setTimeout(()=>showNotifByDef(notifDefs[1]), 28000); // 4s + 20s auto-dismiss + 4s gap
+}
+ 
+function showNotifByDef(def){
+  currentNotifDef=def;
+  // update avatar
+  const avEl=document.getElementById('notif-av');
+  avEl.childNodes[0].textContent=def.av;
+  avEl.style.background=def.avBg;
+  const chBadge=avEl.querySelector('.notif-pop-ch');
+  chBadge.style.background=def.chBg;
+  if(def.chIcon==='instagram'){
+    chBadge.innerHTML=`<svg width="8" height="8" viewBox="0 0 24 24" fill="white"><rect x="2" y="2" width="20" height="20" rx="5" ry="5" stroke="white" stroke-width="2.5" fill="none"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" stroke="white" stroke-width="2" fill="none"/><circle cx="17.5" cy="6.5" r="1.5" fill="white"/></svg>`;
+  } else {
+    chBadge.innerHTML=`<svg width="8" height="8" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.126.555 4.122 1.528 5.856L.072 23.927 6.28 22.5A11.934 11.934 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0z"/></svg>`;
+  }
+  // update texts
+  document.getElementById('notif-name').textContent=def.name;
+  document.querySelector('.notif-pop-sub').textContent=def.sub;
+  document.getElementById('notif-msg').textContent=def.msg;
+  // update quick replies
+  document.querySelector('.notif-qr-list').innerHTML=def.replies
+    .map(r=>`<button class="notif-qr-btn" onclick="quickReply(${JSON.stringify(r)})">${r}</button>`)
+    .join('');
+  // show popup
+  const popup=document.getElementById('notif-popup');
+  popup.classList.add('open');
+  // start timer bar (20s)
+  const fill=document.getElementById('notif-timer-fill');
+  fill.style.transition='none'; fill.style.width='100%';
+  requestAnimationFrame(()=>{
+    requestAnimationFrame(()=>{
+      fill.style.transition='width 20s linear';
+      fill.style.width='0%';
+    });
+  });
+  clearTimeout(notifTimer);
+  notifTimer=setTimeout(dismissNotif, 20000);
+  // mark conv as unread
+  const conv=convData.find(c=>c.id===def.convId);
+  if(conv){ conv.unread=(conv.unread||0)+1; conv.lastMsg=def.msg; conv.time=Date.now(); }
+  if(document.getElementById('view-inbox').classList.contains('active')) renderConvList();
+}
+ 
+function showNotif(){ showNotifByDef(notifDefs[0]); } // kept for compat
+ 
+function dismissNotif(){
+  clearTimeout(notifTimer);
+  const popup=document.getElementById('notif-popup');
+  popup.classList.remove('open');
+}
+ 
+function quickReply(text){
+  dismissNotif();
+  const def=currentNotifDef||notifDefs[0];
+  const convId=def.convId;
+  const conv=convData.find(c=>c.id===convId);
+  if(conv) conv.unread=0;
+  const key='_msgs_'+convId;
+  if(!window[key]) window[key]=[{id:'m0',sender:'contact',content:def.msg,time:Date.now()-10000}];
+  window[key].push({id:'m'+Date.now(),sender:'agent',content:text,time:Date.now()});
+  openConvById(convId, window[key]);
+  setTimeout(()=>toast('✅ Resposta enviada!','success'),300);
+}
+ 
+function openNotifConv(){
+  dismissNotif();
+  const def=currentNotifDef||notifDefs[0];
+  const convId=def.convId;
+  const conv=convData.find(c=>c.id===convId);
+  if(conv) conv.unread=0;
+  const key='_msgs_'+convId;
+  if(!window[key]) window[key]=[{id:'m0',sender:'contact',content:def.msg,time:Date.now()-10000}];
+  openConvById(convId, window[key]);
+}
+ 
+function openConvById(id, msgs){
+  currentConvId=id;
+  const conv=convData.find(c=>c.id===id); if(!conv) return;
+  conv.unread=0;
+  const ac=avColor(conv.contact.name);
+  const av=document.getElementById('ch-av');
+  av.style.background=ac;
+  av.childNodes[0]?.nodeType===3 && av.childNodes[0].remove();
+  av.insertBefore(document.createTextNode(initials(conv.contact.name)),av.firstChild);
+  document.getElementById('ch-name').textContent=conv.contact.name;
+  if(msgs) liveMessages=[...msgs];
+  renderMessages();
+  document.getElementById('bottom-nav').style.display='none';
+  ['inbox','settings','notif'].forEach(v=>document.getElementById('view-'+v).classList.remove('active'));
+  document.getElementById('view-conv').classList.add('active');
+  document.getElementById('conv-connecting').style.display='none';
+  document.getElementById('conv-locked').style.display='none';
+  document.querySelector('.composer-area').style.display='block';
+  setTimeout(()=>{const ml=document.getElementById('msg-list');ml.scrollTop=ml.scrollHeight;},40);
+}
+ 
+// ── TRANSFER (enhanced with sectors) ─────────────────────────
+const sectors=[
+  {id:'s1',name:'Suporte Técnico', icon:'🔧', sub:'Problemas técnicos'},
+  {id:'s2',name:'Financeiro',      icon:'💰', sub:'Pagamentos e faturas'},
+  {id:'s3',name:'Comercial',       icon:'🛒', sub:'Vendas e upgrades'},
+  {id:'s4',name:'Atendimento',     icon:'📞', sub:'Atendimento geral'},
+];
+let transferPending=null;
+ 
+function buildTransferList(q){
+  const el=document.getElementById('transfer-list');
+  const fq=q.toLowerCase();
+  const fagents=agents.filter(a=>!fq||a.name.toLowerCase().includes(fq));
+  const fsectors=sectors.filter(s=>!fq||s.name.toLowerCase().includes(fq));
+  let html='';
+  if(fagents.length){
+    html+=`<div class="sheet-section-title">Agentes disponíveis</div>`;
+    html+=fagents.map(a=>`
+      <div class="transfer-item" onclick="selectTransfer('agent','${a.id}','${a.name}')">
+        <div class="transfer-av" style="background:${avColor(a.name)}">
+          ${initials(a.name)}<div class="online-dot"></div>
+        </div>
+        <div class="transfer-info">
+          <div class="transfer-name">${a.name}</div>
+          <div class="transfer-sub">${a.email}</div>
+        </div>
+      </div>`).join('');
+  }
+  if(fsectors.length){
+    html+=`<div class="sheet-section-title">Setores</div>`;
+    html+=fsectors.map(s=>`
+      <div class="transfer-item" onclick="selectTransfer('sector','${s.id}','${s.name}')">
+        <div class="transfer-av" style="background:#F3F4F6;font-size:20px">${s.icon}</div>
+        <div class="transfer-info">
+          <div class="transfer-name">${s.name}</div>
+          <div class="transfer-sub">${s.sub}</div>
+        </div>
+      </div>`).join('');
+  }
+  if(!html) html='<div style="padding:20px;text-align:center;color:var(--text-3)">Nenhum resultado</div>';
+  el.innerHTML=html;
+}
+ 
+function filterTransfer(q){ buildTransferList(q); }
+ 
+function selectTransfer(type,id,name){
+  transferPending={type,id,name};
+  document.getElementById('transfer-target-name').textContent=name;
+  document.getElementById('transfer-confirm').style.display='block';
+  document.getElementById('transfer-list').style.display='none';
+  document.getElementById('transfer-search-inp').style.display='none';
+}
+ 
+function cancelTransferSelect(){
+  transferPending=null;
+  document.getElementById('transfer-confirm').style.display='none';
+  document.getElementById('transfer-list').style.display='block';
+  document.getElementById('transfer-search-inp').style.display='block';
+}
+ 
+function confirmTransfer(){
+  if(!transferPending) return;
+  closeOverlay('overlay-transfer');
+  cancelTransferSelect();
+  document.getElementById('transfer-search-inp').value='';
+  const conv=convData.find(c=>c.id===currentConvId);
+  if(conv) conv.status='transferred';
+  toast('↗️ Transferida para '+transferPending.name);
+  transferPending=null;
+}
+ 
+// ── CONTACT SHEET ────────────────────────────────────────────
+function openContact(){
+  closeOverlay('overlay-actions');
+  const conv=convData.find(c=>c.id===currentConvId)||convData[0];
+  const c=conv.contact;
+  const ac=avColor(c.name);
+  const tags=(convLabels[currentConvId]||[]);
+  const tagsHtml=tags.length
+    ? tags.map(l=>`<span class="applied-tag-pill" style="color:${l.color};border-color:${l.color};background:${l.color}18">${l.icon} ${l.name}</span>`).join('')
+    : '<span style="font-size:12px;color:var(--text-3);font-style:italic">Sem etiquetas</span>';
+ 
+  document.getElementById('contact-sheet-body').innerHTML=`
+    <div class="contact-sheet-av" style="background:${ac}">${initials(c.name)}</div>
+    <div class="contact-sheet-name">${c.name}</div>
+    <div class="contact-sheet-phone">${c.phone}</div>
+ 
+    <div style="font-size:11px;font-weight:700;color:var(--text-3);text-transform:uppercase;letter-spacing:.6px;padding:0 18px 6px">Dados do contato</div>
+    <div class="contact-info-list">
+      <div class="contact-info-row"><span class="ci-icon">📱</span><div><div class="ci-label">Telefone</div><div class="ci-value">${c.phone}</div></div></div>
+      <div class="contact-info-row"><span class="ci-icon">${conv.channel==='whatsapp'?'🟢':'📧'}</span><div><div class="ci-label">Canal</div><div class="ci-value">${conv.channel}</div></div></div>
+      <div class="contact-info-row"><span class="ci-icon">💬</span><div><div class="ci-label">Conversas</div><div class="ci-value">3 conversas · 1 aberta</div></div></div>
+      <div class="contact-info-row"><span class="ci-icon">📅</span><div><div class="ci-label">Cadastrado em</div><div class="ci-value">01/06/2024</div></div></div>
+    </div>
+ 
+    <div style="font-size:11px;font-weight:700;color:var(--text-3);text-transform:uppercase;letter-spacing:.6px;padding:4px 18px 8px">Etiquetas</div>
+    <div style="padding:0 14px 12px;display:flex;flex-wrap:wrap;gap:6px;align-items:center">
+      ${tagsHtml}
+      <button onclick="closeOverlay('overlay-contact');openOverlay('overlay-labels')" style="padding:4px 10px;border-radius:10px;border:1.5px dashed var(--border2);background:none;font-size:12px;font-weight:600;color:var(--blue);cursor:pointer;font-family:'Poppins',sans-serif">+ Adicionar</button>
+    </div>
+ 
+    <div style="font-size:11px;font-weight:700;color:var(--text-3);text-transform:uppercase;letter-spacing:.6px;padding:4px 18px 8px">Histórico</div>
+    <div class="contact-info-list" style="margin-bottom:6px">
+      <div class="contact-history-item"><div class="chi-dot" style="background:#10B981"></div><div class="chi-info"><div class="chi-preview">Olá, preciso de ajuda com meu pedido…</div><div class="chi-date">Hoje · Aberta</div></div></div>
+      <div class="contact-history-item"><div class="chi-dot" style="background:#9CA3AF"></div><div class="chi-info"><div class="chi-preview">Problema com entrega do produto</div><div class="chi-date">há 3 dias · Resolvida</div></div></div>
+      <div class="contact-history-item"><div class="chi-dot" style="background:#9CA3AF"></div><div class="chi-info"><div class="chi-preview">Dúvida sobre garantia</div><div class="chi-date">há 10 dias · Resolvida</div></div></div>
+    </div>`;
+  document.getElementById('overlay-contact').classList.add('open');
+}
+ 
+// ── LABELS ────────────────────────────────────────────────────
+const allLabels=[
+  {id:'l1', name:'VIP',        icon:'⭐', color:'#F59E0B'},
+  {id:'l2', name:'Urgente',    icon:'🔴', color:'#EF4444'},
+  {id:'l3', name:'Suporte',    icon:'🔧', color:'#3B6AE4'},
+  {id:'l4', name:'Financeiro', icon:'💰', color:'#10B981'},
+  {id:'l5', name:'Retenção',   icon:'🟣', color:'#8B5CF6'},
+  {id:'l6', name:'Aguardando', icon:'⏳', color:'#6B7280'},
+  {id:'l7', name:'Follow-up',  icon:'📌', color:'#F97316'},
+  {id:'l8', name:'Fidelização',icon:'🩷', color:'#EC4899'},
+];
+const convLabels={};  // convId -> [label,…]
+ 
+function buildLabelsGrid(){
+  const conv=currentConvId||'';
+  const applied=convLabels[conv]||[];
+  const grid=document.getElementById('labels-grid');
+  grid.innerHTML=allLabels.map(l=>{
+    const on=applied.some(a=>a.id===l.id);
+    return`<button class="label-chip${on?' selected':''}"
+      style="color:${l.color};border-color:${l.color};${on?'background:'+l.color:''}"
+      onclick="toggleLabel('${l.id}')">
+      <div class="lc-dot" style="background:${on?'rgba(255,255,255,.5)':l.color}"></div>
+      ${on?'✓ ':''}${l.icon} ${l.name}
+    </button>`;
+  }).join('');
+  renderAppliedLabels(conv);
+}
+ 
+function toggleLabel(id){
+  const conv=currentConvId||'';
+  if(!convLabels[conv]) convLabels[conv]=[];
+  const idx=convLabels[conv].findIndex(l=>l.id===id);
+  if(idx>=0) convLabels[conv].splice(idx,1);
+  else { const l=allLabels.find(x=>x.id===id); if(l) convLabels[conv].push(l); }
+  buildLabelsGrid();
+}
+ 
+function renderAppliedLabels(conv){
+  const applied=convLabels[conv]||[];
+  const el=document.getElementById('labels-applied-row');
+  el.innerHTML=applied.length
+    ? applied.map(l=>`<span class="applied-tag-pill" style="color:${l.color};border-color:${l.color};background:${l.color}18">${l.icon} ${l.name}</span>`).join('')
+    : '<span style="font-size:12px;color:var(--text-3);font-style:italic">Nenhuma etiqueta</span>';
+}
+ 
+function saveLabels(){
+  closeOverlay('overlay-labels');
+  const count=(convLabels[currentConvId]||[]).length;
+  toast(`🏷️ ${count} etiqueta${count!==1?'s':''} salva${count!==1?'s':''}!`,'success');
+}
+ 
+// ── SIDE DRAWER ──────────────────────────────────────────────
+function openDrawer(){
+  document.getElementById('side-drawer').classList.add('open');
+  document.getElementById('drawer-overlay').classList.add('open');
+}
+function closeDrawer(){
+  document.getElementById('side-drawer').classList.remove('open');
+  document.getElementById('drawer-overlay').classList.remove('open');
+}
+ 
+ 
+</script>
+</body>
+</html>
+ 
