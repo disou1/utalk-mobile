@@ -625,10 +625,10 @@ body {
       <div class="splash-center">
         <!-- Official Umbler Talk logo -->
         <svg width="200" height="80" viewBox="0 0 200 80" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <!-- Icon: outer blue arc, gap at top -->
-          <path d="M 25 14 A 30 30 0 1 0 55 14" stroke="#3B6AE4" stroke-width="11" fill="none" stroke-linecap="round"/>
-          <!-- Icon: inner coral smile -->
-          <path d="M 24 50 Q 40 66 56 50" stroke="#F06060" stroke-width="9" fill="none" stroke-linecap="round"/>
+          <!-- Blue outer arc: open at top -->
+          <path d="M26 16 A28 28 0 1 0 54 16" stroke="#3B6AE4" stroke-width="14" fill="none" stroke-linecap="round"/>
+          <!-- Coral inner smile: CW semicircle through bottom -->
+          <path d="M22 40 A18 18 0 0 1 58 40" stroke="#F06060" stroke-width="11" fill="none" stroke-linecap="round"/>
           <!-- Text: umbler -->
           <text x="84" y="52" font-family="Poppins,sans-serif" font-size="26" font-weight="300" fill="#1A1A2E" letter-spacing="-0.5">umbler</text>
           <!-- Text: tal -->
@@ -768,8 +768,8 @@ body {
       <div class="login-logo-block">
         <!-- Umbler Talk logo -->
         <svg width="64" height="64" viewBox="0 0 80 80" fill="none">
-          <path d="M 25 14 A 30 30 0 1 0 55 14" stroke="#3B6AE4" stroke-width="12" fill="none" stroke-linecap="round"/>
-          <path d="M 24 50 Q 40 66 56 50" stroke="#F06060" stroke-width="9" fill="none" stroke-linecap="round"/>
+          <path d="M26 16 A28 28 0 1 0 54 16" stroke="#3B6AE4" stroke-width="14" fill="none" stroke-linecap="round"/>
+          <path d="M22 40 A18 18 0 0 1 58 40" stroke="#F06060" stroke-width="11" fill="none" stroke-linecap="round"/>
         </svg>
         <svg width="160" height="28" viewBox="0 0 200 32" fill="none">
           <text x="0" y="26" font-family="Poppins,sans-serif" font-size="28" font-weight="300" fill="#1A1A2E" letter-spacing="-0.5">umbler talk</text>
@@ -801,8 +801,8 @@ body {
         <div class="topbar-logo">
           <!-- Umbler U icon -->
           <svg width="32" height="32" viewBox="0 0 80 80" fill="none">
-            <path d="M25 14 A30 30 0 1 0 55 14" stroke="#3B6AE4" stroke-width="12" fill="none" stroke-linecap="round"/>
-            <path d="M24 50 Q40 66 56 50" stroke="#F06060" stroke-width="9" fill="none" stroke-linecap="round"/>
+            <path d="M26 16 A28 28 0 1 0 54 16" stroke="#3B6AE4" stroke-width="14" fill="none" stroke-linecap="round"/>
+            <path d="M22 40 A18 18 0 0 1 58 40" stroke="#F06060" stroke-width="11" fill="none" stroke-linecap="round"/>
           </svg>
         </div>
         <div class="topbar-actions">
@@ -1079,8 +1079,8 @@ body {
     <div class="drawer-head">
       <button class="drawer-close" onclick="closeDrawer()">✕</button>
       <svg width="26" height="26" viewBox="0 0 80 80" fill="none">
-        <path d="M25 14 A30 30 0 1 0 55 14" stroke="#3B6AE4" stroke-width="12" fill="none" stroke-linecap="round"/>
-        <path d="M24 50 Q40 66 56 50" stroke="#F06060" stroke-width="9" fill="none" stroke-linecap="round"/>
+        <path d="M26 16 A28 28 0 1 0 54 16" stroke="#3B6AE4" stroke-width="14" fill="none" stroke-linecap="round"/>
+        <path d="M22 40 A18 18 0 0 1 58 40" stroke="#F06060" stroke-width="11" fill="none" stroke-linecap="round"/>
       </svg>
       <div class="drawer-org">
         <div class="drawer-org-av">🐕</div>
@@ -1470,30 +1470,70 @@ function openOverlay(id){
 }
 
 // ── NOTIFICATION POPUP ───────────────────────────────────────
-let notifTimer=null, notifTimerEl=null;
+let notifTimer=null, currentNotifDef=null;
+
+const notifDefs=[
+  {
+    convId:'c2', av:'R', avBg:'#3B6AE4', name:'Ryan',
+    sub:'WhatsApp · agora', chBg:'#25D366', chIcon:'whatsapp',
+    msg:'Pode me ajudar? 🙏',
+    replies:['Sim, qual sua dúvida? 👂','Olá! Claro, pode falar 😊','Aguarde um momento ⏳']
+  },
+  {
+    convId:'c1', av:'D', avBg:'#10B981', name:'Disou',
+    sub:'Instagram · agora', chBg:'#E1306C', chIcon:'instagram',
+    msg:'Você conseguiu ver minha proposta? 📋',
+    replies:['Sim, estou analisando agora 👀','Pode me reenviar? Não recebi 📩','Agendei uma reunião sobre isso! 📅']
+  }
+];
 
 function scheduleNotification(){
-  setTimeout(showNotif, 4000);
+  setTimeout(()=>showNotifByDef(notifDefs[0]), 4000);
+  setTimeout(()=>showNotifByDef(notifDefs[1]), 28000); // 4s + 20s auto-dismiss + 4s gap
 }
 
-function showNotif(){
+function showNotifByDef(def){
+  currentNotifDef=def;
+  // update avatar
+  const avEl=document.getElementById('notif-av');
+  avEl.childNodes[0].textContent=def.av;
+  avEl.style.background=def.avBg;
+  const chBadge=avEl.querySelector('.notif-pop-ch');
+  chBadge.style.background=def.chBg;
+  if(def.chIcon==='instagram'){
+    chBadge.innerHTML=`<svg width="8" height="8" viewBox="0 0 24 24" fill="white"><rect x="2" y="2" width="20" height="20" rx="5" ry="5" stroke="white" stroke-width="2.5" fill="none"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" stroke="white" stroke-width="2" fill="none"/><circle cx="17.5" cy="6.5" r="1.5" fill="white"/></svg>`;
+  } else {
+    chBadge.innerHTML=`<svg width="8" height="8" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.126.555 4.122 1.528 5.856L.072 23.927 6.28 22.5A11.934 11.934 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0z"/></svg>`;
+  }
+  // update texts
+  document.getElementById('notif-name').textContent=def.name;
+  document.querySelector('.notif-pop-sub').textContent=def.sub;
+  document.getElementById('notif-msg').textContent=def.msg;
+  // update quick replies
+  document.querySelector('.notif-qr-list').innerHTML=def.replies
+    .map(r=>`<button class="notif-qr-btn" onclick="quickReply(${JSON.stringify(r)})">${r}</button>`)
+    .join('');
+  // show popup
   const popup=document.getElementById('notif-popup');
   popup.classList.add('open');
-  // start timer bar (8s)
+  // start timer bar (20s)
   const fill=document.getElementById('notif-timer-fill');
   fill.style.transition='none'; fill.style.width='100%';
   requestAnimationFrame(()=>{
     requestAnimationFrame(()=>{
-      fill.style.transition='width 8s linear';
+      fill.style.transition='width 20s linear';
       fill.style.width='0%';
     });
   });
-  notifTimer=setTimeout(dismissNotif, 8000);
-  // mark Ryan conv as unread+badge
-  const ryan=convData.find(c=>c.id==='c2');
-  if(ryan){ ryan.unread=1; ryan.lastMsg='Pode me ajudar? 🙏'; ryan.time=Date.now(); }
+  clearTimeout(notifTimer);
+  notifTimer=setTimeout(dismissNotif, 20000);
+  // mark conv as unread
+  const conv=convData.find(c=>c.id===def.convId);
+  if(conv){ conv.unread=(conv.unread||0)+1; conv.lastMsg=def.msg; conv.time=Date.now(); }
   if(document.getElementById('view-inbox').classList.contains('active')) renderConvList();
 }
+
+function showNotif(){ showNotifByDef(notifDefs[0]); } // kept for compat
 
 function dismissNotif(){
   clearTimeout(notifTimer);
@@ -1503,27 +1543,26 @@ function dismissNotif(){
 
 function quickReply(text){
   dismissNotif();
-  // Add to Ryan's conv and open it
-  const ryan=convData.find(c=>c.id==='c2');
-  if(ryan){
-    ryan.unread=0;
-    if(!window._ryanMsgs) window._ryanMsgs=[
-      {id:'r1',sender:'contact',content:'Pode me ajudar? 🙏',time:Date.now()-10000}
-    ];
-    window._ryanMsgs.push({id:'r'+Date.now(),sender:'agent',content:text,time:Date.now()});
-  }
-  openConvById('c2', window._ryanMsgs||[]);
+  const def=currentNotifDef||notifDefs[0];
+  const convId=def.convId;
+  const conv=convData.find(c=>c.id===convId);
+  if(conv) conv.unread=0;
+  const key='_msgs_'+convId;
+  if(!window[key]) window[key]=[{id:'m0',sender:'contact',content:def.msg,time:Date.now()-10000}];
+  window[key].push({id:'m'+Date.now(),sender:'agent',content:text,time:Date.now()});
+  openConvById(convId, window[key]);
   setTimeout(()=>toast('✅ Resposta enviada!','success'),300);
 }
 
 function openNotifConv(){
   dismissNotif();
-  const ryan=convData.find(c=>c.id==='c2');
-  if(ryan) ryan.unread=0;
-  if(!window._ryanMsgs) window._ryanMsgs=[
-    {id:'r1',sender:'contact',content:'Pode me ajudar? 🙏',time:Date.now()-10000}
-  ];
-  openConvById('c2', window._ryanMsgs);
+  const def=currentNotifDef||notifDefs[0];
+  const convId=def.convId;
+  const conv=convData.find(c=>c.id===convId);
+  if(conv) conv.unread=0;
+  const key='_msgs_'+convId;
+  if(!window[key]) window[key]=[{id:'m0',sender:'contact',content:def.msg,time:Date.now()-10000}];
+  openConvById(convId, window[key]);
 }
 
 function openConvById(id, msgs){
