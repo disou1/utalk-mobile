@@ -32,7 +32,117 @@
   --tag-geral:  #F3F4F6;
   --talk2-bg:   #E0FBF9;
   --talk2-text: #00837C;
+  --orange:     #F97316;
+  --purple:     #8B5CF6;
+  --pink:       #EC4899;
 }
+
+/* ════ NOTIFICATION POPUP (bottom, thumb-zone) ═════════════════ */
+.notif-popup {
+  position:absolute; bottom:0; left:0; right:0; z-index:400;
+  background:var(--surface);
+  border-radius:20px 20px 0 0;
+  box-shadow:0 -6px 32px rgba(0,0,0,.18);
+  transform:translateY(100%);
+  transition:transform .35s cubic-bezier(.4,0,.2,1);
+  padding-bottom:env(safe-area-inset-bottom,0);
+}
+.notif-popup.open { transform:translateY(0); }
+.notif-timer-bar { height:3px; background:var(--border); border-radius:3px; overflow:hidden; margin:0 16px 0; }
+.notif-timer-fill { height:100%; background:var(--blue); width:100%; transition:width linear; }
+.notif-popup-inner { padding:10px 16px 0; }
+.notif-popup-head { display:flex; align-items:center; gap:10px; margin-bottom:8px; }
+.notif-pop-av { width:40px; height:40px; border-radius:20px; background:#3B6AE4; display:flex; align-items:center; justify-content:center; font-size:15px; font-weight:700; color:#fff; flex-shrink:0; position:relative; }
+.notif-pop-ch  { position:absolute; bottom:-2px; left:-2px; width:16px; height:16px; border-radius:4px; background:#25D366; border:2px solid #fff; display:flex; align-items:center; justify-content:center; font-size:7px; }
+.notif-pop-info { flex:1; }
+.notif-pop-name { font-size:14px; font-weight:700; color:var(--text-1); }
+.notif-pop-sub  { font-size:11px; color:var(--text-3); }
+.notif-pop-close { width:28px; height:28px; border-radius:14px; background:var(--bg); border:none; cursor:pointer; display:flex; align-items:center; justify-content:center; font-size:13px; color:var(--text-3); }
+.notif-pop-msg { font-size:14px; color:var(--text-1); line-height:1.4; margin-bottom:12px; background:var(--bg); padding:10px 12px; border-radius:12px; }
+.notif-qr-title { font-size:10px; font-weight:700; color:var(--text-3); text-transform:uppercase; letter-spacing:.7px; margin-bottom:7px; }
+.notif-qr-list { display:flex; flex-direction:column; gap:6px; margin-bottom:10px; }
+.notif-qr-btn {
+  width:100%; padding:13px 16px; background:var(--blue-light); color:var(--blue);
+  border:1.5px solid #C7D7FF; border-radius:12px; font-size:13.5px; font-weight:600;
+  cursor:pointer; text-align:left; font-family:'Poppins',sans-serif;
+  transition:background .12s, transform .08s;
+}
+.notif-qr-btn:active { transform:scale(.98); }
+.notif-qr-btn:hover { background:#dce8ff; }
+.notif-view-btn { width:100%; padding:12px; background:var(--blue); color:#fff; border:none; border-radius:12px; font-size:13.5px; font-weight:700; cursor:pointer; font-family:'Poppins',sans-serif; margin-bottom:14px; }
+.notif-handle { width:36px; height:4px; background:var(--border2); border-radius:2px; margin:8px auto 0; }
+
+/* ════ QUICK ACTION BAR (conv, one-hand) ═══════════════════════ */
+.quick-action-bar {
+  background:var(--blue-light); border-bottom:1px solid #C7D7FF;
+  padding:7px 10px; display:flex; gap:6px; overflow-x:auto; flex-shrink:0;
+  scrollbar-width:none;
+}
+.quick-action-bar::-webkit-scrollbar { display:none; }
+.qa-btn {
+  display:flex; align-items:center; gap:5px; padding:7px 13px;
+  background:var(--surface); border:1.5px solid #C7D7FF; border-radius:18px;
+  font-size:12px; font-weight:600; color:var(--blue); cursor:pointer; white-space:nowrap;
+  font-family:'Poppins',sans-serif; flex-shrink:0; transition:background .12s;
+}
+.qa-btn:hover { background:#dce8ff; }
+.qa-btn.danger { color:var(--error); border-color:#FECACA; }
+.qa-btn.danger:hover { background:#FEF2F2; }
+
+/* ════ TRANSFER SHEET (enhanced) ══════════════════════════════ */
+.transfer-search { margin:8px 14px 4px; position:relative; }
+.transfer-search input { width:100%; padding:10px 14px 10px 36px; background:var(--bg); border:1.5px solid var(--border); border-radius:20px; font-size:13px; font-family:'Poppins',sans-serif; color:var(--text-1); outline:none; }
+.transfer-search input:focus { border-color:var(--blue); }
+.transfer-search .search-icon { position:absolute; left:12px; top:50%; transform:translateY(-50%); font-size:13px; color:var(--text-3); pointer-events:none; }
+.sheet-section-title { font-size:10px; font-weight:700; color:var(--text-3); text-transform:uppercase; letter-spacing:.8px; padding:10px 18px 4px; }
+.transfer-item { display:flex; align-items:center; gap:12px; padding:12px 18px; cursor:pointer; transition:background .1s; }
+.transfer-item:hover { background:var(--bg); }
+.transfer-av { width:40px; height:40px; border-radius:20px; display:flex; align-items:center; justify-content:center; font-size:14px; font-weight:700; color:#fff; flex-shrink:0; position:relative; }
+.online-dot { position:absolute; bottom:0; right:0; width:10px; height:10px; background:#10B981; border-radius:5px; border:2px solid var(--surface); }
+.transfer-info { flex:1; }
+.transfer-name { font-size:14px; font-weight:600; color:var(--text-1); }
+.transfer-sub  { font-size:11.5px; color:var(--text-3); }
+.transfer-confirm-box { margin:10px 14px; background:var(--bg); border-radius:14px; padding:14px; }
+.transfer-confirm-box .tcb-title { font-size:12px; color:var(--text-2); margin-bottom:10px; }
+.transfer-confirm-box .tcb-target { font-size:15px; font-weight:700; color:var(--text-1); margin-bottom:12px; }
+.tcb-btns { display:flex; gap:8px; }
+.tcb-confirm { flex:1; padding:11px; background:var(--blue); color:#fff; border:none; border-radius:10px; font-size:14px; font-weight:700; cursor:pointer; font-family:'Poppins',sans-serif; }
+.tcb-cancel  { flex:1; padding:11px; background:var(--surface); color:var(--text-2); border:1.5px solid var(--border2); border-radius:10px; font-size:14px; font-weight:600; cursor:pointer; font-family:'Poppins',sans-serif; }
+
+/* ════ CONTACT SHEET ═══════════════════════════════════════════ */
+.contact-sheet-av { width:64px; height:64px; border-radius:32px; display:flex; align-items:center; justify-content:center; font-size:24px; font-weight:700; color:#fff; margin:12px auto 6px; }
+.contact-sheet-name { font-size:18px; font-weight:700; color:var(--text-1); text-align:center; }
+.contact-sheet-phone { font-size:13px; color:var(--text-2); text-align:center; margin-bottom:16px; }
+.contact-info-list { margin:0 14px 14px; background:var(--surface); border-radius:14px; overflow:hidden; border:1px solid var(--border); }
+.contact-info-row { display:flex; align-items:center; gap:10px; padding:12px 14px; border-bottom:1px solid var(--border); }
+.contact-info-row:last-child { border-bottom:none; }
+.ci-icon { font-size:16px; width:24px; text-align:center; flex-shrink:0; }
+.ci-label { font-size:11px; font-weight:600; color:var(--text-3); text-transform:uppercase; letter-spacing:.4px; }
+.ci-value { font-size:13.5px; font-weight:500; color:var(--text-1); }
+.contact-history-item { display:flex; gap:10px; padding:10px 14px; border-bottom:1px solid var(--border); cursor:pointer; }
+.contact-history-item:last-child { border-bottom:none; }
+.chi-dot { width:8px; height:8px; border-radius:4px; margin-top:5px; flex-shrink:0; }
+.chi-info { flex:1; }
+.chi-preview { font-size:13px; color:var(--text-1); }
+.chi-date    { font-size:11px; color:var(--text-3); margin-top:2px; }
+.sheet-content-scroll { overflow-y:auto; max-height:560px; }
+
+/* ════ LABELS SHEET ════════════════════════════════════════════ */
+.labels-applied { display:flex; flex-wrap:wrap; gap:5px; padding:6px 14px 10px; min-height:36px; }
+.labels-grid { display:grid; grid-template-columns:1fr 1fr; gap:8px; padding:4px 14px 14px; }
+.label-chip {
+  display:flex; align-items:center; gap:7px; padding:12px 14px;
+  border-radius:12px; border:2px solid; cursor:pointer;
+  font-size:13px; font-weight:600; font-family:'Poppins',sans-serif;
+  transition:all .15s; background:var(--surface); min-height:46px;
+}
+.label-chip .lc-dot { width:10px; height:10px; border-radius:5px; flex-shrink:0; }
+.label-chip.selected { color:#fff !important; }
+.label-chip.selected .lc-dot { background:rgba(255,255,255,.6) !important; }
+.labels-save-btn { margin:0 14px 14px; width:calc(100% - 28px); padding:13px; background:var(--blue); color:#fff; border:none; border-radius:12px; font-size:14px; font-weight:700; cursor:pointer; font-family:'Poppins',sans-serif; }
+
+/* applied tag pills in contact sheet */
+.applied-tag-pill { display:inline-flex; align-items:center; gap:4px; padding:3px 10px; border-radius:12px; font-size:11.5px; font-weight:600; border:2px solid; }
 
 body {
   font-family: 'Poppins', -apple-system, sans-serif;
@@ -707,6 +817,15 @@ body {
         <button class="conv-more" onclick="openActions()">⋮</button>
       </div>
 
+      <!-- quick action bar -->
+      <div class="quick-action-bar">
+        <button class="qa-btn" onclick="openContact()">👤 Contato</button>
+        <button class="qa-btn" onclick="openOverlay('overlay-labels')">🏷️ Etiquetas</button>
+        <button class="qa-btn" onclick="openOverlay('overlay-transfer')">↗️ Transferir</button>
+        <button class="qa-btn" onclick="sheetAction('finish')">✅ Finalizar</button>
+        <button class="qa-btn" onclick="setMode('notes')">📋 Notas</button>
+      </div>
+
       <!-- connecting banner -->
       <div class="conv-connecting" id="conv-connecting">
         <div class="rainbow-spin"></div>
@@ -799,28 +918,96 @@ body {
     </button>
   </div>
 
-  <!-- Action sheet -->
-  <div class="overlay" id="overlay-actions">
-    <div class="sheet">
-      <div class="sheet-handle"></div>
-      <div class="sheet-item" onclick="sheetAction('contact')"><span class="si">👤</span> Detalhes do contato</div>
-      <div class="sheet-item" onclick="sheetAction('details')"><span class="si">📄</span> Detalhes da conversa</div>
-      <div class="sheet-item" onclick="sheetAction('transfer')"><span class="si">↗️</span> Transferir conversa</div>
-      <div class="sheet-item" onclick="sheetAction('private')"><span class="si">🔒</span> Privar atendimento</div>
-      <div class="sheet-item" onclick="sheetAction('schedule')"><span class="si">📅</span> Agendar envio de mensagem</div>
-      <div class="sheet-item" onclick="sheetAction('finish')"><span class="si">✓</span> Finalizar conversa</div>
-      <div class="sheet-item" onclick="sheetAction('search')"><span class="si">🔍</span> Pesquisar mensagem</div>
-      <div class="sheet-item danger" onclick="closeOverlay('overlay-actions')"><span class="si">✕</span> Ocultar essa janela</div>
+  <!-- NOTIFICATION POPUP -->
+  <div class="notif-popup" id="notif-popup">
+    <div class="notif-handle"></div>
+    <div class="notif-timer-bar"><div class="notif-timer-fill" id="notif-timer-fill"></div></div>
+    <div class="notif-popup-inner">
+      <div class="notif-popup-head">
+        <div class="notif-pop-av" id="notif-av">R
+          <div class="notif-pop-ch">
+            <svg width="8" height="8" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.126.555 4.122 1.528 5.856L.072 23.927 6.28 22.5A11.934 11.934 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0z"/></svg>
+          </div>
+        </div>
+        <div class="notif-pop-info">
+          <div class="notif-pop-name" id="notif-name">Ryan</div>
+          <div class="notif-pop-sub">WhatsApp · agora</div>
+        </div>
+        <button class="notif-pop-close" onclick="dismissNotif()">✕</button>
+      </div>
+      <div class="notif-pop-msg" id="notif-msg">Pode me ajudar? 🙏</div>
+      <div class="notif-qr-title">Resposta rápida</div>
+      <div class="notif-qr-list">
+        <button class="notif-qr-btn" onclick="quickReply('Sim, qual sua dúvida? 👂')">Sim, qual sua dúvida? 👂</button>
+        <button class="notif-qr-btn" onclick="quickReply('Olá! Claro, pode falar 😊')">Olá! Claro, pode falar 😊</button>
+        <button class="notif-qr-btn" onclick="quickReply('Aguarde um momento ⏳')">Aguarde um momento ⏳</button>
+      </div>
+      <button class="notif-view-btn" onclick="openNotifConv()">Ver conversa →</button>
     </div>
   </div>
 
-  <!-- Transfer sheet -->
-  <div class="overlay" id="overlay-transfer">
+  <!-- ACTION SHEET -->
+  <div class="overlay" id="overlay-actions">
     <div class="sheet">
       <div class="sheet-handle"></div>
-      <div style="font-size:15px;font-weight:700;color:var(--text-1);padding:2px 18px 10px">Transferir conversa</div>
-      <div id="agents-list"></div>
-      <div style="padding:8px 14px 0"><button onclick="closeOverlay('overlay-transfer')" style="width:100%;padding:11px;background:var(--bg);border:none;border-radius:12px;font-size:13.5px;font-weight:600;color:var(--text-2);cursor:pointer;font-family:'Poppins',sans-serif">Cancelar</button></div>
+      <div class="sheet-item" onclick="openContact()"><span class="si">👤</span> Detalhes do contato</div>
+      <div class="sheet-item" onclick="openOverlay('overlay-labels')"><span class="si">🏷️</span> Etiquetas</div>
+      <div class="sheet-item" onclick="sheetAction('details')"><span class="si">📄</span> Detalhes da conversa</div>
+      <div class="sheet-item" onclick="openOverlay('overlay-transfer')"><span class="si">↗️</span> Transferir conversa</div>
+      <div class="sheet-item" onclick="sheetAction('private')"><span class="si">🔒</span> Privar atendimento</div>
+      <div class="sheet-item" onclick="sheetAction('schedule')"><span class="si">📅</span> Agendar envio</div>
+      <div class="sheet-item" onclick="sheetAction('finish')"><span class="si">✓</span> Finalizar conversa</div>
+      <div class="sheet-item danger" onclick="closeOverlay('overlay-actions')"><span class="si">✕</span> Ocultar</div>
+    </div>
+  </div>
+
+  <!-- TRANSFER SHEET (agents + sectors + confirm) -->
+  <div class="overlay" id="overlay-transfer">
+    <div class="sheet" style="max-height:80vh;overflow:hidden;display:flex;flex-direction:column">
+      <div class="sheet-handle"></div>
+      <div style="font-size:15px;font-weight:700;color:var(--text-1);padding:2px 18px 8px;flex-shrink:0">Transferir conversa</div>
+      <div class="transfer-search">
+        <span class="search-icon">🔍</span>
+        <input type="text" placeholder="Buscar agente ou setor…" id="transfer-search-inp" oninput="filterTransfer(this.value)"/>
+      </div>
+      <!-- confirm box (hidden until selection) -->
+      <div class="transfer-confirm-box" id="transfer-confirm" style="display:none">
+        <div class="tcb-title">Transferir esta conversa para:</div>
+        <div class="tcb-target" id="transfer-target-name">—</div>
+        <div class="tcb-btns">
+          <button class="tcb-confirm" onclick="confirmTransfer()">Confirmar</button>
+          <button class="tcb-cancel"  onclick="cancelTransferSelect()">Cancelar</button>
+        </div>
+      </div>
+      <div id="transfer-list" style="overflow-y:auto;flex:1;padding-bottom:12px"></div>
+    </div>
+  </div>
+
+  <!-- CONTACT SHEET -->
+  <div class="overlay" id="overlay-contact">
+    <div class="sheet" style="max-height:88vh;overflow:hidden;display:flex;flex-direction:column">
+      <div class="sheet-handle"></div>
+      <div class="sheet-content-scroll" id="contact-sheet-body">
+        <!-- filled by JS -->
+      </div>
+      <div style="padding:0 14px 14px;flex-shrink:0">
+        <button onclick="closeOverlay('overlay-contact')" style="width:100%;padding:12px;background:var(--bg);border:none;border-radius:12px;font-size:14px;font-weight:600;color:var(--text-2);cursor:pointer;font-family:'Poppins',sans-serif">Fechar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- LABELS SHEET -->
+  <div class="overlay" id="overlay-labels">
+    <div class="sheet">
+      <div class="sheet-handle"></div>
+      <div style="font-size:15px;font-weight:700;color:var(--text-1);padding:2px 18px 6px">Etiquetas</div>
+      <div style="font-size:11px;font-weight:600;color:var(--text-3);text-transform:uppercase;letter-spacing:.7px;padding:0 18px 6px">Aplicadas</div>
+      <div class="labels-applied" id="labels-applied-row">
+        <span style="font-size:12px;color:var(--text-3);font-style:italic">Nenhuma etiqueta</span>
+      </div>
+      <div style="height:1px;background:var(--border);margin:0 14px 10px"></div>
+      <div class="labels-grid" id="labels-grid"></div>
+      <button class="labels-save-btn" onclick="saveLabels()">Salvar etiquetas</button>
     </div>
   </div>
 
@@ -921,6 +1108,7 @@ function doLogin(){
     document.getElementById('view-login').classList.remove('active');
     document.getElementById('bottom-nav').style.display='flex';
     showTab('inbox');toast('Conectado com sucesso!');
+    scheduleNotification();
   },1400);
 }
 function doLogout(){
@@ -1111,6 +1299,256 @@ function setNotifTab(i,el){
 
 renderConvList();
 document.querySelectorAll('.overlay').forEach(o=>o.addEventListener('click',e=>{if(e.target===o)o.classList.remove('open');}));
+
+// ── OVERLAY HELPERS ──────────────────────────────────────────
+function openOverlay(id){
+  closeOverlay('overlay-actions');
+  document.getElementById(id).classList.add('open');
+  if(id==='overlay-transfer') buildTransferList('');
+  if(id==='overlay-labels')   buildLabelsGrid();
+}
+
+// ── NOTIFICATION POPUP ───────────────────────────────────────
+let notifTimer=null, notifTimerEl=null;
+
+function scheduleNotification(){
+  setTimeout(showNotif, 4000);
+}
+
+function showNotif(){
+  const popup=document.getElementById('notif-popup');
+  popup.classList.add('open');
+  // start timer bar (8s)
+  const fill=document.getElementById('notif-timer-fill');
+  fill.style.transition='none'; fill.style.width='100%';
+  requestAnimationFrame(()=>{
+    requestAnimationFrame(()=>{
+      fill.style.transition='width 8s linear';
+      fill.style.width='0%';
+    });
+  });
+  notifTimer=setTimeout(dismissNotif, 8000);
+  // mark Ryan conv as unread+badge
+  const ryan=convData.find(c=>c.id==='c2');
+  if(ryan){ ryan.unread=1; ryan.lastMsg='Pode me ajudar? 🙏'; ryan.time=Date.now(); }
+  if(document.getElementById('view-inbox').classList.contains('active')) renderConvList();
+}
+
+function dismissNotif(){
+  clearTimeout(notifTimer);
+  const popup=document.getElementById('notif-popup');
+  popup.classList.remove('open');
+}
+
+function quickReply(text){
+  dismissNotif();
+  // Add to Ryan's conv and open it
+  const ryan=convData.find(c=>c.id==='c2');
+  if(ryan){
+    ryan.unread=0;
+    if(!window._ryanMsgs) window._ryanMsgs=[
+      {id:'r1',sender:'contact',content:'Pode me ajudar? 🙏',time:Date.now()-10000}
+    ];
+    window._ryanMsgs.push({id:'r'+Date.now(),sender:'agent',content:text,time:Date.now()});
+  }
+  openConvById('c2', window._ryanMsgs||[]);
+  setTimeout(()=>toast('✅ Resposta enviada!','success'),300);
+}
+
+function openNotifConv(){
+  dismissNotif();
+  const ryan=convData.find(c=>c.id==='c2');
+  if(ryan) ryan.unread=0;
+  if(!window._ryanMsgs) window._ryanMsgs=[
+    {id:'r1',sender:'contact',content:'Pode me ajudar? 🙏',time:Date.now()-10000}
+  ];
+  openConvById('c2', window._ryanMsgs);
+}
+
+function openConvById(id, msgs){
+  currentConvId=id;
+  const conv=convData.find(c=>c.id===id); if(!conv) return;
+  conv.unread=0;
+  const ac=avColor(conv.contact.name);
+  const av=document.getElementById('ch-av');
+  av.style.background=ac;
+  av.childNodes[0]?.nodeType===3 && av.childNodes[0].remove();
+  av.insertBefore(document.createTextNode(initials(conv.contact.name)),av.firstChild);
+  document.getElementById('ch-name').textContent=conv.contact.name;
+  if(msgs) liveMessages=[...msgs];
+  renderMessages();
+  document.getElementById('bottom-nav').style.display='none';
+  ['inbox','settings','notif'].forEach(v=>document.getElementById('view-'+v).classList.remove('active'));
+  document.getElementById('view-conv').classList.add('active');
+  document.getElementById('conv-connecting').style.display='none';
+  document.getElementById('conv-locked').style.display='none';
+  document.querySelector('.composer-area').style.display='block';
+  setTimeout(()=>{const ml=document.getElementById('msg-list');ml.scrollTop=ml.scrollHeight;},40);
+}
+
+// ── TRANSFER (enhanced with sectors) ─────────────────────────
+const sectors=[
+  {id:'s1',name:'Suporte Técnico', icon:'🔧', sub:'Problemas técnicos'},
+  {id:'s2',name:'Financeiro',      icon:'💰', sub:'Pagamentos e faturas'},
+  {id:'s3',name:'Comercial',       icon:'🛒', sub:'Vendas e upgrades'},
+  {id:'s4',name:'Atendimento',     icon:'📞', sub:'Atendimento geral'},
+];
+let transferPending=null;
+
+function buildTransferList(q){
+  const el=document.getElementById('transfer-list');
+  const fq=q.toLowerCase();
+  const fagents=agents.filter(a=>!fq||a.name.toLowerCase().includes(fq));
+  const fsectors=sectors.filter(s=>!fq||s.name.toLowerCase().includes(fq));
+  let html='';
+  if(fagents.length){
+    html+=`<div class="sheet-section-title">Agentes disponíveis</div>`;
+    html+=fagents.map(a=>`
+      <div class="transfer-item" onclick="selectTransfer('agent','${a.id}','${a.name}')">
+        <div class="transfer-av" style="background:${avColor(a.name)}">
+          ${initials(a.name)}<div class="online-dot"></div>
+        </div>
+        <div class="transfer-info">
+          <div class="transfer-name">${a.name}</div>
+          <div class="transfer-sub">${a.email}</div>
+        </div>
+      </div>`).join('');
+  }
+  if(fsectors.length){
+    html+=`<div class="sheet-section-title">Setores</div>`;
+    html+=fsectors.map(s=>`
+      <div class="transfer-item" onclick="selectTransfer('sector','${s.id}','${s.name}')">
+        <div class="transfer-av" style="background:#F3F4F6;font-size:20px">${s.icon}</div>
+        <div class="transfer-info">
+          <div class="transfer-name">${s.name}</div>
+          <div class="transfer-sub">${s.sub}</div>
+        </div>
+      </div>`).join('');
+  }
+  if(!html) html='<div style="padding:20px;text-align:center;color:var(--text-3)">Nenhum resultado</div>';
+  el.innerHTML=html;
+}
+
+function filterTransfer(q){ buildTransferList(q); }
+
+function selectTransfer(type,id,name){
+  transferPending={type,id,name};
+  document.getElementById('transfer-target-name').textContent=name;
+  document.getElementById('transfer-confirm').style.display='block';
+  document.getElementById('transfer-list').style.display='none';
+  document.getElementById('transfer-search-inp').style.display='none';
+}
+
+function cancelTransferSelect(){
+  transferPending=null;
+  document.getElementById('transfer-confirm').style.display='none';
+  document.getElementById('transfer-list').style.display='block';
+  document.getElementById('transfer-search-inp').style.display='block';
+}
+
+function confirmTransfer(){
+  if(!transferPending) return;
+  closeOverlay('overlay-transfer');
+  cancelTransferSelect();
+  document.getElementById('transfer-search-inp').value='';
+  const conv=convData.find(c=>c.id===currentConvId);
+  if(conv) conv.status='transferred';
+  toast('↗️ Transferida para '+transferPending.name);
+  transferPending=null;
+}
+
+// ── CONTACT SHEET ────────────────────────────────────────────
+function openContact(){
+  closeOverlay('overlay-actions');
+  const conv=convData.find(c=>c.id===currentConvId)||convData[0];
+  const c=conv.contact;
+  const ac=avColor(c.name);
+  const tags=(convLabels[currentConvId]||[]);
+  const tagsHtml=tags.length
+    ? tags.map(l=>`<span class="applied-tag-pill" style="color:${l.color};border-color:${l.color};background:${l.color}18">${l.icon} ${l.name}</span>`).join('')
+    : '<span style="font-size:12px;color:var(--text-3);font-style:italic">Sem etiquetas</span>';
+
+  document.getElementById('contact-sheet-body').innerHTML=`
+    <div class="contact-sheet-av" style="background:${ac}">${initials(c.name)}</div>
+    <div class="contact-sheet-name">${c.name}</div>
+    <div class="contact-sheet-phone">${c.phone}</div>
+
+    <div style="font-size:11px;font-weight:700;color:var(--text-3);text-transform:uppercase;letter-spacing:.6px;padding:0 18px 6px">Dados do contato</div>
+    <div class="contact-info-list">
+      <div class="contact-info-row"><span class="ci-icon">📱</span><div><div class="ci-label">Telefone</div><div class="ci-value">${c.phone}</div></div></div>
+      <div class="contact-info-row"><span class="ci-icon">${conv.channel==='whatsapp'?'🟢':'📧'}</span><div><div class="ci-label">Canal</div><div class="ci-value">${conv.channel}</div></div></div>
+      <div class="contact-info-row"><span class="ci-icon">💬</span><div><div class="ci-label">Conversas</div><div class="ci-value">3 conversas · 1 aberta</div></div></div>
+      <div class="contact-info-row"><span class="ci-icon">📅</span><div><div class="ci-label">Cadastrado em</div><div class="ci-value">01/06/2024</div></div></div>
+    </div>
+
+    <div style="font-size:11px;font-weight:700;color:var(--text-3);text-transform:uppercase;letter-spacing:.6px;padding:4px 18px 8px">Etiquetas</div>
+    <div style="padding:0 14px 12px;display:flex;flex-wrap:wrap;gap:6px;align-items:center">
+      ${tagsHtml}
+      <button onclick="closeOverlay('overlay-contact');openOverlay('overlay-labels')" style="padding:4px 10px;border-radius:10px;border:1.5px dashed var(--border2);background:none;font-size:12px;font-weight:600;color:var(--blue);cursor:pointer;font-family:'Poppins',sans-serif">+ Adicionar</button>
+    </div>
+
+    <div style="font-size:11px;font-weight:700;color:var(--text-3);text-transform:uppercase;letter-spacing:.6px;padding:4px 18px 8px">Histórico</div>
+    <div class="contact-info-list" style="margin-bottom:6px">
+      <div class="contact-history-item"><div class="chi-dot" style="background:#10B981"></div><div class="chi-info"><div class="chi-preview">Olá, preciso de ajuda com meu pedido…</div><div class="chi-date">Hoje · Aberta</div></div></div>
+      <div class="contact-history-item"><div class="chi-dot" style="background:#9CA3AF"></div><div class="chi-info"><div class="chi-preview">Problema com entrega do produto</div><div class="chi-date">há 3 dias · Resolvida</div></div></div>
+      <div class="contact-history-item"><div class="chi-dot" style="background:#9CA3AF"></div><div class="chi-info"><div class="chi-preview">Dúvida sobre garantia</div><div class="chi-date">há 10 dias · Resolvida</div></div></div>
+    </div>`;
+  document.getElementById('overlay-contact').classList.add('open');
+}
+
+// ── LABELS ────────────────────────────────────────────────────
+const allLabels=[
+  {id:'l1', name:'VIP',        icon:'⭐', color:'#F59E0B'},
+  {id:'l2', name:'Urgente',    icon:'🔴', color:'#EF4444'},
+  {id:'l3', name:'Suporte',    icon:'🔧', color:'#3B6AE4'},
+  {id:'l4', name:'Financeiro', icon:'💰', color:'#10B981'},
+  {id:'l5', name:'Retenção',   icon:'🟣', color:'#8B5CF6'},
+  {id:'l6', name:'Aguardando', icon:'⏳', color:'#6B7280'},
+  {id:'l7', name:'Follow-up',  icon:'📌', color:'#F97316'},
+  {id:'l8', name:'Fidelização',icon:'🩷', color:'#EC4899'},
+];
+const convLabels={};  // convId -> [label,…]
+
+function buildLabelsGrid(){
+  const conv=currentConvId||'';
+  const applied=convLabels[conv]||[];
+  const grid=document.getElementById('labels-grid');
+  grid.innerHTML=allLabels.map(l=>{
+    const on=applied.some(a=>a.id===l.id);
+    return`<button class="label-chip${on?' selected':''}"
+      style="color:${l.color};border-color:${l.color};${on?'background:'+l.color:''}"
+      onclick="toggleLabel('${l.id}')">
+      <div class="lc-dot" style="background:${on?'rgba(255,255,255,.5)':l.color}"></div>
+      ${on?'✓ ':''}${l.icon} ${l.name}
+    </button>`;
+  }).join('');
+  renderAppliedLabels(conv);
+}
+
+function toggleLabel(id){
+  const conv=currentConvId||'';
+  if(!convLabels[conv]) convLabels[conv]=[];
+  const idx=convLabels[conv].findIndex(l=>l.id===id);
+  if(idx>=0) convLabels[conv].splice(idx,1);
+  else { const l=allLabels.find(x=>x.id===id); if(l) convLabels[conv].push(l); }
+  buildLabelsGrid();
+}
+
+function renderAppliedLabels(conv){
+  const applied=convLabels[conv]||[];
+  const el=document.getElementById('labels-applied-row');
+  el.innerHTML=applied.length
+    ? applied.map(l=>`<span class="applied-tag-pill" style="color:${l.color};border-color:${l.color};background:${l.color}18">${l.icon} ${l.name}</span>`).join('')
+    : '<span style="font-size:12px;color:var(--text-3);font-style:italic">Nenhuma etiqueta</span>';
+}
+
+function saveLabels(){
+  closeOverlay('overlay-labels');
+  const count=(convLabels[currentConvId]||[]).length;
+  toast(`🏷️ ${count} etiqueta${count!==1?'s':''} salva${count!==1?'s':''}!`,'success');
+}
+
+
 </script>
 </body>
 </html>
